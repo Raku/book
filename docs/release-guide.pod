@@ -1,0 +1,23 @@
+=head1 NAME
+
+Release guide for the Perl 6 book
+
+=head1 SCHEDULE
+
+We'll release monthly, and (conjectural) release three days after each parrot
+release, so the Friday after the 3rd Tuesday of each month.
+
+We want a good version printed for the Rakudo * release, which implies that we
+should finalize in mid March 2010.
+
+=head1 DATES
+
+    Date            Release Manager
+    2009-10-23      moritz
+    2009-11-20
+    2009-12-18
+
+=head1 RELEASE PROCEDURE
+
+Not fixed yet. The first release will be a blog post including a vision
+statement.
