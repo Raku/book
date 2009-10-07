@@ -1,6 +1,7 @@
 We are writing a book about Perl 6.
 
-It will be some kind of introduction to Perl 6, and at the same time showing
+It will be some kind of example driven introduction to Perl 6,
+and at the same time showing
 off the reasons why we love that language.
 
 We plan to have monthly releases, see docs/release-guide.pod
