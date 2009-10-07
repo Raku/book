@@ -16,6 +16,10 @@ should finalize in mid March 2010.
     2009-10-23      moritz
     2009-11-20
     2009-12-18
+    2010-01-22
+    2010-02-19
+    2010-03-19
+    2010-04-23                              Rakudo * Release
 
 =head1 RELEASE PROCEDURE
 
