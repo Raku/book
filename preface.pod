@@ -1,0 +1,51 @@
+=head1 Preface
+
+[ be witty here ]
+
+=head2 Audience
+
+This book is primarily for people who want to learn Perl 6 and have some
+experience programming in another programming language. However, no
+prior knowledge of Perl is necessary. After working through this book, a
+programmer should have a solid grasp of the basics of Perl 6. That means
+that they should be able to solve their own problems with Perl 6. This
+book is not a comprehensive reference. It is a series of tutorials.
+
+=head2 Perl 6 implementations
+
+Perl 6 is a specification. Any implementation that passes the official
+test suite can call itself "Perl 6". There are currently several
+implementations at various levels of maturity. All of the code in this
+book is tested using the Rakudo implementation of Perl 6.
+
+=head2 Organization of the Book
+
+Each chapter is a mini-tutorial covering some aspect of Perl 6.
+Later chapters build on concepts introduced in earlier chapters.
+Each chapter contains a sample program in its entirety followed by
+prose that explains the code in detail.
+
+=head2 Installing Rakudo
+
+Complete instructions for downloading and installing Rakudo can be found
+at http://www.rakudo.org/how-to-get-rakudo
+
+Source code releases are available from
+http://github.com/rakudo/rakudo/downloads
+
+A binary release for windows is available from
+http://sourceforge.net/projects/parrotwin32/files/
+
+
+=head2 Executing programs
+
+To run a Perl 6 program with Rakudo, include the install directory in
+your system PATH variable and issue a command like:
+
+    $ perl6 hello.pl
+
+If the Rakudo compiler is invoked without an explicit script to run, it
+enters a small interactive mode that allows Perl 6 statements to be
+executed from the command line. Each line entered is treated as a
+separate compilation unit, however (which means that subroutines are
+preserved after they are defined, but variables are not).

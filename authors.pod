@@ -1,0 +1,17 @@
+=head1 Authors
+
+This book is the work of many contributors.  They are listed below.
+
+=item Jonathan Worthington
+
+Jonathan a prolific contributor to the Rakudo compiler.  He is primarily responsible for the implementation of Rakudo's object system.
+
+=item Patrick R. Michaud  
+
+Patrick is the chief architect of Rakudo, the Parrot-based Perl 6 compiler.
+
+=item Carl Mäsak
+
+=item Moritz Lenz
+
+=item Jonathan Scott Duff
