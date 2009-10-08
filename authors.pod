@@ -16,4 +16,7 @@ Carl builds applications using Rakudo.  He has submitted over 500 Rakudo-related
 
 =item Moritz Lenz
 
+Moritz tends the Perl 6 test suite, uses and develops Rakudo and blogs about
+anything related to Perl 6.
+
 =item Jonathan Scott Duff
