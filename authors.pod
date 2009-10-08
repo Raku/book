@@ -12,6 +12,8 @@ Patrick is the chief architect of Rakudo, the Parrot-based Perl 6 compiler.
 
 =item Carl Mäsak
 
+Carl builds applications using Rakudo.  He has submitted over 500 Rakudo-related bug tickets.  Sometimes he actually fixes things, too.
+
 =item Moritz Lenz
 
 =item Jonathan Scott Duff
