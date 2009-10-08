@@ -1,0 +1,29 @@
+=head1 NAME
+
+About examples used in the book
+
+=head1 DESCRIPTION
+
+Good examples live at the heart of our book, so it's worth thinking hard about
+it.
+
+At the initial brainstorming meeting we agreed that the JSON::Tiny module
+would make a good example (which doesn't imply we'll actually use it). Here's
+why:
+
+=over
+
+=item it solves a real world problem, and it solves it (nearly) completely
+
+=item it's short enough to comfortably fit into a book
+
+=item it uses fairly idiomatic Perl 6 without overdoing it
+
+=item it uses some nice features (grammars, action methods, multi dispatch)
+
+=back
+
+Our examples should fulfill as many of these criteria as possible.
+
+In particular we B<don't> want the usual Mammal examples for inheritance,
+C<$foo> and C<bar()> as names (though C<pub>s are fine).
