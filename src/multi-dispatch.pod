@@ -1,0 +1,32 @@
+TODO: heading
+
+JSON, short for Javascript Object Notation, is a simple data exchange format
+that is often used for communicating with web services. It supports arrays,
+hashes, numbers, strings, boolean values and C<null>, the undefined value.
+
+The example below presents a section of C<JSON::Tiny>, a minimal library for
+converting Perl 6 data structures to JSON. The other part of that module,
+which parses JSON and turns it into Perl 6 data structures, will be presented
+later (TODO: reference grammar chapter).
+
+The full code, containing additionally containing documentation and tests,
+can be found at L<http://github.com/moritz/json/>.
+
+    # Import JSON::Tiny code here from lib/JSON/Tiny.pm
+
+This code defines a single I<multi sub> named C<to-json>, which takes one
+argument and turns that into a string. However there are many candidates of
+that sub: subs with the same name, but different signatures.
+
+The various candidates all look like
+
+    multi to-json(Bool $data) { code here }
+    multi to-json(Num  $data) { code here }
+
+Which one is actually called depends on the type of the data passed to
+subroutine. So if you call C<to-json(Bool::True)>, the first one is called. If
+you pass a C<Num> to it, the second one is called.
+
+The candidates for handling C<Num> and C<Int> are very simple: since JSON's
+and Perl 6's number formats coincide, the JSON converter can simply rely on
+Perls conversion of these numbers to strings.
