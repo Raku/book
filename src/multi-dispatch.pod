@@ -33,8 +33,8 @@ can be found at L<http://github.com/moritz/json/>.
     }
 
     multi to-json($d where undef) { 'null' }
-    multi to-json($s) {
-        die "Can't serialize an object of type " ~ $s.WHAT.perl
+    multi to-json($d) {
+        die "Can't serialize an object of type " ~ $d.WHAT.perl
     }
 
 
@@ -103,3 +103,31 @@ line with C<say> prints a higher number than the first.
 
 (TODO: insert side note "Don't do that at home, kids! Type checks with side
 effects are a B<really> bad idea in real world code")
+
+Back to the JSON example, there's one candidate not yet explained.
+
+    multi to-json($d) {
+        die "Can't serialize an object of type " ~ $d.WHAT.perl
+    }
+
+This has not explicit types or constraint on its parameter at all, so it
+defaults to C<Any> - and thus matches any object we might pass to it. The code
+just complains that it doesn't know what to do with the argument, because JSON
+is just defined for some basic structures.
+
+That might look simple at first, but if you look closer you find that it
+doesn't just match for objects of all type for which no other candidate is
+defined - it matches for I<all> objects. Including C<Int>, C<Bool>, C<Num> and
+so on. So for a call like C<to-json(2)> there are two matching candidates -
+C<Bool> and C<Any>.
+
+If you try it out, you'll find that the dispatcher (which is the part of the
+compiler that decides which candidate to call) still calls the C<Int>
+candidate.
+
+The explanation is that since C<Int> is a type that conforms to C<Any>, it is
+considered a tighter match for an integer. More generally speaking if you have
+two types C<A> and C<B>, and C<A> conforms to C<B> (or C<A ~~ B> is the Perl 6
+programmer says), then an object which conforsm to C<A> does so more
+tightly than to C<B>. And in the case of a multi dispatch the tightest match
+always wins.
