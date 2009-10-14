@@ -1,0 +1,40 @@
+The following program shows how a dependency handler might look in Perl 6.
+It showcases custom constructors, private and public attributes, methods
+and various aspects of signatures. It's not very much code, and yet the
+result is interesting and, at times, useful.
+
+    class Task {
+        has Task @!dependencies;
+        has &!callback;
+        has Bool $.done;
+
+        # RAKUDO: Should really be '&callback' [perl #69766]
+        method new(Callable $callback, Task *@dependencies) {
+            self.bless(*, :$callback, :@dependencies);
+        }
+
+        method add(Task @new-dependencies) {
+            push @!dependencies, @new-dependencies;
+        }
+
+        method perform() {
+            unless $!done {
+                .perform() for @!dependencies;
+                &!callback();
+                $!done = True;
+            }
+        }
+    }
+
+    my $eat =
+        Task.new({ say 'eating dinner. NOM!' },
+            Task.new({ say 'making dinner' },
+                Task.new({ say 'buying food' },
+                    Task.new({ say 'making some money' }),
+                    Task.new({ say 'going to the store' })
+                ),
+                Task.new({ say 'cleaning kitchen' })
+            )
+        );
+
+    $eat.perform();
