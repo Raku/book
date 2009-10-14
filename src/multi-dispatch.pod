@@ -12,9 +12,33 @@ later (TODO: reference grammar chapter).
 The full code, containing additionally containing documentation and tests,
 can be found at L<http://github.com/moritz/json/>.
 
-    # Import JSON::Tiny code here from lib/JSON/Tiny.pm
+    multi to-json(Num  $d) { ~$d }
+    multi to-json(Int  $d) { ~$d }
+    multi to-json(Bool $d) { $d ?? 'true' !! 'false'; }
+    multi to-json(Str  $d) {
+        '"'
+        ~ $d.trans(['"',  '\\',   "\b", "\f", "\n", "\r", "\t"]
+                => ['\"', '\\\\', '\b', '\f', '\n', '\r', '\t'])
+        ~ '"'
+    }
+    multi to-json(Array $d) {
+        return  '[ '
+                ~ (map { to-json($_) }, $d.values).join(', ')
+                ~ ' ]';
+    }
+    multi to-json(Hash  $d) {
+        return '{ '
+                ~ (map { to-json(.key) ~ ' : ' ~ to-json(.value) }, $d.pairs).join(', ')
+                ~ ' }';
+    }
 
-This code defines a single I<multi sub> named C<to-json>, which takes one
+    multi to-json($d where undef) { 'null' }
+    multi to-json($s) {
+        die "Can't serialize an object of type " ~ $s.WHAT.perl
+    }
+
+
+This code defines a single I<multi> sub named C<to-json>, which takes one
 argument and turns that into a string. However there are many candidates of
 that sub: subs with the same name, but different signatures.
 
@@ -29,4 +53,53 @@ you pass a C<Num> to it, the second one is called.
 
 The candidates for handling C<Num> and C<Int> are very simple: since JSON's
 and Perl 6's number formats coincide, the JSON converter can simply rely on
-Perls conversion of these numbers to strings.
+Perls conversion of these numbers to strings. The C<Bool> candidate returns
+the literal strings C<'true'> or C<'false'>.
+
+The C<Str> candidate does a bit more work: it add quotes at the begin and the
+end, and substitutes those characters that the JSON spec does not allow in
+strings - a tabulator by C<\t>, a newline by C<\n> and so on.
+
+The next one is C<to-json(Array $d)>, which converts all elements of the array
+to JSON, joins them with commas and surrounds them with square brackets. The
+part that converts the individual elements calls C<to-json> again. This
+doesn't necessarily call the candidate it was called from, but again the one
+that fits to the type of the argument.
+
+TODO: describe Hash candidate briefly
+
+    to-json($d where undef) { 'null' }
+
+This candidate adds something new: it doesn't contain a type defintion, and
+thus the type of the parameter defaults to C<Any>, which is the root of the
+"normal" branch of the type hierarchy (more on that $later). More
+interestingly there's the C<where undef> clause, which is a so-called
+I<subset type>: it matches only some values of the type C<Any>.
+
+The verbose version of that is C<$d where { $d ~~ undef }>, so the
+C<where undef> part is actually translated to a smart match. And yes, the
+curly braces can contain arbirary code. Whenever the compiler performs a type
+check on the parameter C<$d>, it first checks the I<nominal> type (which is
+C<Any> here), and if that check succeeds, it calls the code block. Only if
+that returns a true value, the whole type check is considered successful.
+
+You can abuse that count how often a type check is performed:
+
+    my $counter = 0;
+    multi a(Int $x) { };
+    multi a($x) { }
+    multi a($x where { $counter++; True }) { };
+
+    a(3);
+    say $counter;
+    a('str');
+    say $counter;
+
+This piece of code defines three multis, one of which increases a counter
+whenever its C<where> clause, also called I<constraint>,  is executed.
+Any Perl 6 compiler is free to
+optimize away type checks it knows to succeed, but if it does not, the second
+line with C<say> prints a higher number than the first.
+
+(TODO: insert side note "Don't do that at home, kids! Type checks with side
+effects are a B<really> bad idea in real world code")
