@@ -166,6 +166,9 @@ signatures may contain any number of positional and named arguments, both
 explicit and slurpy. However only positional parameters contribute to the
 narrowness of a match.
 
+    # RAKUDO currently doesn't like this with two 
+    # anonymous arguments, see RT #69798
+    # as a workaround one can add name to one of them.
     class Scissors { }
     class Paper    { }
     class Stone    { }
