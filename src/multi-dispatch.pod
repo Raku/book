@@ -175,6 +175,19 @@ narrowness of a match.
     multi wins(::T      $, T        $) { 0  }
     multi wins(         $,          $) { -1 }
 
+    sub play($a, $b) {
+        given wins($a, $b) {
+            when  1 { say 'Player One wins' }
+            when  0 { say 'Draw'            }
+            when -1 { say 'Player Two wins' }
+        }
+    }
+
+    play(Scissors, Paper);
+    play(Paper,    Paper);
+    play(Stone,    Paper);
+
+
 This example demonstrates how a popular game can be decided completely by
 multi dispatch. Boths players independently select an object (either
 scissors, paper, or stone), and scissors win against paper, paper wraps stone,
@@ -206,3 +219,5 @@ and the routine returns C<0> to indicate a draw.
 
 The final candidate is just a fallback for the cases not covered yet - which
 is when Player Two wins.
+
+# TODO: should I explain the narrowness levels involved here? --moritz
