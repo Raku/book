@@ -158,3 +158,51 @@ with the best matching signature just by looking at nominal type constraints,
 which are very cheap to check. Only then will it run the constraint checks
 (which tend to be far more expensive), and if they fail it considers
 candidates that are less narrow by nominal types.
+
+=head2 Multiple arguments
+
+Multi dispatch is not limited to one parameter and argument. Candidate
+signatures may contain any number of positional and named arguments, both
+explicit and slurpy. However only positional parameters contribute to the
+narrowness of a match.
+
+    class Scissors { }
+    class Paper    { }
+    class Stone    { }
+    multi wins(Scissors $, Paper    $) { 1  }
+    multi wins(Paper    $, Stone    $) { 1  }
+    multi wins(Stone    $, Scissors $) { 1  }
+    multi wins(::T      $, T        $) { 0  }
+    multi wins(         $,          $) { -1 }
+
+This example demonstrates how a popular game can be decided completely by
+multi dispatch. Boths players independently select an object (either
+scissors, paper, or stone), and scissors win against paper, paper wraps stone,
+and scissors can't cut stone, but go blunt trying. If both players select the
+same item, it's a draw.
+
+The example code above creates a type for each possible object by declaring a
+class. For each combination of chosen objects for which Player One wins
+there's a candidate of the form
+
+    multi wins(Scissors $, Paper $) { 1 }
+
+The only new thing here is that the parameters don't have names. Since they
+are not used in the body of the subroutine anywhere, there's no use in forcing
+the programmer to come up with a clever name. A C<$> in a signature just
+stands for a single, anonymous scalar variable.
+
+The fourth candidate, C<multi wins(::T $, T $) { 0  }> uses C<::T>, which is a
+I<type capture> (similar to I<generics> or I<templates> in other programming
+languages). It binds the nominal type of the first argument to C<T>, which can
+then act as a type constraint. That means that if you pass a C<Stone> as the
+first argument, C<T> is an alias for C<Stone> inside the rest of the
+signature, and also in the body of the routine. So the signature
+C<(::T $, T $)> is bindable only by two objects of the same type, or if the
+second is of a subtype of the first.
+
+So in the case of our game it matches only for two objects of the same type,
+and the routine returns C<0> to indicate a draw.
+
+The final candidate is just a fallback for the cases not covered yet - which
+is when Player Two wins.
