@@ -70,6 +70,8 @@ TODO: describe Hash candidate briefly
 
     to-json($d where undef) { 'null' }
 
+=head2 Constraints
+
 This candidate adds something new: it doesn't contain a type defintion, and
 thus the type of the parameter defaults to C<Any>, which is the root of the
 "normal" branch of the type hierarchy (more on that $later). More
@@ -104,6 +106,8 @@ line with C<say> prints a higher number than the first.
 (TODO: insert side note "Don't do that at home, kids! Type checks with side
 effects are a B<really> bad idea in real world code")
 
+=head2 Narrowness
+
 Back to the JSON example, there's one candidate not yet explained.
 
     multi to-json($d) {
@@ -126,8 +130,31 @@ compiler that decides which candidate to call) still calls the C<Int>
 candidate.
 
 The explanation is that since C<Int> is a type that conforms to C<Any>, it is
-considered a tighter match for an integer. More generally speaking if you have
+considered a narrower match for an integer. More generally speaking if you have
 two types C<A> and C<B>, and C<A> conforms to C<B> (or C<A ~~ B> is the Perl 6
-programmer says), then an object which conforsm to C<A> does so more
-tightly than to C<B>. And in the case of a multi dispatch the tightest match
+programmer says), then an object which conforms to C<A> does so more
+narrowly than to C<B>. And in the case of a multi dispatch the narrowest match
 always wins.
+
+Also a successfully evaluated constraint makes a match narrower than the
+absence of a constraint, so in the case
+
+    multi to-json($d) { ... }
+    multi to-json($d where undef) { ... }
+
+an undefined value is dispatched to the second candidate.
+
+However a matching constraint always contributes less to narrowness than a
+more specific match in the nominal type.
+
+    TODO: Better example
+    multi a(Any $x where { $x > 0 }) { 'Constraint'   }
+    multi a(Int $x)                  { 'Nominal type' }
+    say a(3), ' wins';
+
+This is a restriction that allows a clever optimization in the compiler: It
+can sort all candidates by narrowness once, and can quickly find the candidate
+with the best matching signature just by looking at nominal type constraints,
+which are very cheap to check. Only then will it run the constraint checks
+(which tend to be far more expensive), and if they fail it considers
+candidates that are less narrow by nominal types.
