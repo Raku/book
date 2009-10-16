@@ -66,11 +66,14 @@ part that converts the individual elements calls C<to-json> again. This
 doesn't necessarily call the candidate it was called from, but again the one
 that fits to the type of the argument.
 
-TODO: describe Hash candidate briefly
+The candidate that processes hashes turns them into the form
+C<{ "key1" : "value1", "key2" : [ "second", "value" ] }> or so. It does this
+again by recursing into C<to-json>.
+
+=head2 Constraints
 
     to-json($d where undef) { 'null' }
 
-=head2 Constraints
 
 This candidate adds something new: it doesn't contain a type defintion, and
 thus the type of the parameter defaults to C<Any>, which is the root of the
@@ -223,4 +226,72 @@ and the routine returns C<0> to indicate a draw.
 The final candidate is just a fallback for the cases not covered yet - which
 is when Player Two wins.
 
-# TODO: should I explain the narrowness levels involved here? --moritz
+# XXX: should I explain the narrowness levels involved here? --moritz
+
+Implicit constraints can be applied through traits:
+
+    multi swap($a is rw, $b is rw) {
+        ($a, $b) = ($b, $a);
+    }
+
+This routine simply exchanges the contents of its two arguments. To do that is
+has to bind the two arguments as C<rw>, that is as both readable and writable.
+Trying to call that with an immutable value (for example a number literal)
+fails.
+
+The built-in function C<substr> can not only extract parts of strings, but
+also modify them:
+
+    # substr(String, Start, Length)
+    say substr('Perl 5', 0, 4);         # prints Perl
+    my $p = 'Perl 5';
+    # substr(String, Start, Length, Substitution)
+    substr($p, 6, 1, '6');
+    # now $p contains the string 'Perl 6'
+
+Seeing these two use cases you already know that the three-argument version
+and the four-argument version are handled by different candidates: the latter
+binds its first argument as C<rw>:
+
+    multi substr($str, $start = 0, $length = *) { ... }
+    multi substr($str is rw, $start, $length, $substitution) { ... }
+
+This is also an example of candidates with different arity (that is, expecting
+a different number of arguments). This quite seldom really necessary, because
+it is often a better alternative to make parameters optional. Cases where an
+arbitrary number of arguments is allowed are handled with slurpy parameters
+instead:
+
+    sub mean(*@values) {
+        ([+] @values) / @values;
+    }
+
+=head2 Protos
+
+You have two options to write multi subs: either you start every candidate
+with C<multi sub ...> or C<multi ...>, or you declare once and for all that
+the compiler shall view every sub of a given name as a multi candidate. You
+can do that by installing a I<proto> routine:
+
+    proto to-json { ... }       # literal ... here
+    # automatically a multi
+    sub to-json(Bool $d) { $d ?? 'true' !! 'false' }
+
+Nearly all Perl 6 built-in functions and operators export a proto definition,
+preventing accidental overriding.
+=for footnote One of the very rare exceptions is the smart match operator infix:<~~> which is not overloadable easily, but which redispatches to overloadable multi methods.
+=for footnote To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.
+
+=head2 Multi Methods
+
+Not only subroutines can act as multis, but also methods. For multi method
+dispatch the invocant participates just like a positional parameter.
+
+The main difference between sub and method calls is where the dispatcher
+searches for the routines: It looks for subroutines in the current and outer
+lexical scopes, whereas it looks for methods in the class of the invocant, and
+recursively in any parent classes.
+
+    # XXX should this explanation moved to the OO tutorial?
+
+    # TODO: Multi method dispatch example
