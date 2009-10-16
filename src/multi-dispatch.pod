@@ -153,7 +153,7 @@ more specific match in the nominal type.
     TODO: Better example
     multi a(Any $x where { $x > 0 }) { 'Constraint'   }
     multi a(Int $x)                  { 'Nominal type' }
-    say a(3), ' wins';
+    say a(3), ' wins';       # says "Nominal type wins"
 
 This is a restriction that allows a clever optimization in the compiler: It
 can sort all candidates by narrowness once, and can quickly find the candidate
@@ -226,7 +226,25 @@ and the routine returns C<0> to indicate a draw.
 The final candidate is just a fallback for the cases not covered yet - which
 is when Player Two wins.
 
-# XXX: should I explain the narrowness levels involved here? --moritz
+If the C<Scissors, Paper)> candidate matches the supplied argument list,
+it is two steps narrower than the C<(Any, Any)> fallback, because both
+C<Scissors> and C<Paper> are direct subclasses of C<Any>, so both contribute
+one step.
+
+If the C<(::T, T)> candidate matches, the type capture in the first parameter
+does not contribute any narrowness - it is not a constraint after all. However
+C<T> is used as a constraint for the second parameter, and accounts for some
+many step of narrowness as the number of inheritance steps between C<T> and
+C<Any>. So passing two C<Stone>s means that C<::T, T> matches one step
+narrower than C<Any, Any>. So a possible candidate
+
+    multi wins(Stone $, Stone $) {
+        say "Two stones? What is this, 20,000 years ago?"
+    }
+
+would win against C<(::T, T)>.
+
+
 
 Implicit constraints can be applied through traits:
 
