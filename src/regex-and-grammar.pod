@@ -1,0 +1,455 @@
+=head1 Pattern matching
+
+A common error while writing is to accidentally duplicate a word.
+It is hard to catch errors by rereading your own text, so we present a way to
+let Perl 6 search for your errors, introducing so-called I<regexes>:
+
+    my $s = 'the quick brown fox jumped over the the lazy dog';
+
+    token word { \w+ [ \' \w+]? }
+    regex dup { <word> \W+ $<word> }
+    if $s ~~ m/ <dup> / {
+        say "Found '{$<dup><word>}' twice in a row";
+    }
+
+
+Regular expressions are a concept from computer science, and consist of
+primitive patterns that describe how text looks. In Perl 6 the pattern
+matching is much more powerful (comparable to Context-Free Languages), so we
+prefer to call them just C<regex>. (If you know regexes from other
+programming languages it's best to forget all of their syntax, since in
+Perl 6 much is different than in PCRE or POSIX regexes).
+
+In the simplest case a regex contains
+just a constant string, and matching a string against that regex just searches
+for that string:
+
+    if 'properly' ~~ m/ perl / {
+        say "'properly' contains 'perl'";
+    }
+
+The constructs C<m/ ... /> builds a regex, and putting it on the right hand
+side of the C<~~> smart match operator applies it against the string on the
+left hand side. By default whitespaces inside the regex are irrelevant for the
+matching, so writing it as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all
+produces the exact same semantics - although the first way is probably the most
+readable one.
+
+Only word characters, digits and the underscore cause an exact substring
+search. All other characters have, at least potentially, a special meaning. If
+you want to search for a comma, an asterisk or other non-word characters, you
+have to quote or escape them:
+
+    my $str = "I'm *very* happy";
+
+    # quoting
+    if $str ~~ m/ '*very*' /   { say '\o/' }
+    # escaping
+    if $str ~~ m/ \* very \* / { say '\o/' }
+
+However searching for literal strings gets boring pretty quickly, so let's
+explore some "special" (also called I<metasyntactic>) characters. The dot C<.>
+matches a single, arbitrary character:
+
+    my @words = <spell superlative openly stuff>;
+    for @words -> $w {
+        if $w ~~ m/ pe.l / {
+            say "$w contains $/";
+        } else {
+            say "no match for $w";
+        }
+    }
+
+This prints
+
+    spell contains pell
+    superlative contains perl
+    openly contains penl
+    no match for stuff
+
+The dot matched an C<l>, C<r> and C<n>, but it would also match a space in the
+sentence I<the spectroscoB<pe l>acks resolution> - regexes don't care about
+word boundaries at all. The special variable C<$/> stores (among other things)
+just the part of the string the matched the regular expression. C<$/> holds
+the so-called I<match object>.
+
+Suppose you had a big chunk of text, and for solving a
+crossword puzzle you are looking  for words containing C<pe>, then an
+arbitrary letter, and then an C<l> - but not a space, your crossword puzzle
+has extra markers for those. The appropriate regex for that is C<m/pe \w l/>.
+The C<\w> is a control sequence that stands for a "word" character, that is a
+letter, digit or an underscore. Other common control sequences that each match
+a single character, can be found in the following table
+
+    Symbol  Description             Examples
+    \w      word character          l, ö, 3, _
+    \d      digit                   0, 1, ٩
+    \s      whitespace              (tab), (blank), (newline)
+    \t      tabulator               (tab)
+    \n      newline                 (newline)
+    \h      horizontal whitespace   (space), (tab)
+    \v      vertical whitespace     (newline), (vertical tab)
+
+Each of these backslash sequence means the complete opposite if you convert
+the letter to upper case: C<\w> matches a character that's not a word
+character, C<\N> matches a single character that's not a newline.
+
+These matches are not limited to the ASCII range - C<\d> matches Latin,
+Arabic-Indic, Devanagari and other digits, C<\s> matches non-breaking
+whitespace and so on. These I<character classes> follow the Unicode definition
+of what is a letter, number and so on. You can define custom character classes
+by listing them inside nested angle and square brackets C<< <[ ... ]> >>.
+
+    if $str ~~ / <[aeiou]> / {
+        say "'$str' contains a vowel";
+    }
+    # negation with a -
+    if $str ~~ / <-[aeiou]> / {
+        say "'$str' contains something that's not a vowel";
+    }
+
+# TODO: ranges in character classes, composition
+
+A I<quantifier> can specify how often something has to occur. A question mark
+C<?> makes the proceeding thing (be it a letter, a character class or
+something more complicated) optional, meaning it can either be present either
+zero or one times in the string being matched. So C<m/ho u? se/> matches
+either C<house> or C<hose>. You can also write the regex as C<m/hou?se/>
+without any spaces, and the C<?> still quantifies only the C<u>.
+
+The asterisk C<*> stands for zero or more occurrences, so C<m/z\w*o/> can
+match C<zo>, C<zoo>, C<zero> and so on. The plus C<+> stands for one or more
+occurrences, C<\w+> matches what you usually consider a word (though only
+matches the first three characters from C<isn't>).
+
+The most general quantifier is C<**>. If followed by a number it matches that
+many times, and if followed by a range, it can match any number of times that
+the range allows:
+
+    # match a date of the form 2009-10-24:
+    m/ \d**4 '-' \d\d '-' \d\d /
+    # match at least three 'a's in a row:
+    m/ a ** 3..* /
+
+If the right hand side is neither a number nor a range, it is taken as a
+delimiter, which means that C<m/ \w ** ', '/> matches a list of characters
+which are separated by a comma and a whitespace each.
+
+If a quantifier has several ways to match, the longest one is chosen.
+
+    my $html = '<p>A paragraph</p> <p>And a second one</p>';
+    if $html ~~ m/ '<p>' .* '</p>' / {
+        say "Matches the complete string!";
+    }
+
+This is called I<greedy> matching. Appending a question mark to a modifier
+makes it non-greedy,
+so using C<.*?> instead of C<.*> in the example above
+makes the regex match only the string C<< <p>A paragraph</p> >>.
+
+=for footnote The non-greedy general quantifier is C<$thing **? $count>, so
+the question mark goes directly after the second asterisk.
+=for footnote Still it's a very poor way to parse HTML, and a proper parser is always preferable.
+
+If you wish to apply a modifier to more than just one character or character
+class, you can group items with square brackets:
+
+    my $ingredients = 'milk, flour, eggs and sugar';
+    # prints "milk, flour, eggs"
+    $ingredients ~~ m/ [\w+] ** [\,\s*] / && say $/;
+
+Alternatives can be separated by vertical bars. One vertical bar between two
+parts of a regex means that the longest alternative wins, two bars make the
+first matching alternative win.
+
+    $string ~~ m/ \d**4 '-' \d\d '-' \d\d | 'today' | 'yesterday' /
+
+=head2 Anchors
+
+So far every regex we looked at could match anywhere within a string, but
+often it is desirable to limit the match to the start or end of a string or
+line, or to word boundaries.
+
+A single caret C<^> anchors the regex to the start of the string, a dollar
+C<$> to the end. So C<m/ ^a /> matches strings beginning with an C<a>, and
+C<m/ ^ a $ /> matches strings that only consist of an C<a>.
+
+    Assertion   Meaning
+    ^           start of string
+    $           end of string
+    ^^          start of a line
+    $$          end of a line
+    <<          left word boundary
+    «           left word boundary
+    >>          right word boundary
+    »           right word boundary
+
+=head2 Captures
+
+So far regexes have been good to check if a string is in a certain format, and
+to search for pattern. But with some more features they can be very good for
+I<extracting> information too.
+
+Surrounding a part of a regex by round parenthesis C<(...)> makes it
+I<capture> the string it matches. The string matched by the first group of
+parenthesis is stored in C<$/[0]>, the second in C<$/[1]> etc. In fact you can
+use C<$/> as an array containing the captures from each parenthesis group.
+
+    my $str = 'Germany was reunited on 1990-10-03, peacefully';
+    if $str ~~ m/ (\d**4) \- (\d\d) \- (\d\d) / {
+        say "Year:  ", $/[0];
+        say "Month: ", $/[1];
+        say "Day:   ", $/[2];
+        # usage as an array:
+        say $/.join('-');       # prints 1990-10-03
+    }
+
+If a capture is quantified, the corresponding entry in the match object is a
+list of other match objects:
+
+    my $ingredients = 'eggs, milk, sugar and flour';
+    if $ingredients ~~ m/(\w+) ** [\,\s*] \s* 'and' \s* (\w+)/ {
+        say 'list: ', $/[0].join(' | ');
+        say 'end:  ', $/[1];
+    }
+
+This prints
+
+    list: eggs | milk | sugar
+    end:  flour
+
+To the screen. The first capture, C<(\w+)>, was quantified, and thus C<$/[0]>
+is a list on which we can call the C<.join> method. Regardless how many
+times the first capture matches, the second is still available in C<$/[1]>.
+
+As a shortcut C<$/[0]> is also available under the name C<$0>, C<$/[1]> as
+C<$1> and so on. These aliases are also available inside the regex. This
+allows us to write a regex that detects a rather common error when writing a
+text: an accidentally duplicated word.
+
+    my $s = 'the quick brown fox jumped over the the lazy dog';
+
+    if $s ~~ m/ « ( \w+ ) \W+ $0 » / {
+        say "Found two '$0' in a row";
+    }
+
+The regex first anchors to a left word boundary with C<«> so that it doesn't
+match partial duplication of words. Then a word is captured C<( \w+ )>,
+followed by at least one non-word character C<\W+> (which implies a right word
+boundary, so no need to use an explicit one here), and then followed by
+previously matched word, terminated by another word boundary.
+
+Without the first word boundary anchor the regex would for example match
+I<strB<and and> beach>, without the last word boundary anchor it would also
+match I<B<the the>ory>.
+
+=head2 Named regexes
+
+You can declare regexes just like subroutines, and give them names. Suppose
+you found the previous example useful, and wanted to make it available easily.
+Also you don't like the fact that doesn't catch two C<doesn't> or C<isn't> in
+a row, so you wan to extend it a bit:
+
+    regex word { \w+ [ \' \w+]? }
+    regex dup { « <word> \W+ $<word> » }
+    if $s ~~ m/ <dup> / {
+        say "Found '{$<dup><word>}' twice in a row";
+    }
+
+Here we introduce a regex with name C<word>, which matches at least one word
+character, optionally followed by a single quote. Another regex called C<dup>
+(short for I<duplicate>) is anchored at a word boundary, then calls the regex
+C<word> by putting it in angle brackets, then matches at least one non-word
+character, and then matches the same string as previously matched by the regex
+C<word>. The syntax for this I<backreference> is a dollar, followed by the
+name of the named regex in angle brackets. After that another word boundary is
+required.
+
+In the mainline code C<< $<dup> >>, short for C<$/{'dup'}>, accesses the match
+object that the regex C<dup> produced. That one has called the regex C<word>,
+and the match object produced from that call is accessible as
+C<< $<dup><word> >>.
+
+Named regexes make it easy to organize complex regexes in smaller pieces, just
+like subroutines all that for ordinary code.
+
+=head2 Modifiers
+
+A previously used example to match a list of words was
+
+    m/(\w+) ** [\,\s*] \s* 'and' \s* (\w+)/
+
+This works, but it is kinda clumsy - all these C<\s*> could be left out if we
+had a way to just say "allow whitespaces anywhere". Since this is quite
+common, Perl 6 regexes provide such an option: the C<:sigspace> modifier,
+short C<:s>
+
+    my $ingredients = 'eggs, milk, sugar and flour';
+    if $ingredients ~~ m/:s ( \w+ ) ** \,'and' (\w+)/ {
+        say 'list: ', $/[0].join(' | ');
+        say 'end:  ', $/[1];
+    }
+
+It allows optional whitespaces in the text wherever there is one or more
+whitespace in the pattern. Actually it's even a bit cleverer than that:
+between two word characters whitespaces are not optional, but mandatory;
+so the regex above does not match the string C<eggs, milk, sugarandflour>.
+
+The C<:ignorecase> or C<:i> modifier makes the regex insensitive to upper and
+lower case, so C<m/ :i perl /> matches not only C<perl>, but also C<PerL> or
+C<PERL> (though nobody really writes the programming language in all uppercase
+letters).
+
+=head2 Backtracking control
+
+When you write a regex, the regex engine figures out how to search for that
+pattern in a text itself. This often involves that a certain way to match
+things is tried out, and if it didn't work, another way is tried. This process
+of failing, and trying again in a different way is called I<backtracking>.
+
+For example matching C<m/\w+ 'en'/> against the string C<oxen> makes the
+C<\w+> group fist match the whole string, but then the C<en> literal at the
+end can't match anything. So C<\w+> gives up one character, and now matches
+C<oxe>. Still C<en> can't match, so the C<\w+> group again gives up one
+character and now matches C<ox>. The C<en> literal can now match the last two
+characters of the string, and the overall match succeeds.
+
+While backtracking is often what one wants, and very convenient, it can also
+be slow, and sometimes confusing. A colon C<:> switches off backtracking for
+the previous quantifier or alternation. So C<m/ \w+: 'en'/> can never match
+any string, because the C<\w+> always eats up all word characters, and never
+releases them.
+
+The C<:ratchet> modifier disables backtracking for a whole regex, which is
+often desirable in a small regex that is called from others regexes. When
+search for duplicate words, we had to anchor the regex to word boundaries,
+because C<\w+> would allow matching only part of a word. By disabling
+backtracking we get the more intuitive behavior that C<\w+> always matches a
+full word:
+
+    regex word { :ratchet \w+ [ \' \w+]? }
+    regex dup { <word> \W+ $<word> }
+
+    # no match, doesn't match the 'and'
+    # in 'strand' without backtracking
+    'strand and beach' ~~ m/<dup>/
+
+However the effect of C<:ratchet> is limited to the regex it stands in - the
+outer one still backtracks, and can also retry the regex C<word> at a
+different staring position.
+
+The C<regex { :ratchet ... }> pattern is common that it has its own shortcut:
+C<token { ... }>. So you'd typically write the previous example as
+
+    token word { \w+ [ \' \w+]? }
+    regex dup { <word> \W+ $<word> }
+
+A token that also switches on the C<:ratchet> modifier is called a C<rule>.
+
+    rule wordlist { <word> ** \, 'and' <word> }
+
+=head2 Other regex features
+
+Sometimes you want to call other regexes, but don't want them to capture
+the matched text, for example when parsing a programming language you might
+discard whitespaces and comments. You can achieve that by calling the regex
+as C<< <.otherrule> >>.
+
+# TODO: lookahead, lookbehind, examples
+
+=head1 Grammars
+
+Grammars organize regexes, just like modules organize subroutines and classes
+organize methods. The following
+example demonstrates how to parse JSON, a data exchange format already
+introduced in the chapter on multi dispatch (TODO: make this a proper
+reference).
+
+    # file lib/JSON/Tiny/Grammar.pg
+
+    grammar JSON::Tiny::Grammar;
+    rule TOP {
+        ^ [
+            | <object> {*}      #= object
+            | <array>  {*}      #= array
+        ] $
+    }
+    rule object     { '{' ~ '}' <pairlist>      {*}   }
+    rule pairlist   {
+        <pair> ** ','
+        {*}
+    }
+
+    rule pair {
+        <string> ':' <value>        {*}
+    }
+
+    rule array {
+        '[' ~ ']'
+            [   
+                [ <value> ** ',' ]?
+                \s*
+            ]
+        {*}
+    }
+
+    # TODO: turn into a proto regex once they are implemented
+    rule value {
+        | <string>  {*}     #= string
+        | <number>  {*}     #= number
+        | <object>  {*}     #= object
+        | <array>   {*}     #= array
+        | 'true'    {*}     #= true
+        | 'false'   {*}     #= false
+        | 'null'    {*}     #= null
+    }
+
+    token string {
+        \" ~ \" ([
+            | <str>
+            | \\ <str_escape>
+        ]*) {*}
+    }
+
+    token str {
+        <-["\\\t\n]>+
+    }
+
+    token str_escape {
+        [
+            <["\\/bfnrt]>
+        | u <xdigit>**4
+        ] {*}
+    }
+
+    token number {
+        \- ?
+        [ 0 | <[1..9]> <[0..9]>* ]
+        [ \. <[0..9]>+ ]?
+        [ <[eE]> [\+|\-]? <[0..9]>+ ]?
+        {*}
+    }
+
+    # test it:
+    # TODO: look up actual population of Austria
+    my $tester = '{
+        "country":  "Austria",
+        "cities": [ "Wien", "Salzburg", "Innsbruck" ],
+        "population": 35e6
+    }';
+
+    if JSON::Tiny::Grammar.parse($tester) {
+        say "It's valid JSON";
+    } else {
+        # TODO: error reporting
+        say "Not quite...";
+    }
+
+As you can see, a grammar contains various named regexes, one of which is
+called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
+
+Rule C<TOP> anchors the match to the start and end of the string, so that the
+whole string has to be in valid JSON format for the match to succeed. It then
+either matches an C<< <array> >> or an C<< <object> >>, both of which are
+defined later on. The C<{*}> provides hook which will later make it easier to
+access specific parts of the string.
