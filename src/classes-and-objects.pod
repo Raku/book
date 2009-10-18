@@ -211,7 +211,7 @@ single task with no dependencies, we could just write:
 
 Earlier I mentioned that by declaring the class C<Task>, a type object had been
 installed in the namespace. Since this is just a kind of "empty instance" of
-the class - an instance without any state - we able to call methods on it that
+the class - an instance without any state - we are able to call methods on it that
 do not try to access any state. This includes C<new>, which just creates a new
 object rather than doing anything to the current one. Here, we have just passed
 a single item to the constructor - a code block specifying what to do when
