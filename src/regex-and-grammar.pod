@@ -452,4 +452,11 @@ Rule C<TOP> anchors the match to the start and end of the string, so that the
 whole string has to be in valid JSON format for the match to succeed. It then
 either matches an C<< <array> >> or an C<< <object> >>, both of which are
 defined later on. The C<{*}> provides hook which will later make it easier to
-access specific parts of the string.
+access specific parts of the string. The C<#= object> and C<#= array> markers
+don't influence the match in any way,  the just provide labels that makes it
+easier to determine which of the two alternatives matched.
+
+The following calls are straight forward, and reflect the structure in which
+JSON components can appear. The only new thing here is I<goal matching> syntax
+C<'{' ~ '}' [ ... ]> which is something similar like C<'{' ... '}'>, but gives
+a better error message if it fails.
