@@ -4,17 +4,17 @@ and various aspects of signatures. It's not very much code, and yet the
 result is interesting and, at times, useful.
 
     class Task {
-        has Task @!dependencies;
         has &!callback;
+        has Task @!dependencies;
         has Bool $.done;
 
         # RAKUDO: Should really be '&callback' [perl #69766]
         method new(Callable $callback, Task *@dependencies) {
-            self.bless(*, :$callback, :@dependencies);
+            return self.bless(*, :$callback, :@dependencies);
         }
 
-        method add(Task @new-dependencies) {
-            push @!dependencies, @new-dependencies;
+        method add-dependency(Task $dependency) {
+            push @!dependencies, $dependency;
         }
 
         method perform() {
@@ -38,3 +38,209 @@ result is interesting and, at times, useful.
         );
 
     $eat.perform();
+
+
+=head2 Starting with class
+
+Perl 6, like many other languages, uses the C<class> keyword to introduce a
+new class. Anything inside of the block that follows is considered part of the
+class definition. While arbitrary code may be placed in there, just like any
+other block, the things that most commonly appear are declarations. In our
+example, we find declarations relating to state (attributes, introduced
+through the C<has> keyword) and behavior (methods, through the C<method>
+keyword).
+
+Declaring a class results in the creation of a type object, which by default
+gets installed into the package (just like a variable declared with C<our>
+scope). This type object is a kind of "empty instance" of the class, and you
+are already used to dealing with them (every time you mentioned a type like
+Int or Str, you were actually referring to the type object of one of the
+Perl 6 built-in classes). In our example, we use the class name C<Task> to
+refer to the class later on, when we are creating instances of it by calling
+the C<new> method.
+
+=head2 I can has state?
+
+The first 3 lines inside our class block all declare attributes (known in
+some other languages as fields or instance storage). These are storage
+locations that every instance of a class gets. They are also not accessible
+from the outside of the class, just as a C<my> variable can not be accessed
+from the outside of the scope it was declared in. This provides encapsulation,
+one of the key principles of object oriented design.
+
+Our first declaration specifies instance storage for a callback - a bit of
+code that we will invoke in order to perform the task that the object is
+representing.
+
+    has &!callback;
+
+Since this is something that we should be able to call, we have used the C<&>
+sigil. Following that is something that we have not seen before: the C<!>
+twigil (or secondary sigil). This forms part of the name of the variable,
+and emphasizes that it is a per-instance storage location private to the
+class. The second declaration also uses this twigil:
+
+    has Task @!dependencies;
+
+However, this time we have an array of items, so we have chosen the C<@>
+sigil. These items each specify a task that must be completed before the
+present one can be. Furthermore, we have declared that the array may only
+hold instances of the Task class (or some subclass of it).
+
+As well as knowing what to do for a task and what its dependent tasks are,
+we also want to know whether the task has been completed yet. This is the
+purpose of our third attribute declaration.
+
+    has Bool $.done;
+
+This time, we have declared a scalar attribute (the C<$> sigil) that is of
+type C<Bool>. Instead of the C<!> twigil, this time we have chosen the C<.>
+sigil. While Perl 6 does enforce encapsulation on you, it also saves you
+from writing accessor methods. Replacing the C<!> with a C<.> both declares
+the attribute C<$!done> and an accessor method named C<done>. It's as if you
+had written:
+
+    has Bool $!done;
+    method done() { return $!done }
+
+Note that this is not like declaring a public attribute, as some languages
+allow; you really are getting both a private storage location and a method,
+just without having to write the method by hand. You are free to instead
+write your own accessor method, if at some future point you need to do
+something more complex than just hand back the value.
+
+Note that using the C<.> twigil has created a method that will provide us
+with readonly access to the attribute. We may decide that we'd like to be
+able to reset whether or not a task was done and perform it again. In that
+case, we would write:
+
+    has Bool $.done is rw;
+
+The use of the C<is rw> trait causes the generated accessor method to
+instead return something that can be assigned to and update the value of
+the attribute.
+
+=head2 Methods
+
+While attributes give our objects state, methods give our objects behaviors.
+We'll put aside the C<new> method for a while - it's a constructor, and we'll
+consider it in more detail later - and look instead at the second method,
+C<add-dependency>. The purpose of this method is to add one new task to this
+task's dependency list.
+
+    method add-dependency(Task $dependency) {
+        push @!dependencies, $dependency;
+    }
+
+In many ways, this looks a lot like a C<sub> declaration. However, there are
+two important differences. First, this routine will be added to the list of
+methods for the current class, so that if we have an instance of the Task
+class we can use the C<.> method call operator to call it. Second, it places
+the object that the method was invoked on into the special variable C<self>.
+
+Inside the method, we simply take the parameter that was passed - which must
+be an instance of the C<Task> class - and C<push> it (add it onto the end of)
+the array C<@!dependencies>, which is one of the attributes of the class.
+
+The second method contains the main logic of our dependency handler, and so
+is a little more complex.
+
+    method perform() {
+        unless $!done {
+            .perform() for @!dependencies;
+            &!callback();
+            $!done = True;
+        }
+    }
+
+We take no parameters, but instead work with the object's attributes. First,
+we check if the task has already been done by checking its $!done attribute;
+if it has been, we won't do anything else.
+
+Next, we wish to perform all of this task's dependencies. For this, we use the
+C<for> construct to iterate over all of the items in the C<@!dependencies>
+attribute. Each item is put into the topic variable, C<$_>, and then the
+statement to the left - the C<.perform()> method call - is run. Using the
+C<.> method call operator without specifying what object to call the method on
+will use the current topic. Altogether, then, this line of code means, call
+the C<.perform> method on everything in C<@!dependencies>.
+
+With all of the dependencies done, it's time to perform this task. To do this,
+we grab the C<&!callback> attribute and put parentheses after it, which has the
+effect of calling the bit of code we stored in that attribute. Finally, we set
+the C<$!done> attribute to True, to say that we have done the task, in order
+that we will not repeat it.
+
+=head2 Constructors
+
+Perl 6 is rather more liberal than many languages in the area of constructors.
+A constructor is pretty much anything that returns an instance of the class.
+Furthermore, constructors are just ordinary methods. You inherit a default
+constructor named C<new> from the base class C<Object>, which you are free to
+override. That is what we do in our example.
+
+    # RAKUDO: Should really be '&callback' [perl #69766]
+    method new(Callable $callback, Task *@dependencies) {
+        return self.bless(*, :$callback, :@dependencies);
+    }
+
+The biggest difference between constructors in Perl 6 and constructors in
+languages such as C# and Java is that rather than just setting up state on
+a somehow already magically created object, they actually handle the creation
+of the object themselves. This easiest way to do this is by calling the
+C<bless> method, also inherited from C<Object>. The C<bless> method expects
+to be given a positional parameter - the so-called "candidate" - and a set of
+named parameters providing the initial values for each attribute.
+
+Therefore, our custom constructor simply exists to turn positional arguments
+into named arguments, so that our class can provide a nice constructor for
+its users. The first parameter is the callback (the thing to do to execute the
+task). The rest of the parameters are dependent C<Task> instances, and are
+captured into the C<@dependencies> slurpy array. We simply pass these on as
+named parameters to bless (note that C<:$callback> just uses the name of the
+variable - minus the sigil - as the name of the parameter).
+
+=head2 Consuming our class
+
+Now that we have created our class, it's time to create some instances of it.
+Since we have gone to the effort of declaring a custom constructor, we have a
+neat way of declaring tasks along with their dependencies. To create just a
+single task with no dependencies, we could just write:
+
+    my $eat = Task.new({ say 'eating dinner. NOM!' });
+
+Earlier I mentioned that by declaring the class C<Task>, a type object had been
+installed in the namespace. Since this is just a kind of "empty instance" of
+the class - an instance without any state - we able to call methods on it that
+do not try to access any state. This includes C<new>, which just creates a new
+object rather than doing anything to the current one. Here, we have just passed
+a single item to the constructor - a code block specifying what to do when
+performing the task.
+
+Since, unfortunately, dinner never just magically happens, we also need to set
+up some dependent tasks.
+
+    my $eat =
+        Task.new({ say 'eating dinner. NOM!' },
+            Task.new({ say 'making dinner' },
+                Task.new({ say 'buying food' },
+                    Task.new({ say 'making some money' }),
+                    Task.new({ say 'going to the store' })
+                ),
+                Task.new({ say 'cleaning kitchen' })
+            )
+        );
+
+Notice how the custom constructor and sensible use of whitespace allow us to
+lay out our constructor calls nicely to make it clear what tasks are dependent
+on what. Finally, we can call the C<perform> method, which recursively calls
+the C<perform> method on the various other dependencies in order, giving us
+the output:
+
+    making some money
+    going to the store
+    buying food
+    cleaning kitchen
+    making dinner
+    eating dinner. NOM!
+
