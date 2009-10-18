@@ -25,12 +25,12 @@ L<http://github.com/moritz/json/>.
     }
     multi to-json(Array $d) {
         return  '[ '
-                ~ (map { to-json($_) }, $d.values).join(', ')
+                ~ $d.values.map({ to-json($_) }).join(', ')
                 ~ ' ]';
     }
     multi to-json(Hash  $d) {
         return '{ '
-                ~ (map { to-json(.key) ~ ' : ' ~ to-json(.value) }, $d.pairs).join(', ')
+                ~ $d.pairs.map({ to-json(.key) ~ ' : ' ~ to-json(.value) }).join(', ')
                 ~ ' }';
     }
 
