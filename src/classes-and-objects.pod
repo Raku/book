@@ -95,7 +95,7 @@ purpose of our third attribute declaration.
 
 This time, we have declared a scalar attribute (the C<$> sigil) that is of
 type C<Bool>. Instead of the C<!> twigil, this time we have chosen the C<.>
-sigil. While Perl 6 does enforce encapsulation on you, it also saves you
+twigil. While Perl 6 does enforce encapsulation on you, it also saves you
 from writing accessor methods. Replacing the C<!> with a C<.> both declares
 the attribute C<$!done> and an accessor method named C<done>. It's as if you
 had written:
