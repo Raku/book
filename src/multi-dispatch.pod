@@ -248,6 +248,7 @@ narrower than C<Any, Any>. So a possible candidate
 would win against C<(::T, T)>.
 
 
+=head2 Bindability checks
 
 Implicit constraints can be applied through traits:
 
@@ -294,7 +295,7 @@ with C<multi sub ...> or C<multi ...>, or you declare once and for all that
 the compiler shall view every sub of a given name as a multi candidate. You
 can do that by installing a I<proto> routine:
 
-    proto to-json { ... }       # literal ... here
+    proto to-json($) { ... }       # literal ... here
     # automatically a multi
     sub to-json(Bool $d) { $d ?? 'true' !! 'false' }
 
