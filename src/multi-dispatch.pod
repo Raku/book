@@ -176,15 +176,15 @@ narrowness of a match.
     # anonymous arguments, see RT #69798
     # as a workaround one can add name to one of them.
     enum Symbol <Rock Paper Scissors>;
-    multi wins(Scissors $, Paper    $) { 1  }
-    multi wins(Paper    $, Rock     $) { 1  }
-    multi wins(Rock     $, Scissors $) { 1  }
-    multi wins(::T      $, T        $) { 0  }
+    multi wins(Scissors $, Paper    $) { +1 }
+    multi wins(Paper    $, Rock     $) { +1 }
+    multi wins(Rock     $, Scissors $) { +1 }
+    multi wins(::T      $, T        $) {  0 }
     multi wins(         $,          $) { -1 }
 
     sub play($a, $b) {
         given wins($a, $b) {
-            when  1 { say 'Player One wins' }
+            when +1 { say 'Player One wins' }
             when  0 { say 'Draw'            }
             when -1 { say 'Player Two wins' }
         }
@@ -205,14 +205,14 @@ The example code above creates a type for each possible symbol by declaring
 an enumerated type, or enum. For each combination of chosen symbols
 for which Player One wins there's a candidate of the form
 
-    multi wins(Scissors $, Paper $) { 1 }
+    multi wins(Scissors $, Paper $) { +1 }
 
 The only new thing here is that the parameters don't have names. Since they
 are not used in the body of the subroutine anywhere, there's no use in forcing
 the programmer to come up with a clever name. A C<$> in a signature just
 stands for a single, anonymous scalar variable.
 
-The fourth candidate, C<multi wins(::T $, T $) { 0  }> uses C<::T>, which is a
+The fourth candidate, C<multi wins(::T $, T $) {  0 }> uses C<::T>, which is a
 I<type capture> (similar to I<generics> or I<templates> in other programming
 languages). It binds the nominal type of the first argument to C<T>, which can
 then act as a type constraint. That means that if you pass a C<Rock> as the

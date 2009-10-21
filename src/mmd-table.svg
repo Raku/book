@@ -274,13 +274,13 @@
      style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Andale Mono;-inkscape-font-specification:Andale Mono"><tspan
        x="29.991549"
        y="311.07275"
-       id="tspan3582">multi wins(Scissors $, Paper    $) {  1 }</tspan><tspan
+       id="tspan3582">multi wins(Scissors $, Paper    $) { +1 }</tspan><tspan
        x="29.991549"
        y="333.57275"
-       id="tspan3584">multi wins(Paper    $, Rock     $) {  1 }</tspan><tspan
+       id="tspan3584">multi wins(Paper    $, Rock     $) { +1 }</tspan><tspan
        x="29.991549"
        y="356.07275"
-       id="tspan3586">multi wins(Rock     $, Scissors $) {  1 }</tspan><tspan
+       id="tspan3586">multi wins(Rock     $, Scissors $) { +1 }</tspan><tspan
        x="29.991549"
        y="378.57275"
        id="tspan3588">multi wins(::T      $, T        $) {  0 }</tspan><tspan
@@ -352,32 +352,32 @@
      id="rect4119"
      style="fill:url(#linearGradient4558);fill-opacity:1;stroke:#000000;stroke-width:3.54330707;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   <text
-     x="698.61841"
+     x="677.03247"
      y="373.50171"
      id="text4521"
      xml:space="preserve"
      style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Andale Mono;-inkscape-font-specification:Andale Mono"><tspan
-       x="698.61841"
+       x="677.03247"
        y="373.50171"
-       id="tspan4523">1</tspan></text>
+       id="tspan4523">+1</tspan></text>
   <text
-     x="827.60364"
+     x="806.0177"
      y="452.65497"
      id="text4525"
      xml:space="preserve"
      style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Andale Mono;-inkscape-font-specification:Andale Mono"><tspan
-       x="827.60364"
+       x="806.0177"
        y="452.65497"
-       id="tspan4527">1</tspan></text>
+       id="tspan4527">+1</tspan></text>
   <text
-     x="956.58881"
+     x="935.00287"
      y="294.34848"
      id="text4529"
      xml:space="preserve"
      style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Andale Mono;-inkscape-font-specification:Andale Mono"><tspan
-       x="956.58881"
+       x="935.00287"
        y="294.34848"
-       id="tspan4531">1</tspan></text>
+       id="tspan4531">+1</tspan></text>
   <text
      x="697.5813"
      y="294.27817"
