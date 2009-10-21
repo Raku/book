@@ -1,74 +1,74 @@
 =head1 Grammars
 
-Grammars organize regexes, just like modules organize subroutines and classes
-organize methods. The following
+Grammars organize regexes, just like  classes organize methods. The following
 example demonstrates how to parse JSON, a data exchange format already
 introduced in the chapter on multi dispatch (TODO: make this a proper
 reference).
 
     # file lib/JSON/Tiny/Grammar.pg
 
-    grammar JSON::Tiny::Grammar;
-    rule TOP {
-        ^ [
-            | <object> {*}      #= object
-            | <array>  {*}      #= array
-        ] $
-    }
-    rule object     { '{' ~ '}' <pairlist>      {*}   }
-    rule pairlist   {
-        <pair> ** ','
-        {*}
-    }
+    grammar JSON::Tiny::Grammar {
+        rule TOP {
+            ^ [
+                | <object> {*}      #= object
+                | <array>  {*}      #= array
+            ] $
+        }
+        rule object     { '{' ~ '}' <pairlist>      {*}   }
+        rule pairlist   {
+            <pair> ** ','
+            {*}
+        }
 
-    rule pair {
-        <string> ':' <value>        {*}
-    }
+        rule pair {
+            <string> ':' <value>        {*}
+        }
 
-    rule array {
-        '[' ~ ']'
-            [   
-                [ <value> ** ',' ]?
-                \s*
-            ]
-        {*}
-    }
+        rule array {
+            '[' ~ ']'
+                [   
+                    [ <value> ** ',' ]?
+                    \s*
+                ]
+            {*}
+        }
 
-    # TODO: turn into a proto regex once they are implemented
-    rule value {
-        | <string>  {*}     #= string
-        | <number>  {*}     #= number
-        | <object>  {*}     #= object
-        | <array>   {*}     #= array
-        | 'true'    {*}     #= true
-        | 'false'   {*}     #= false
-        | 'null'    {*}     #= null
-    }
+        # TODO: turn into a proto regex once they are implemented
+        rule value {
+            | <string>  {*}     #= string
+            | <number>  {*}     #= number
+            | <object>  {*}     #= object
+            | <array>   {*}     #= array
+            | 'true'    {*}     #= true
+            | 'false'   {*}     #= false
+            | 'null'    {*}     #= null
+        }
 
-    token string {
-        \" ~ \" ([
-            | <str>
-            | \\ <str_escape>
-        ]*) {*}
-    }
+        token string {
+            \" ~ \" ([
+                | <str>
+                | \\ <str_escape>
+            ]*) {*}
+        }
 
-    token str {
-        <-["\\\t\n]>+
-    }
+        token str {
+            <-["\\\t\n]>+
+        }
 
-    token str_escape {
-        [
-            <["\\/bfnrt]>
-        | u <xdigit>**4
-        ] {*}
-    }
+        token str_escape {
+            [
+                <["\\/bfnrt]>
+            | u <xdigit>**4
+            ] {*}
+        }
 
-    token number {
-        \- ?
-        [ 0 | <[1..9]> <[0..9]>* ]
-        [ \. <[0..9]>+ ]?
-        [ <[eE]> [\+|\-]? <[0..9]>+ ]?
-        {*}
+        token number {
+            \- ?
+            [ 0 | <[1..9]> <[0..9]>* ]
+            [ \. <[0..9]>+ ]?
+            [ <[eE]> [\+|\-]? <[0..9]>+ ]?
+            {*}
+        }
     }
 
     # test it:
@@ -76,7 +76,7 @@ reference).
     my $tester = '{
         "country":  "Austria",
         "cities": [ "Wien", "Salzburg", "Innsbruck" ],
-        "population": 35e6
+        "population": 8353243
     }';
 
     if JSON::Tiny::Grammar.parse($tester) {
@@ -108,5 +108,32 @@ The only new regex syntax used in the C<JSON::Tiny> grammar is the
 I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
 like C<'{' ... '}'>, but gives a better error message if it fails.
 
+=head2 Grammar Inheritance
+
+It was mentioned earlier that grammars manage regexes just like classes manage
+methods. This analogy goes deeper than just having a namespace to put routines
+or regexes into - you can inherit grammars just like classes, mix roles into
+them, and benefit from the usual polymorphism.
+
+Suppose you wanted to enhance the JSON grammar to allow single-line javascript
+comments. The simplest enhancement is to allow it in any place where
+whitespace is also allowed.
+
+Whitespace is currently done by having some rules which implicitly enable the
+C<:sigspace> modifier. Which in turn internally replaces all whitespaces in
+the regex to calls to the C<ws> token. So all you've got to do is to override
+that:
+
+    grammar JSON::Tiny::Grammar::WithComments
+        is JSON::Tiny::Grammar {
+
+        token ws {
+            | \s* '//' \N* \n
+            | <?ww> \s+
+            | <!ww> \s*
+        }
+    }
+
+    # TODO: explanation
 
 =for vim: spell
