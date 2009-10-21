@@ -175,12 +175,12 @@ narrowness of a match.
     # RAKUDO currently doesn't like this with two 
     # anonymous arguments, see RT #69798
     # as a workaround one can add name to one of them.
-    class Scissors { }
+    class Rock     { }
     class Paper    { }
-    class Stone    { }
+    class Scissors { }
     multi wins(Scissors $, Paper    $) { 1  }
-    multi wins(Paper    $, Stone    $) { 1  }
-    multi wins(Stone    $, Scissors $) { 1  }
+    multi wins(Paper    $, Rock     $) { 1  }
+    multi wins(Rock     $, Scissors $) { 1  }
     multi wins(::T      $, T        $) { 0  }
     multi wins(         $,          $) { -1 }
 
@@ -194,13 +194,13 @@ narrowness of a match.
 
     play(Scissors, Paper);
     play(Paper,    Paper);
-    play(Stone,    Paper);
+    play(Rock,     Paper);
 
 
 This example demonstrates how a popular game can be decided completely by
 multi dispatch. Boths players independently select an object (either
-scissors, paper, or stone), and scissors win against paper, paper wraps stone,
-and scissors can't cut stone, but go blunt trying. If both players select the
+rock, paper, or scissors), and scissors win against paper, paper wraps rock,
+and scissors can't cut rock, but go blunt trying. If both players select the
 same item, it's a draw.
 
 The example code above creates a type for each possible object by declaring a
@@ -217,8 +217,8 @@ stands for a single, anonymous scalar variable.
 The fourth candidate, C<multi wins(::T $, T $) { 0  }> uses C<::T>, which is a
 I<type capture> (similar to I<generics> or I<templates> in other programming
 languages). It binds the nominal type of the first argument to C<T>, which can
-then act as a type constraint. That means that if you pass a C<Stone> as the
-first argument, C<T> is an alias for C<Stone> inside the rest of the
+then act as a type constraint. That means that if you pass a C<Rock> as the
+first argument, C<T> is an alias for C<Rock> inside the rest of the
 signature, and also in the body of the routine. So the signature
 C<(::T $, T $)> is bindable only by two objects of the same type, or if the
 second is of a subtype of the first.
@@ -238,11 +238,11 @@ If the C<(::T, T)> candidate matches, the type capture in the first parameter
 does not contribute any narrowness - it is not a constraint after all. However
 C<T> is used as a constraint for the second parameter, and accounts for some
 many step of narrowness as the number of inheritance steps between C<T> and
-C<Any>. So passing two C<Stone>s means that C<::T, T> matches one step
+C<Any>. So passing two C<Rock>s means that C<::T, T> matches one step
 narrower than C<Any, Any>. So a possible candidate
 
-    multi wins(Stone $, Stone $) {
-        say "Two stones? What is this, 20,000 years ago?"
+    multi wins(Rock $, Rock $) {
+        say "Two rocks? What is this, 20,000 years ago?"
     }
 
 would win against C<(::T, T)>.
