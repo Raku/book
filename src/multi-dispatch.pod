@@ -83,12 +83,12 @@ thus the type of the parameter defaults to C<Any>, which is the root of the
 interestingly there's the C<where undef> clause, which is a so-called
 I<subset type>: it matches only some values of the type C<Any>.
 
-The verbose version of that is C<$d where { $d ~~ undef }>, so the
-C<where undef> part is actually translated to a smart match. And yes, the
-curly braces can contain arbirary code. Whenever the compiler performs a type
-check on the parameter C<$d>, it first checks the I<nominal> type (which is
-C<Any> here), and if that check succeeds, it calls the code block. The whole
-type check will only be considered successful if that returns a true value.
+The C<where undef> part is actually translated to a smart match. We could
+write it out explicitly as C<$d where { $d ~~ undef }>. And yes, the curly
+braces can contain arbitrary code. Whenever the compiler performs a type check
+on the parameter C<$d>, it first checks the I<nominal> type (which is C<Any>
+here), and if that check succeeds, it calls the code block. The whole type
+check will only be considered successful if that returns a true value.
 
 You can abuse this to count how often a type check is performed:
 
