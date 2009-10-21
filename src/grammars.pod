@@ -1,0 +1,104 @@
+=head1 Grammars
+
+Grammars organize regexes, just like modules organize subroutines and classes
+organize methods. The following
+example demonstrates how to parse JSON, a data exchange format already
+introduced in the chapter on multi dispatch (TODO: make this a proper
+reference).
+
+    # file lib/JSON/Tiny/Grammar.pg
+
+    grammar JSON::Tiny::Grammar;
+    rule TOP {
+        ^ [
+            | <object> {*}      #= object
+            | <array>  {*}      #= array
+        ] $
+    }
+    rule object     { '{' ~ '}' <pairlist>      {*}   }
+    rule pairlist   {
+        <pair> ** ','
+        {*}
+    }
+
+    rule pair {
+        <string> ':' <value>        {*}
+    }
+
+    rule array {
+        '[' ~ ']'
+            [   
+                [ <value> ** ',' ]?
+                \s*
+            ]
+        {*}
+    }
+
+    # TODO: turn into a proto regex once they are implemented
+    rule value {
+        | <string>  {*}     #= string
+        | <number>  {*}     #= number
+        | <object>  {*}     #= object
+        | <array>   {*}     #= array
+        | 'true'    {*}     #= true
+        | 'false'   {*}     #= false
+        | 'null'    {*}     #= null
+    }
+
+    token string {
+        \" ~ \" ([
+            | <str>
+            | \\ <str_escape>
+        ]*) {*}
+    }
+
+    token str {
+        <-["\\\t\n]>+
+    }
+
+    token str_escape {
+        [
+            <["\\/bfnrt]>
+        | u <xdigit>**4
+        ] {*}
+    }
+
+    token number {
+        \- ?
+        [ 0 | <[1..9]> <[0..9]>* ]
+        [ \. <[0..9]>+ ]?
+        [ <[eE]> [\+|\-]? <[0..9]>+ ]?
+        {*}
+    }
+
+    # test it:
+    # TODO: look up actual population of Austria
+    my $tester = '{
+        "country":  "Austria",
+        "cities": [ "Wien", "Salzburg", "Innsbruck" ],
+        "population": 35e6
+    }';
+
+    if JSON::Tiny::Grammar.parse($tester) {
+        say "It's valid JSON";
+    } else {
+        # TODO: error reporting
+        say "Not quite...";
+    }
+
+As you can see, a grammar contains various named regexes, one of which is
+called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
+
+Rule C<TOP> anchors the match to the start and end of the string, so that the
+whole string has to be in valid JSON format for the match to succeed. It then
+either matches an C<< <array> >> or an C<< <object> >>, both of which are
+defined later on. The C<{*}> provides hook which will later make it easier to
+access specific parts of the string. The C<#= object> and C<#= array> markers
+don't influence the match in any way,  the just provide labels that makes it
+easier to determine which of the two alternatives matched.
+
+The following calls are straight forward, and reflect the structure in which
+JSON components can appear. The only new thing here is I<goal matching> syntax
+C<'{' ~ '}' [ ... ]> which is something similar like C<'{' ... '}'>, but gives
+a better error message if it fails.
+
