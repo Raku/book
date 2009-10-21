@@ -86,7 +86,7 @@ reference).
         say "Not quite...";
     }
 
-As you can see, a grammar contains various named regexes, one of which is
+A grammar contains various named regexes, one of which is
 called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
 
 Rule C<TOP> anchors the match to the start and end of the string, so that the
@@ -98,7 +98,15 @@ don't influence the match in any way,  the just provide labels that makes it
 easier to determine which of the two alternatives matched.
 
 The following calls are straight forward, and reflect the structure in which
-JSON components can appear. The only new thing here is I<goal matching> syntax
-C<'{' ~ '}' [ ... ]> which is something similar like C<'{' ... '}'>, but gives
-a better error message if it fails.
+JSON components can appear. This includes some recursive calls: For example
+C<array> calls C<value>, and C<value> again calls C<array>. That's fine as
+long as at least one regex per recursion cycle consumes at least one
+character. If not, the (mutual) recursion can go on infinitely, never
+progressing in the string, or to other parts of the grammar.
 
+The only new regex syntax used in the C<JSON::Tiny> grammar is the
+I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
+like C<'{' ... '}'>, but gives a better error message if it fails.
+
+
+=for vim: spell
