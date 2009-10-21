@@ -1,0 +1,28 @@
+#!perl -w
+use strict;
+use Pod::PseudoPod::LaTeX;
+
+print <<'HEADER';
+\documentclass[11pt,a4paper,oneside]{report}
+ 
+\begin{document}
+HEADER
+
+for (qw<
+
+    preface
+
+    multi-dispatch
+    classes-and-objects
+    regexes
+    grammars
+
+>) {
+    my $parser = Pod::PseudoPod::LaTeX->new();
+    $parser->output_fh( *STDOUT );
+    $parser->parse_file( "src/$_.pod" );
+}
+
+print <<'FOOTER';
+\end{document}
+FOOTER
