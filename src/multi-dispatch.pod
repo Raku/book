@@ -165,6 +165,11 @@ which are very cheap to check. Only then will it run the constraint checks
 (which tend to be far more expensive), and if they fail it considers
 candidates that are less narrow by nominal types.
 
+With some trickery it is possible to get an object which both conforms to a
+built-in type (let's say C<Num>) but which is also an undefined value. In this
+case the candidate that is specific to C<Num> wins, since the nominal type
+check is narrower than the C<where undef> constraint.
+
 =head1 Multiple arguments
 
 Multi dispatch is not limited to one parameter and argument. Candidate
