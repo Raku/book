@@ -1,3 +1,5 @@
+=head0 Classes and Objects
+
 The following program shows how a dependency handler might look in Perl 6.
 It showcases custom constructors, private and public attributes, methods
 and various aspects of signatures. It's not very much code, and yet the
@@ -40,7 +42,7 @@ result is interesting and, at times, useful.
     $eat.perform();
 
 
-=head2 Starting with class
+=head1 Starting with class
 
 Perl 6, like many other languages, uses the C<class> keyword to introduce a
 new class. Anything inside of the block that follows is considered part of the
@@ -59,7 +61,7 @@ Perl 6 built-in classes). In our example, we use the class name C<Task> to
 refer to the class later on, when we are creating instances of it by calling
 the C<new> method.
 
-=head2 I can has state?
+=head1 I can has state?
 
 The first 3 lines inside our class block all declare attributes (known in
 some other languages as fields or instance storage). These are storage
@@ -120,7 +122,7 @@ The use of the C<is rw> trait causes the generated accessor method to
 instead return something that can be assigned to and update the value of
 the attribute.
 
-=head2 Methods
+=head1 Methods
 
 While attributes give our objects state, methods give our objects behaviors.
 We'll put aside the C<new> method for a while - it's a constructor, and we'll
@@ -171,7 +173,7 @@ effect of calling the bit of code we stored in that attribute. Finally, we set
 the C<$!done> attribute to True, to say that we have done the task, in order
 that we will not repeat it.
 
-=head2 Constructors
+=head1 Constructors
 
 Perl 6 is rather more liberal than many languages in the area of constructors.
 A constructor is pretty much anything that returns an instance of the class.
@@ -200,7 +202,7 @@ captured into the C<@dependencies> slurpy array. We simply pass these on as
 named parameters to bless (note that C<:$callback> just uses the name of the
 variable - minus the sigil - as the name of the parameter).
 
-=head2 Consuming our class
+=head1 Consuming our class
 
 Now that we have created our class, it's time to create some instances of it.
 Since we have gone to the effort of declaring a custom constructor, we have a

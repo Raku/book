@@ -1,4 +1,4 @@
-=head1 Grammars
+=head0 Grammars
 
 Grammars organize regexes, just like  classes organize methods. The following
 example demonstrates how to parse JSON, a data exchange format already
@@ -108,7 +108,7 @@ The only new regex syntax used in the C<JSON::Tiny> grammar is the
 I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
 like C<'{' ... '}'>, but gives a better error message if it fails.
 
-=head2 Grammar Inheritance
+=head1 Grammar Inheritance
 
 It was mentioned earlier that grammars manage regexes just like classes manage
 methods. This analogy goes deeper than just having a namespace to put routines

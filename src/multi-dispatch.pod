@@ -1,4 +1,4 @@
-=head1 Multis
+=head0 Multis
 
 JSON, short for Javascript Object Notation, is a simple data exchange format
 that is often used for communicating with web services. It supports arrays,
@@ -72,7 +72,7 @@ The candidate that processes hashes turns them into the form
 C<{ "key1" : "value1", "key2" : [ "second", "value" ] }> or so. It does this
 again by recursing into C<to-json>.
 
-=head2 Constraints
+=head1 Constraints
 
     to-json($d where undef) { 'null' }
 
@@ -111,7 +111,7 @@ the first.
 (TODO: insert side note "Don't do that at home, kids! Type checks with side
 effects are a B<really> bad idea in real world code")
 
-=head2 Narrowness
+=head1 Narrowness
 
 Back to the JSON example, there's one candidate not yet explained.
 
@@ -165,7 +165,7 @@ which are very cheap to check. Only then will it run the constraint checks
 (which tend to be far more expensive), and if they fail it considers
 candidates that are less narrow by nominal types.
 
-=head2 Multiple arguments
+=head1 Multiple arguments
 
 Multi dispatch is not limited to one parameter and argument. Candidate
 signatures may contain any number of positional and named arguments, both
@@ -246,7 +246,7 @@ narrower than C<Any, Any>. So a possible candidate
 would win against C<(::T, T)>.
 
 
-=head2 Bindability checks
+=head1 Bindability checks
 
 Implicit constraints can be applied through traits:
 
@@ -286,7 +286,7 @@ instead:
         ([+] @values) / @values;
     }
 
-=head2 Protos
+=head1 Protos
 
 You have two options to write multi subs: either you start every candidate
 with C<multi sub ...> or C<multi ...>, or you declare once and for all that
@@ -302,7 +302,7 @@ preventing accidental overriding.
 =for footnote One of the very rare exceptions is the smart match operator infix:<~~> which is not overloadable easily, but which redispatches to overloadable multi methods.
 =for footnote To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.
 
-=head2 Multi Methods
+=head1 Multi Methods
 
 Not only subroutines can act as multis, but also methods. For multi method
 dispatch the invocant participates just like a positional parameter.
@@ -323,7 +323,7 @@ C<$object.*method> calls all matching candidates and considers it OK to not
 to dispatch to any candidate if none matched, and C<$object.+method> calls at
 least one matching candidate.
 
-=head2 Toying with the candidate list
+=head1 Toying with the candidate list
 
 For each multi dispatch a list of candidates is built, all of which satisfy
 the nominal type constraints. For a normal sub or method call, the dispatcher

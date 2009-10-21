@@ -1,4 +1,4 @@
-=head1 Pattern matching
+=head0 Pattern matching
 
 A common error while writing is to accidentally duplicate a word.
 It is hard to catch errors by rereading your own text, so we present a way to
@@ -164,7 +164,7 @@ first matching alternative win.
 
     $string ~~ m/ \d**4 '-' \d\d '-' \d\d | 'today' | 'yesterday' /
 
-=head2 Anchors
+=head1 Anchors
 
 So far every regex we looked at could match anywhere within a string, but
 often it is desirable to limit the match to the start or end of a string or
@@ -184,7 +184,7 @@ C<m/ ^ a $ /> matches strings that only consist of an C<a>.
     >>          right word boundary
     »           right word boundary
 
-=head2 Captures
+=head1 Captures
 
 So far regexes have been good to check if a string is in a certain format, and
 to search for pattern. But with some more features they can be very good for
@@ -243,7 +243,7 @@ Without the first word boundary anchor the regex would for example match
 I<strB<and and> beach>, without the last word boundary anchor it would also
 match I<B<the the>ory>.
 
-=head2 Named regexes
+=head1 Named regexes
 
 You can declare regexes just like subroutines, and give them names. Suppose
 you found the previous example useful, and wanted to make it available easily.
@@ -273,7 +273,7 @@ C<< $<dup><word> >>.
 Named regexes make it easy to organize complex regexes in smaller pieces, just
 like subroutines all that for ordinary code.
 
-=head2 Modifiers
+=head1 Modifiers
 
 A previously used example to match a list of words was
 
@@ -300,7 +300,7 @@ lower case, so C<m/ :i perl /> matches not only C<perl>, but also C<PerL> or
 C<PERL> (though nobody really writes the programming language in all uppercase
 letters).
 
-=head2 Backtracking control
+=head1 Backtracking control
 
 When you write a regex, the regex engine figures out how to search for that
 pattern in a text itself. This often involves that a certain way to match
@@ -348,7 +348,7 @@ A token that also switches on the C<:ratchet> modifier is called a C<rule>.
 
     rule wordlist { <word> ** \, 'and' <word> }
 
-=head2 Other regex features
+=head1 Other regex features
 
 Sometimes you want to call other regexes, but don't want them to capture
 the matched text, for example when parsing a programming language you might
