@@ -175,9 +175,7 @@ narrowness of a match.
     # RAKUDO currently doesn't like this with two 
     # anonymous arguments, see RT #69798
     # as a workaround one can add name to one of them.
-    class Rock     { }
-    class Paper    { }
-    class Scissors { }
+    enum Symbol <Rock Paper Scissors>;
     multi wins(Scissors $, Paper    $) { 1  }
     multi wins(Paper    $, Rock     $) { 1  }
     multi wins(Rock     $, Scissors $) { 1  }
@@ -198,13 +196,13 @@ narrowness of a match.
 
 
 This example demonstrates how a popular game can be decided completely by
-multi dispatch. Boths players independently select an object (either
+multi dispatch. Boths players independently select a symbol (either
 rock, paper, or scissors), and scissors win against paper, paper wraps rock,
 and scissors can't cut rock, but go blunt trying. If both players select the
 same item, it's a draw.
 
-The example code above creates a type for each possible object by declaring a
-class (more on this in a later chapter). For each combination of chosen objects
+The example code above creates a type for each possible symbol by declaring
+an enumerated type, or enum. For each combination of chosen symbols
 for which Player One wins there's a candidate of the form
 
     multi wins(Scissors $, Paper $) { 1 }
@@ -229,9 +227,9 @@ and the routine returns C<0> to indicate a draw.
 The final candidate is just a fallback for the cases not covered yet - which
 is when Player Two wins.
 
-If the C<Scissors, Paper)> candidate matches the supplied argument list,
+If the C<(Scissors, Paper)> candidate matches the supplied argument list,
 it is two steps narrower than the C<(Any, Any)> fallback, because both
-C<Scissors> and C<Paper> are direct subclasses of C<Any>, so both contribute
+C<Scissors> and C<Paper> are direct subtypes of C<Any>, so both contribute
 one step.
 
 If the C<(::T, T)> candidate matches, the type capture in the first parameter
