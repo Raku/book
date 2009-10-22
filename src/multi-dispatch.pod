@@ -77,7 +77,7 @@ again by recursing into C<to-json>.
     to-json($d where undef) { 'null' }
 
 
-This candidate adds something new: it doesn't contain a type defintion, and
+This candidate adds two new twists.  It doesn't contain a type defintion, and
 thus the type of the parameter defaults to C<Any>, which is the root of the
 "normal" branch of the type hierarchy (more on that later). More
 interestingly there's the C<where undef> clause, which is a so-called
