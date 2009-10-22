@@ -8,19 +8,10 @@ print <<'HEADER';
 \begin{document}
 HEADER
 
-for (qw<
-
-    preface
-
-    multi-dispatch
-    classes-and-objects
-    regexes
-    grammars
-
->) {
+for (@ARGV) {
     my $parser = Pod::PseudoPod::LaTeX->new();
     $parser->output_fh( *STDOUT );
-    $parser->parse_file( "src/$_.pod" );
+    $parser->parse_file( $_ );
 }
 
 print <<'FOOTER';
