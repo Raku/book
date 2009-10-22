@@ -355,4 +355,9 @@ the matched text, for example when parsing a programming language you might
 discard whitespaces and comments. You can achieve that by calling the regex
 as C<< <.otherrule> >>.
 
+For example if you use the C<:sigspace> modifier, every continuous piece of
+whitespaces is internally replaced by C<< <.ws> >>, which means you can
+provide a different idea of what a whitespace is - more on that in
+$theGrammarChapter.
+
 # TODO: lookahead, lookbehind, examples

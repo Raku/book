@@ -21,7 +21,14 @@ offered to published it via Onyx Neon Press.
 Until then, monthly releases will be published under a Creative Commons license
 (noncommercial, attribution, share-alike). 
 
-TODO: Status.
+Currently there are four chapters under construction, with the intention to
+write the more introductory chapters later, when we know what we need to
+introduce for the later chapters. So far we have
+
+ * Multi dispatch
+ * Classes and Object
+ * Regexes
+ * Grammars
 
 Interested? Check out the git repository at http://github.com/perl6/book, and
 join us in irc://freenode.net#perl6book.
