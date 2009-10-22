@@ -11,6 +11,18 @@ still very welcome to join us.
 
 You can find us on #perl6book on irc.freenode.net.
 
+To build the book, you need to have the following software installed:
+
+    * GNU make
+    * perl 5
+    * the Perl 5 module Pod::PseudoPod::LaTeX
+    * inkscape (for svg -> pdf conversion)
+    * pdflatex
+
+Just type 'make' on your command line, and the book should be build in
+build/book.pdf
+
+
 All material in this repository is licensed under the CC-by-nc-sa license:
 http://creativecommons.org/licenses/by-nc-sa/2.5/ (attribution, noncommercial,
 share-alike), unless explicitly stated otherwise.
