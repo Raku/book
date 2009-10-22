@@ -199,6 +199,10 @@ narrowness of a match.
     play(Paper,    Paper);
     play(Rock,     Paper);
 
+=for figure
+        \includegraphics[width=0.8\textwidth]{mmd-table.pdf}
+        \caption{Who wins the \emph{Rock, Paper, Scissors} game?}
+        \label{fig:mmd-rock-paper-scissors}
 
 This example demonstrates how a popular game can be decided completely by
 multi dispatch. Boths players independently select a symbol (either
