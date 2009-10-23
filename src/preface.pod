@@ -13,6 +13,12 @@ In the pages that follow, you will be introduced to the Perl 6 language
 through its Rakudo implementation. Good luck and as the Perl 6 community
 often says: have fun!
 
+This book is a work-in-progress, and it is expected that even releases
+will contain some amount of C<TODO> comments prior to the printing of the
+book.  We've left them in because they might serve as useful cues for the
+reader as well as for us authors about what remains to be done. Even so,
+we pray the reader's indulgence and understanding.
+
 =head1 Audience
 
 This book is primarily for people who want to learn Perl 6 and have some
