@@ -97,7 +97,7 @@ access specific parts of the string. The C<#= object> and C<#= array> markers
 don't influence the match in any way,  the just provide labels that makes it
 easier to determine which of the two alternatives matched.
 
-The following calls are straight forward, and reflect the structure in which
+The following calls are straightforward, and reflect the structure in which
 JSON components can appear. This includes some recursive calls: For example
 C<array> calls C<value>, and C<value> again calls C<array>. That's fine as
 long as at least one regex per recursion cycle consumes at least one
