@@ -20,5 +20,4 @@ clean:
 
 .PHONY: clean
 
-# for stupid vim users:
 # vim: set noexpandtab
