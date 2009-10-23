@@ -1,6 +1,17 @@
 =head0 Preface
 
-[ be witty here ]
+Perl 6 has had a long gestation period. During that time several
+implementations have been created. These implementations have, in turn,
+informed the design of Perl 6 in ways that wouldn't have been possible
+without developers trying to implement the specification and programmers
+trying to use those implementations to solve real programming problems.
+Because of this interplay between design and implementation, today we
+have more cohesive and consistent language specification and a compiler
+that implements a good bit of it. 
+
+In the pages that follow, you will be introduced to the Perl 6 language
+through its Rakudo implementation. Good luck and as the Perl 6 community
+often says: have fun!
 
 =head1 Audience
 
@@ -28,14 +39,10 @@ prose that explains the code in detail.
 =head1 Installing Rakudo
 
 Complete instructions for downloading and installing Rakudo can be found
-at http://www.rakudo.org/how-to-get-rakudo
-
-Source code releases are available from
-http://github.com/rakudo/rakudo/downloads
-
-A binary release for windows is available from
-http://sourceforge.net/projects/parrotwin32/files/
-
+at U<http://www.rakudo.org/how-to-get-rakudo>. Source code releases are
+available from U<http://github.com/rakudo/rakudo/downloads>. A binary
+release for windows is available from
+U<http://sourceforge.net/projects/parrotwin32/files/>.
 
 =head1 Executing programs
 
@@ -49,3 +56,31 @@ enters a small interactive mode that allows Perl 6 statements to be
 executed from the command line. Each line entered is treated as a
 separate compilation unit, however (which means that subroutines are
 preserved after they are defined, but variables are not).
+
+=head1 Getting involved
+
+If you are inspired by the contents of this book and want to contribute
+to the Perl 6 community, there are more resources available to you:
+
+=over
+
+=item IRC
+
+There is a channel #perl6 on irc.freenode.net dedicated to all things Perl 6.
+
+=item Mailing Lists
+
+For issues regarding the Perl 6 language specification send email to
+C<perl6-language@perl.org>, for issues regarding the compiler send email to
+C<perl6-compiler@perl.org>
+
+=back
+
+=head1 Acknowledgements
+
+=for editors
+
+Surely we'll want to thank some people!  :-)
+
+=end for
+
