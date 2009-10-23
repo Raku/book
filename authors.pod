@@ -4,7 +4,8 @@ This book is the work of many contributors.  They are listed below.
 
 =item Jonathan Worthington
 
-Jonathan a prolific contributor to the Rakudo compiler.  He is primarily responsible for the implementation of Rakudo's object system.
+Jonathan is a prolific contributor to the Rakudo compiler. He is
+primarily responsible for the implementation of Rakudo's object system.
 
 =item Patrick R. Michaud  
 
@@ -12,11 +13,16 @@ Patrick is the chief architect of Rakudo, the Parrot-based Perl 6 compiler.
 
 =item Carl Mäsak
 
-Carl builds applications using Rakudo.  He has submitted over 500 Rakudo-related bug tickets.  Sometimes he actually fixes things, too.
+Carl builds applications using Rakudo. He has submitted over 500 Rakudo-
+related bug tickets. Sometimes he actually fixes things, too.
 
 =item Moritz Lenz
 
 Moritz tends the Perl 6 test suite, uses and develops Rakudo and blogs about
 anything related to Perl 6.
 
-=item Jonathan Scott Duff
+=item Jonathan Scott Duff (Scott)
+
+Scott occasionally tries to write things in Perl 6, but mostly hangs out
+on irc.freenode.net on the #perl6 channel and discusses anything that
+piques his interest relating to Perl 6 or its development.
