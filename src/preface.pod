@@ -35,7 +35,7 @@ test suite can call itself "Perl 6". There are currently several
 implementations at various levels of maturity. All of the code in this
 book is tested using the Rakudo implementation of Perl 6.
 
-=head1 Organization of the Book
+=head1 Organization of the book
 
 Each chapter is a mini-tutorial covering some aspect of Perl 6.
 Later chapters build on concepts introduced in earlier chapters.
@@ -74,7 +74,7 @@ to the Perl 6 community, there are more resources available to you:
 
 There is a channel #perl6 on irc.freenode.net dedicated to all things Perl 6.
 
-=item Mailing Lists
+=item Mailing lists
 
 For issues regarding the Perl 6 language specification send email to
 C<perl6-language@perl.org>, for issues regarding the compiler send email to
