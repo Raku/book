@@ -348,6 +348,24 @@ A token that also switches on the C<:ratchet> modifier is called a C<rule>.
 
     rule wordlist { <word> ** \, 'and' <word> }
 
+=head1 Substitutions
+
+Not only data validation and extraction made regexes popular, also data
+manipulation. The C<subst> method matches a regex against a string, and if a
+match was found, substitutes it by the second argument.
+
+    my $spacey = 'with    many  superfluous   spaces';
+    say $spacey.subst(rx/ \s+ /, ' ', :g);
+    # output: with many superfluous spaces
+
+The C<:g> at the end tells the substitution to work I<globally>, so that every
+match of regex is replaced. Without C<:g> it stops after the first match.
+
+Note that the regex was constructed with C<rx/ ... /> rather than C<m/ ... />.
+The former constructs a regex object, the latter would match the regex
+immediately against the topic variable C<$_>, and pass the resulting match
+object to the C<subst> method.
+
 =head1 Other regex features
 
 Sometimes you want to call other regexes, but don't want them to capture
@@ -360,4 +378,23 @@ whitespaces is internally replaced by C<< <.ws> >>, which means you can
 provide a different idea of what a whitespace is - more on that in
 $theGrammarChapter.
 
-# TODO: lookahead, lookbehind, examples
+Sometimes you just want to take a look ahead, and check if the
+next characters fulfill some properties -- but without actually consuming
+them, so that the following parts of the regex can still match them.
+
+A common use for that are substitutions. In normal English text you always place
+a whitespace after a comma, and if somebody forgets to add that whitespace, a
+regex can clean up after the lazy writer:
+
+    my $str = 'milk,flour,sugar and eggs';
+    say $str.subst(/',' <.before \w>/, ', ',  :g);
+    # output: milk, flour, sugar and eggs
+
+The word character after the comma is not part of the match, because it is in
+a look-ahead, which C<< <.before ... > >> introduces. (The leading dot just
+suppresses capturing, if you want to access the capture as C<< $<before> >>
+you can also omit the dot.)
+
+    # TODO: lookbehind
+
+=for vim: spell spelllang=en
