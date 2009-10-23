@@ -18,7 +18,7 @@ primitive patterns that describe how text looks. In Perl 6 the pattern
 matching is much more powerful (comparable to Context-Free Languages), so we
 prefer to call them just C<regex>. (If you know regexes from other
 programming languages it's best to forget all of their syntax, since in
-Perl 6 much is different than in PCRE or POSIX regexes).
+Perl 6 much is different than in PCRE or POSIX regexes.)
 
 In the simplest case a regex contains
 just a constant string, and matching a string against that regex just searches

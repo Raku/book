@@ -76,7 +76,7 @@ again by recursing into C<to-json>.
 
     to-json($d where undef) { 'null' }
 
-This candidate adds two new twists.  It doesn't contain a type defintion, and
+This candidate adds two new twists.  It doesn't contain a type definition, and
 thus the type of the parameter defaults to C<Any>, which is the root of the
 "normal" branch of the type hierarchy (more on that later). More
 interestingly there's the C<where undef> clause, which is a so-called
@@ -125,7 +125,7 @@ is just defined for some basic structures.
 
 That might look simple at first, but if you look closer you'll find that it
 doesn't just match for objects of all type for which no other candidate is
-defined - it matches for I<all> objects. Including C<Int>, C<Bool>, C<Num> and
+defined -- it matches for I<all> objects, including C<Int>, C<Bool>, C<Num> and
 so on. So for a call like C<to-json(2)> there are two matching candidates -
 C<Bool> and C<Any>.
 
