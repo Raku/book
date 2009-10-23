@@ -64,7 +64,7 @@ strings - a tab character by C<\t>, a newline by C<\n> and so on.
 
 Next is C<to-json(Array $d)>, which converts all elements of the array
 to JSON, joins them with commas and surrounds them with square brackets. 
-Individual elements are converted by recursive calls C<to-json> again. This
+Individual elements are converted by recursive calls to C<to-json> again. This
 doesn't necessarily call the candidate it was called from, but again the one
 that fits to the type of the argument.
 
@@ -132,7 +132,7 @@ C<Bool> and C<Any>.
 If you try it out, you'll find that the dispatcher (which is the part of
 the compiler that decides which candidate to call) still calls the
 C<Int> candidate.  Since C<Int> is a type that conforms to C<Any>, it is
-considered a M<narrower> match for an integer. More generally speaking, if you have
+considered a I<narrower> match for an integer. More generally speaking, if you have
 two types C<A> and C<B>, and C<A> conforms to C<B> (or C<A ~~ B>, as the Perl 6
 programmer says), then an object which conforms to C<A> does so more
 narrowly than to C<B>. And in the case of a multi dispatch the narrowest match
