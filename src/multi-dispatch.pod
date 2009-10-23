@@ -1,6 +1,6 @@
 =head0 Multis
 
-JSON, short for Javascript Object Notation, is a simple data exchange format
+Javascript Object Notation, or JSON for short, is a simple data exchange format
 that is often used for communicating with web services. It supports arrays,
 hashes, numbers, strings, boolean values and C<null>, the undefined value.
 
@@ -58,13 +58,13 @@ and Perl 6's number formats coincide, the JSON converter can simply rely on
 Perl's conversion of these numbers to strings. The C<Bool> candidate returns
 the literal strings C<'true'> or C<'false'>.
 
-The C<Str> candidate does a bit more work: it add quotes at the begin and the
+The C<Str> candidate does a bit more work: it adds quotes at the begin and the
 end, and substitutes those characters that the JSON spec does not allow in
-strings - a tabulator by C<\t>, a newline by C<\n> and so on.
+strings - a tab character by C<\t>, a newline by C<\n> and so on.
 
-The next one is C<to-json(Array $d)>, which converts all elements of the array
-to JSON, joins them with commas and surrounds them with square brackets. The
-part that converts the individual elements calls C<to-json> again. This
+Next is C<to-json(Array $d)>, which converts all elements of the array
+to JSON, joins them with commas and surrounds them with square brackets. 
+Individual elements are converted by recursive calls C<to-json> again. This
 doesn't necessarily call the candidate it was called from, but again the one
 that fits to the type of the argument.
 
@@ -76,7 +76,6 @@ again by recursing into C<to-json>.
 
     to-json($d where undef) { 'null' }
 
-
 This candidate adds two new twists.  It doesn't contain a type defintion, and
 thus the type of the parameter defaults to C<Any>, which is the root of the
 "normal" branch of the type hierarchy (more on that later). More
@@ -84,11 +83,11 @@ interestingly there's the C<where undef> clause, which is a so-called
 I<subset type>: it matches only some values of the type C<Any>.
 
 The C<where undef> part is actually translated to a smart match. We could
-write it out explicitly as C<$d where { $d ~~ undef }>. And yes, the curly
+write it out explicitly as C<Any $d where { $d ~~ undef }>. And yes, the curly
 braces can contain arbitrary code. Whenever the compiler performs a type check
 on the parameter C<$d>, it first checks the I<nominal> type (which is C<Any>
 here), and if that check succeeds, it calls the code block. The whole type
-check will only be considered successful if that returns a true value.
+check will only be considered successful if the code block returns a true value.
 
 You can abuse this to count how often a type check is performed:
 
@@ -103,7 +102,7 @@ You can abuse this to count how often a type check is performed:
     say $counter;
 
 This piece of code defines three multis, one of which increases a counter
-whenever its C<where> clause, also called I<constraint>,  is executed.
+whenever its C<where> clause (also called a I<constraint>) is executed.
 Any Perl 6 compiler is free to optimize away type checks it knows will succeed,
 but if it does not, the second line with C<say> prints a higher number than
 the first.
@@ -119,24 +118,21 @@ Back to the JSON example, there's one candidate not yet explained.
         die "Can't serialize an object of type " ~ $d.WHAT.perl
     }
 
-This has not explicit types or constraint on its parameter at all, so it
+This has no explicit type or constraint on its parameter at all, so it
 defaults to C<Any> - and thus matches any object we might pass to it. The code
 just complains that it doesn't know what to do with the argument, because JSON
 is just defined for some basic structures.
 
-That might look simple at first, but if you look closer you find that it
+That might look simple at first, but if you look closer you'll find that it
 doesn't just match for objects of all type for which no other candidate is
 defined - it matches for I<all> objects. Including C<Int>, C<Bool>, C<Num> and
 so on. So for a call like C<to-json(2)> there are two matching candidates -
 C<Bool> and C<Any>.
 
-If you try it out, you'll find that the dispatcher (which is the part of the
-compiler that decides which candidate to call) still calls the C<Int>
-candidate. It's not about going through them in order either - you can even
-move the last catch-all candidate to be first and the code still works.
-
-The explanation is that since C<Int> is a type that conforms to C<Any>, it is
-considered a narrower match for an integer. More generally speaking if you have
+If you try it out, you'll find that the dispatcher (which is the part of
+the compiler that decides which candidate to call) still calls the
+C<Int> candidate.  Since C<Int> is a type that conforms to C<Any>, it is
+considered a M<narrower> match for an integer. More generally speaking, if you have
 two types C<A> and C<B>, and C<A> conforms to C<B> (or C<A ~~ B>, as the Perl 6
 programmer says), then an object which conforms to C<A> does so more
 narrowly than to C<B>. And in the case of a multi dispatch the narrowest match
@@ -268,10 +264,10 @@ Implicit constraints can be applied through traits:
         ($a, $b) = ($b, $a);
     }
 
-This routine simply exchanges the contents of its two arguments. To do that is
-has to bind the two arguments as C<rw>, that is as both readable and writable.
-Trying to call that with an immutable value (for example a number literal)
-fails.
+This routine simply exchanges the contents of its two arguments. To do
+that is has to bind the two arguments as C<rw>, that is as both readable
+and writable. Trying to call the C<swap> routine with an immutable value
+(for example a number literal) fails.
 
 The built-in function C<substr> can not only extract parts of strings, but
 also modify them:
@@ -313,8 +309,8 @@ can do that by installing a I<proto> routine:
 
 Nearly all Perl 6 built-in functions and operators export a proto definition,
 preventing accidental overriding.
-=for footnote One of the very rare exceptions is the smart match operator infix:<~~> which is not overloadable easily, but which redispatches to overloadable multi methods.
-=for footnote To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.
+N<<One of the very rare exceptions is the smart match operator infix:<~~> which is not overloadable easily, but which redispatches to overloadable multi methods.>>
+N<<To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.>>
 
 =head1 Multi Methods
 
