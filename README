@@ -19,12 +19,12 @@ To build the book, you need to have the following software installed:
     * inkscape (for svg -> pdf conversion)
     * pdflatex
 
-Just type 'make' on your command line, and the book should be build in
+Just type 'make' on your command line, and the book should be built in
 build/book.pdf
 
 
-All material in this repository is licensed under the CC-by-nc-sa license:
-http://creativecommons.org/licenses/by-nc-sa/2.5/ (attribution, noncommercial,
-share-alike), unless explicitly stated otherwise.
+All material in this repository is licensed under a CC-by-nc-sa license:
+<http://creativecommons.org/licenses/by-nc-sa/2.5/> (attribution,
+noncommercial, share-alike), unless explicitly stated otherwise.
 
 (Maybe we'll open up towards removing the noncommercial part at some point).
