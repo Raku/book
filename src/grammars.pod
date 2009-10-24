@@ -72,7 +72,6 @@ reference).
     }
 
     # test it:
-    # TODO: look up actual population of Austria
     my $tester = '{
         "country":  "Austria",
         "cities": [ "Wien", "Salzburg", "Innsbruck" ],
@@ -128,12 +127,28 @@ that:
         is JSON::Tiny::Grammar {
 
         token ws {
-            | \s* '//' \N* \n
-            | <?ww> \s+
-            | <!ww> \s*
+            \s* [ '//' \N* \n ]?
         }
     }
 
-    # TODO: explanation
+    my $tester = '{
+        "country":  "Austria",
+        "cities": [ "Wien", "Salzburg", "Innsbruck" ],
+        "population": 8353243 // data from 2009-01
+    }';
+    if JSON::Tiny::Grammar::WithComments.parse($tester) {
+        say "It's valid (modified) JSON";
+    }
 
-=for vim: spell
+The first two lines introduce a grammar that inherits from
+C<JSON::Tiny::Grammar>. The inheritance is specified with the C<is> trait.
+This means that the grammar rules are now called from the child grammar if it
+exists there, and from the parent grammar otherwise - just like normal method
+calls.
+
+In (our relaxed) JSON whitespaces are never mandatory, so the C<ws> is allowed
+to match nothing at all. After optional spaces two slashes C<'//'>  introduce a
+comment, which is followed by an arbitrary number of characters that are not
+newlines, and then a newline -- in prose: it extends to the rest of the line.
+
+=for vim: spell spelllang=en tw=78
