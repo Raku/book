@@ -111,7 +111,7 @@ by listing them inside nested angle and square brackets C<< <[ ... ]> >>.
 # TODO: ranges in character classes, composition
 
 A I<quantifier> can specify how often something has to occur. A question mark
-C<?> makes the proceeding thing (be it a letter, a character class or
+C<?> makes the preceding thing (be it a letter, a character class or
 something more complicated) optional, meaning it can either be present either
 zero or one times in the string being matched. So C<m/ho u? se/> matches
 either C<house> or C<hose>. You can also write the regex as C<m/hou?se/>
@@ -308,7 +308,7 @@ things is tried out, and if it didn't work, another way is tried. This process
 of failing, and trying again in a different way is called I<backtracking>.
 
 For example matching C<m/\w+ 'en'/> against the string C<oxen> makes the
-C<\w+> group fist match the whole string, but then the C<en> literal at the
+C<\w+> group first match the whole string, but then the C<en> literal at the
 end can't match anything. So C<\w+> gives up one character, and now matches
 C<oxe>. Still C<en> can't match, so the C<\w+> group again gives up one
 character and now matches C<ox>. The C<en> literal can now match the last two
