@@ -1,3 +1,4 @@
+=encoding UTF-8
 =head0 Pattern matching
 
 A common error while writing is to accidentally duplicate a word.
@@ -387,14 +388,35 @@ a whitespace after a comma, and if somebody forgets to add that whitespace, a
 regex can clean up after the lazy writer:
 
     my $str = 'milk,flour,sugar and eggs';
-    say $str.subst(/',' <.before \w>/, ', ',  :g);
+    say $str.subst(/',' <?before \w>/, ', ',  :g);
     # output: milk, flour, sugar and eggs
 
 The word character after the comma is not part of the match, because it is in
-a look-ahead, which C<< <.before ... > >> introduces. (The leading dot just
-suppresses capturing, if you want to access the capture as C<< $<before> >>
-you can also omit the dot.)
+a look-ahead, which C<< <?before ... > >> introduces. The leading question
+mark indicates an I<assertion>, that is a rule that never uses up characters
+from the matched string.
 
-    # TODO: lookbehind
+In fact you can turn any call to a subrule into an assertion. The built-in
+token C<< <alpha> >> matches an alphabetic character, so you could write the
+example above as
 
-=for vim: spell spelllang=en
+    say $str.subst(/',' <?alpha>/, ', ',  :g);
+
+instead. With an exclamation mark the meaning is negated, so yet another way
+to write it is
+
+    say $str.subst(/',' <!space>/, ', ',  :g);
+
+A look in the opposite direction is also possible, with C<< <?after> >>. In
+fact many built-in anchors can be written with look-ahead and look-behind
+assertions, though usually not quite as efficient:
+
+    Assertion       Meaning             Rewritten
+    ^               start of string     <!after .>
+    ^^              start of line       <?after ^ | \n >
+    $               end of string       <!before .>
+    >>              right word boundary <?after \w> <!before \w>
+
+    # TODO: non-contrived example for look-behind
+
+=for vim: spell spelllang=en tw=78
