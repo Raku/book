@@ -419,4 +419,78 @@ assertions, though usually not quite as efficient:
 
     # TODO: non-contrived example for look-behind
 
+=head1 Match objects
+
+    sub line-and-column(Match $m) {
+        my $line   = ($m.orig.substr(0, $m.from).split("\n")).elems;
+        # RAKUDO workaround for RT #70003, $m.orig.rindex(...) directly fails
+        my $column = $m.from - ('' ~ $m.orig).rindex("\n", $m.from);
+        $line, $column;
+    }
+
+    my $s = "the quick\nbrown fox jumped\nover the the lazy dog";
+
+    token word { \w+ [ \' \w+]? }
+    regex dup { <word> \W+ $<word> }
+    if $s ~~ m/ <dup> / {
+        my ($line, $column) = line-and-column($/);
+        say "Found '{$<dup><word>}' twice in a row";
+        say "at line $line, column $column";
+    }
+
+    # output:
+    # Found 'the' twice in a row
+    # at line 3, column 6
+
+
+Every regex match returns an object of type C<Match>. Evaluated in boolean
+context, such a match object returns C<True> for successful matches and
+C<False> for failed ones. Most properties are only interesting after
+successful matches, so we'll concentrate on those.
+
+The C<orig> method returns the string that was matched against, C<from> and
+C<to> the positions of the start point and end point of the match.
+
+In the example above the C<line-and-column> function determines the line
+number the match occurred in, by extracting the string up to the match
+position (C<$m.orig.substr(0, $m.from)>), splitting it by newlines and
+counting the elements. The column is determined by searching backwards from
+the match position, and calculating the difference to the match position.
+
+Using a match object as an array yields access to the positional captures,
+using it as a hash reveals the named captures - which is what C<< $<dup> >>
+was doing in the previous example -- it is a shortcut for C<< $/<dup> >> or
+C<< $/{ 'dup' } >>. These captures are again C<Match> objects, so
+match objects are really trees of matches.
+
+The C<caps> method returns all captures, named and positional, in the order in
+which their matched text appears in the source string. The return value is a
+list of C<Pair> object, the keys of which are the name or number of the
+capture, the value the corresponding C<Match> object.
+
+    if 'abc' ~~ m/(.) <alpha> (.) / {
+        for $/.caps {
+            say .key, ' => ', .value;
+
+        }
+    }
+    
+    # Output:
+    # 0 => a
+    # alpha => b
+    # 1 => c
+
+In this case the captures are in the same order as they are in the regex, but
+quantifiers can change that. Still C<$/.caps> follows the ordering of the
+string, not of the regex. If there is a part of the string that is matched
+but not captured, it does not appear anywhere in the values that C<caps>
+returned.
+
+If you want the non-captured parts too, you need to use C<$/.chunks> instead.
+It returns both the captured and the non-captured part of the matched string,
+in the same format as C<caps>, but with a tilde C<~> as key. So if there are
+no overlapping captures (which could only come from look-around assertions),
+the concatenation of all the pair values that C<chunks> returns is equal to
+the matched part of the string.
+
 =for vim: spell spelllang=en tw=78
