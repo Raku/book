@@ -288,7 +288,7 @@ I<backreference> is a dollar, followed by the name of the named regex in angle
 brackets. 
 
 In the mainline code C<< $<dup> >>, short for C<$/{'dup'}>, accesses the match
-object that the regex C<dup> produced. C<dup> also has a subrle called C<word>,
+object that the regex C<dup> produced. C<dup> also has a subrule called C<word>,
 and the match object produced from that call is accessible as
 C<< $<dup><word> >>.
 
