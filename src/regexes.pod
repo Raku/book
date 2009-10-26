@@ -31,7 +31,7 @@ for that string:
 
 The constructs C<m/ ... /> builds a regex, and putting it on the right hand
 side of the C<~~> smart match operator applies it against the string on the
-left hand side. By default whitespaces inside the regex are irrelevant for the
+left hand side. By default, whitespace inside the regex are irrelevant for the
 matching, so writing it as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all
 produces the exact same semantics - although the first way is probably the most
 readable one.
@@ -92,7 +92,7 @@ a single character, can be found in the following table
     \v      vertical whitespace     (newline), (vertical tab)
 
 Each of these backslash sequence means the complete opposite if you convert
-the letter to upper case: C<\w> matches a character that's not a word
+the letter to upper case: C<\W> matches a character that's not a word
 character, C<\N> matches a single character that's not a newline.
 
 These matches are not limited to the ASCII range - C<\d> matches Latin,
@@ -109,7 +109,28 @@ by listing them inside nested angle and square brackets C<< <[ ... ]> >>.
         say "'$str' contains something that's not a vowel";
     }
 
-# TODO: ranges in character classes, composition
+Rather than listing each character in the character class individually,
+ranges of characters may be specified by placing the range operator
+C<..> between the character that starts the range and the character
+that ends the range.  For instance,
+
+    # match a, b, c, d, ..., y, z
+    if $str ~~ / <[a..z]> / {
+        say "'$str' contains a lower case letter";
+    }
+
+Character classes may also be added or subtracted by using the C<+>
+and C<-> operators:
+
+    if $str ~~ / <[a..z]+[0..9]> / {
+        say "'$str' contains a letter or number";
+    }
+    if $str ~~ / <[a..z]-[aeiou]> / {
+        say "'$str' contains a consonant";
+    }
+
+The negated character class is just a special application of this 
+idea.
 
 A I<quantifier> can specify how often something has to occur. A question mark
 C<?> makes the preceding thing (be it a letter, a character class or
@@ -120,8 +141,8 @@ without any spaces, and the C<?> still quantifies only the C<u>.
 
 The asterisk C<*> stands for zero or more occurrences, so C<m/z\w*o/> can
 match C<zo>, C<zoo>, C<zero> and so on. The plus C<+> stands for one or more
-occurrences, C<\w+> matches what you usually consider a word (though only
-matches the first three characters from C<isn't>).
+occurrences, C<\w+> matches what is usually considered a word (though only
+matches the first three characters from C<isn't> because C<'> isn't a word character).
 
 The most general quantifier is C<**>. If followed by a number it matches that
 many times, and if followed by a range, it can match any number of times that
@@ -167,7 +188,7 @@ first matching alternative win.
 
 =head1 Anchors
 
-So far every regex we looked at could match anywhere within a string, but
+So far every regex we have looked at could match anywhere within a string, but
 often it is desirable to limit the match to the start or end of a string or
 line, or to word boundaries.
 
@@ -175,7 +196,7 @@ A single caret C<^> anchors the regex to the start of the string, a dollar
 C<$> to the end. So C<m/ ^a /> matches strings beginning with an C<a>, and
 C<m/ ^ a $ /> matches strings that only consist of an C<a>.
 
-    Assertion   Meaning
+    Anchor      Meaning
     ^           start of string
     $           end of string
     ^^          start of a line
@@ -187,11 +208,11 @@ C<m/ ^ a $ /> matches strings that only consist of an C<a>.
 
 =head1 Captures
 
-So far regexes have been good to check if a string is in a certain format, and
+Regexes are good to check if a string is in a certain format, and
 to search for pattern. But with some more features they can be very good for
 I<extracting> information too.
 
-Surrounding a part of a regex by round parenthesis C<(...)> makes it
+Surrounding a part of a regex by round brackets C<(...)> makes it
 I<capture> the string it matches. The string matched by the first group of
 parenthesis is stored in C<$/[0]>, the second in C<$/[1]> etc. In fact you can
 use C<$/> as an array containing the captures from each parenthesis group.
@@ -223,7 +244,7 @@ To the screen. The first capture, C<(\w+)>, was quantified, and thus C<$/[0]>
 is a list on which we can call the C<.join> method. Regardless how many
 times the first capture matches, the second is still available in C<$/[1]>.
 
-As a shortcut C<$/[0]> is also available under the name C<$0>, C<$/[1]> as
+As a shortcut, C<$/[0]> is also available under the name C<$0>, C<$/[1]> as
 C<$1> and so on. These aliases are also available inside the regex. This
 allows us to write a regex that detects a rather common error when writing a
 text: an accidentally duplicated word.
@@ -262,17 +283,17 @@ character, optionally followed by a single quote. Another regex called C<dup>
 (short for I<duplicate>) is anchored at a word boundary, then calls the regex
 C<word> by putting it in angle brackets, then matches at least one non-word
 character, and then matches the same string as previously matched by the regex
-C<word>. The syntax for this I<backreference> is a dollar, followed by the
-name of the named regex in angle brackets. After that another word boundary is
-required.
+C<word>.  After that another word boundary is required.  The syntax for this 
+I<backreference> is a dollar, followed by the name of the named regex in angle 
+brackets. 
 
 In the mainline code C<< $<dup> >>, short for C<$/{'dup'}>, accesses the match
-object that the regex C<dup> produced. That one has called the regex C<word>,
+object that the regex C<dup> produced. C<dup> also has a subrle called C<word>,
 and the match object produced from that call is accessible as
 C<< $<dup><word> >>.
 
 Named regexes make it easy to organize complex regexes in smaller pieces, just
-like subroutines all that for ordinary code.
+as subroutines allow for ordinary code.
 
 =head1 Modifiers
 
@@ -345,7 +366,7 @@ C<token { ... }>. So you'd typically write the previous example as
     token word { \w+ [ \' \w+]? }
     regex dup { <word> \W+ $<word> }
 
-A token that also switches on the C<:ratchet> modifier is called a C<rule>.
+A token that also switches on the C<:sigspace> modifier is called a C<rule>.
 
     rule wordlist { <word> ** \, 'and' <word> }
 
@@ -411,7 +432,7 @@ A look in the opposite direction is also possible, with C<< <?after> >>. In
 fact many built-in anchors can be written with look-ahead and look-behind
 assertions, though usually not quite as efficient:
 
-    Assertion       Meaning             Rewritten
+    Anchor          Meaning             Equivalent Assertion
     ^               start of string     <!after .>
     ^^              start of line       <?after ^ | \n >
     $               end of string       <!before .>
