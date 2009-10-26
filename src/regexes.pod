@@ -116,7 +116,7 @@ that ends the range.  For instance,
 
     # match a, b, c, d, ..., y, z
     if $str ~~ / <[a..z]> / {
-        say "'$str' contains a lower case letter";
+        say "'$str' contains a lower case Latin letter";
     }
 
 Character classes may also be added or subtracted by using the C<+>
@@ -129,7 +129,7 @@ and C<-> operators:
         say "'$str' contains a consonant";
     }
 
-The negated character class is just a special application of this 
+The negated character class is just a special application of this
 idea.
 
 A I<quantifier> can specify how often something has to occur. A question mark
@@ -284,8 +284,8 @@ character, optionally followed by a single quote. Another regex called C<dup>
 C<word> by putting it in angle brackets, then matches at least one non-word
 character, and then matches the same string as previously matched by the regex
 C<word>.  After that another word boundary is required.  The syntax for this 
-I<backreference> is a dollar, followed by the name of the named regex in angle 
-brackets. 
+I<backreference> is a dollar, followed by the name of the named regex in angle
+brackets.
 
 In the mainline code C<< $<dup> >>, short for C<$/{'dup'}>, accesses the match
 object that the regex C<dup> produced. C<dup> also has a subrule called C<word>,
