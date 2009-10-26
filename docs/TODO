@@ -1,0 +1,9 @@
+This is a list of *technical* TODO items that needs to be solved
+
+* footnotes produce some Mojibake
+* non-ASCII-Characters (notably « and ») are silently missing from the PDF
+* investigate syntax highlighting or emphasizing for the code examples
+* investigate how to do proper cross-references
+* code blocks preserve all leading whitespaces, leading to indented code
+  examples - that should not be the case, or at maybe be optional
+* maybe we need a more elaborate Makefile when we get more images
