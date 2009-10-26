@@ -7,3 +7,4 @@ This is a list of *technical* TODO items that needs to be solved
 * code blocks preserve all leading whitespaces, leading to indented code
   examples - that should not be the case, or at maybe be optional
 * maybe we need a more elaborate Makefile when we get more images
+* C<^> is rendered as ^{}, see http://rt.cpan.org/Public/Bug/Display.html?id=50794
