@@ -1,4 +1,5 @@
-CHAPTERS = src/preface.pod \
+CHAPTERS =src/basics.pod \
+          src/preface.pod \
 		  src/multi-dispatch.pod \
 		  src/classes-and-objects.pod \
 		  src/regexes.pod \
@@ -15,7 +16,7 @@ build/mmd-table.pdf: src/mmd-table.svg
 	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
 
 build/book.pdf:	build/book.tex build/mmd-table.pdf
-	cd build && pdflatex book.tex
+	cd build && pdflatex book.tex && pdflatex book.tex
 
 build/book.tex: $(CHAPTERS)
 	perl bin/book-to-latex $(CHAPTERS) > build/book.tex
