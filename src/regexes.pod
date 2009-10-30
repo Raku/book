@@ -29,11 +29,11 @@ for that string:
         say "'properly' contains 'perl'";
     }
 
-The constructs C<m/ ... /> builds a regex, and putting it on the right hand
+The construct C<m/ ... /> builds a regex, and putting it on the right hand
 side of the C<~~> smart match operator applies it against the string on the
 left hand side. By default, whitespace inside the regex are irrelevant for the
-matching, so writing it as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all
-produces the exact same semantics - although the first way is probably the most
+matching, so writing the regex as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all
+produce the exact same semantics - although the first way is probably the most
 readable one.
 
 Only word characters, digits and the underscore cause an exact substring
@@ -49,7 +49,7 @@ have to quote or escape them:
     if $str ~~ m/ \* very \* / { say '\o/' }
 
 However searching for literal strings gets boring pretty quickly, so let's
-explore some "special" (also called I<metasyntactic>) characters. The dot C<.>
+explore some "special" (also called I<metasyntactic>) characters. The dot (C<.>)
 matches a single, arbitrary character:
 
     my @words = <spell superlative openly stuff>;
@@ -164,7 +164,7 @@ If a quantifier has several ways to match, the longest one is chosen.
         say "Matches the complete string!";
     }
 
-This is called I<greedy> matching. Appending a question mark to a modifier
+This is called I<greedy> matching. Appending a question mark to a quantifier
 makes it non-greedy,
 so using C<.*?> instead of C<.*> in the example above
 makes the regex match only the string C<< <p>A paragraph</p> >>.
@@ -270,7 +270,7 @@ match I<B<the the>ory>.
 You can declare regexes just like subroutines, and give them names. Suppose
 you found the previous example useful, and wanted to make it available easily.
 Also you don't like the fact that doesn't catch two C<doesn't> or C<isn't> in
-a row, so you wan to extend it a bit:
+a row, so you want to extend it a bit:
 
     regex word { \w+ [ \' \w+]? }
     regex dup { « <word> \W+ $<word> » }
@@ -324,17 +324,21 @@ letters).
 
 =head1 Backtracking control
 
-When you write a regex, the regex engine figures out how to search for that
-pattern in a text itself. This often involves that a certain way to match
-things is tried out, and if it didn't work, another way is tried. This process
-of failing, and trying again in a different way is called I<backtracking>.
+In the course of matching a regex against a string, the regex engine may
+reach a point where an alternation has matched a particular alternative
+or a quantifier has greedily matched all it can but the final portion of
+the regex fails to match. So, the regex engine backs up and attempts to
+match another alternative or matches one less character on the
+quantified portion to see if the overall regex succeeds. This process of
+failing and trying again is called I<backtracking>.
 
 For example matching C<m/\w+ 'en'/> against the string C<oxen> makes the
-C<\w+> group first match the whole string, but then the C<en> literal at the
-end can't match anything. So C<\w+> gives up one character, and now matches
-C<oxe>. Still C<en> can't match, so the C<\w+> group again gives up one
-character and now matches C<ox>. The C<en> literal can now match the last two
-characters of the string, and the overall match succeeds.
+C<\w+> group first match the whole string (because of the greediness of
+C<+>), but then the C<en> literal at the end can't match anything. So
+C<\w+> gives up one character, and now matches C<oxe>. Still, C<en> can't
+match, so the C<\w+> group again gives up one character and now matches
+C<ox>. The C<en> literal can now match the last two characters of the
+string, and the overall match succeeds.
 
 While backtracking is often what one wants, and very convenient, it can also
 be slow, and sometimes confusing. A colon C<:> switches off backtracking for
@@ -344,7 +348,7 @@ releases them.
 
 The C<:ratchet> modifier disables backtracking for a whole regex, which is
 often desirable in a small regex that is called from others regexes. When
-search for duplicate words, we had to anchor the regex to word boundaries,
+searching for duplicate words, we had to anchor the regex to word boundaries,
 because C<\w+> would allow matching only part of a word. By disabling
 backtracking we get the more intuitive behavior that C<\w+> always matches a
 full word:
@@ -372,9 +376,10 @@ A token that also switches on the C<:sigspace> modifier is called a C<rule>.
 
 =head1 Substitutions
 
-Not only data validation and extraction made regexes popular, also data
-manipulation. The C<subst> method matches a regex against a string, and if a
-match was found, substitutes it by the second argument.
+Regexes are not only popular for data validation and extraction, but
+also data manipulation. The C<subst> method matches a regex against a
+string, and if a match is found, substitutes the portion of the string
+that matches with its second argument.
 
     my $spacey = 'with    many  superfluous   spaces';
     say $spacey.subst(rx/ \s+ /, ' ', :g);
@@ -384,9 +389,10 @@ The C<:g> at the end tells the substitution to work I<globally>, so that every
 match of regex is replaced. Without C<:g> it stops after the first match.
 
 Note that the regex was constructed with C<rx/ ... /> rather than C<m/ ... />.
-The former constructs a regex object, the latter would match the regex
-immediately against the topic variable C<$_>, and pass the resulting match
-object to the C<subst> method.
+The former constructs a regex object, the latter not only constructs the regex
+object, but immediately matches it against the topic variable C<$_>.  
+Had we used C<m/ ... /> in the call to C<subst>, a match object would
+have been passed as the first argument rather than the regex itself.
 
 =head1 Other regex features
 
@@ -412,14 +418,14 @@ regex can clean up after the lazy writer:
     say $str.subst(/',' <?before \w>/, ', ',  :g);
     # output: milk, flour, sugar and eggs
 
-The word character after the comma is not part of the match, because it is in
-a look-ahead, which C<< <?before ... > >> introduces. The leading question
-mark indicates an I<assertion>, that is a rule that never uses up characters
-from the matched string.
+The word character after the comma is not part of the match, because it
+is in a look-ahead, which C<< <?before ... > >> introduces. The leading
+question mark indicates an I<zero width assertion>, that is a rule that
+never uses up characters from the matched string.
 
-In fact you can turn any call to a subrule into an assertion. The built-in
-token C<< <alpha> >> matches an alphabetic character, so you could write the
-example above as
+In fact you can turn any call to a subrule into an zero width assertion.
+The built-in token C<< <alpha> >> matches an alphabetic character, so
+you could write the example above as
 
     say $str.subst(/',' <?alpha>/, ', ',  :g);
 
