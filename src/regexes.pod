@@ -325,7 +325,7 @@ letters).
 =head1 Backtracking control
 
 In the course of matching a regex against a string, the regex engine may
-reach a point where an alternation has matched a particular alternative
+reach a point where an alternation has matched a particular branch
 or a quantifier has greedily matched all it can but the final portion of
 the regex fails to match. So, the regex engine backs up and attempts to
 match another alternative or matches one less character on the
