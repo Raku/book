@@ -65,7 +65,7 @@ sub read-dictionary ($dictionary) {
     return @words;
 }
 
-sub fill-blanks(@blanks, $word,$letter) {
+sub fill-blanks(@blanks, $word, $letter) {
     gather for @blanks Z $word.split('') -> $b, $w {
         take $w eq $letter ?? $w !! $b;
     }
