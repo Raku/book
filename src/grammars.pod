@@ -151,4 +151,40 @@ to match nothing at all. After optional spaces two slashes C<'//'>  introduce a
 comment, which is followed by an arbitrary number of characters that are not
 newlines, and then a newline -- in prose: it extends to the rest of the line.
 
+=head1 Extracting data
+
+The C<parse> method of a grammar returns a C<Match> object, and through the
+captures you can access all the relevant information. However to do that you
+have to write a function that traverses the match tree recursively, and
+search for bits and pieces you are interested in. Since this is a cumbersome
+task, an alternative solution exist: I<actions method>.
+
+    # TODO: example for JSON actions methods
+    # since this is going to change quite a bit
+    # with upcoming Rakudo changes I don't bother to
+    # put it in and explain it in detail right now
+
+    my $actions = JSON::Tiny::Actions.new();
+    JSON::Tiny::Grammar.parse($str, :$actions);
+
+    # RAKUDO doesn't call action methods at the
+    # end of each each rule yet
+
+We pass an actions object to the grammar's C<parse> method. Whenever the
+grammar engine finishes parsing one rule, or encounters a C<{*}> token in the
+grammar, it calls an method of the match object, with the same name as
+the current rule. If no such method is found, it is silently ignored.
+
+It passes the current match object as the first positional argument, and
+optionally as a second argument the name of the current branch, which can be
+set with C<#= name> at the end of a line.
+
+Each match object has a slot C<ast> for a payload object, called
+I<abstract syntax tree>. It can hold a custom data structure that you create
+from the match object. Calling C<make $thing> in an action method sets the
+C<ast> attribute of the current match object to C<$thing>.
+
+In the case of our JSON parser the payload can be directly the data structure
+which corresponds that the JSON string represents.
+
 =for vim: spell spelllang=en tw=78
