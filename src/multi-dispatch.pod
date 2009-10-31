@@ -310,8 +310,10 @@ can do that by installing a I<proto> routine:
 
 Nearly all Perl 6 built-in functions and operators export a proto definition,
 preventing accidental overriding.
-N<<One of the very rare exceptions is the smart match operator infix:<~~> which is not overloadable easily, but which redispatches to overloadable multi methods.>>
-N<<To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.>>
+N<One of the very rare exceptions is the smart match operator
+C<< infix:<~~> >> which is not overloadable easily, but which redispatches
+to overloadable multi methods.>>
+N<To hide all candidates of a multi and replace them by another sub, you can declare it as C<only sub YourSub>, though at the time of writing it is not supported by any compiler.>
 
 =head1 Multi Methods
 

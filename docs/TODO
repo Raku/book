@@ -1,6 +1,5 @@
 This is a list of *technical* TODO items that needs to be solved
 
-* footnotes produce some Mojibake
 * non-ASCII-Characters (notably « and ») are silently missing from the PDF
 * investigate syntax highlighting or emphasizing for the code examples
 * investigate how to do proper cross-references
@@ -8,3 +7,8 @@ This is a list of *technical* TODO items that needs to be solved
   examples - that should not be the case, or at maybe be optional
 * maybe we need a more elaborate Makefile when we get more images
 * C<^> is rendered as ^{}, see http://rt.cpan.org/Public/Bug/Display.html?id=50794
+
+RESOLVED
+* footnotes produce some Mojibake
+  - it seems that Pod::PseudoPod only wants single angle brackets on N<...>,
+    N<< ... >> adds some additional angle brackets to the TeX output.
