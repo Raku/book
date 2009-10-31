@@ -173,9 +173,10 @@ signatures may contain any number of positional and named arguments, both
 explicit and slurpy. However only positional parameters contribute to the
 narrowness of a match.
 
-    # RAKUDO currently doesn't like this with two 
-    # anonymous arguments, see RT #69798
-    # as a workaround one can add name to one of them.
+    # RAKUDO has problems with an enum here,
+    # it answers with "Player One wins\nDraw\nDraw"
+    # using separate classes would fix that,
+    # but is not as pretty.
     enum Symbol <Rock Paper Scissors>;
     multi wins(Scissors $, Paper    $) { +1 }
     multi wins(Paper    $, Rock     $) { +1 }
