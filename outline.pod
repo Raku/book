@@ -11,8 +11,6 @@ feel free to adapt and improve.
 
 =head2  Chapter 1 - the basics
 
-TODO:
-
 Lexical conventions, literals, variables, scalars, arrays, hashes, basic
 operators, method and function calls, control flow.
 
@@ -20,7 +18,12 @@ operators, method and function calls, control flow.
 
 (How can we make that chapter non-boring? keeping it short?)
 
+TODO: more about arrays, hashes, built-in functions and methods, operators,
+list quoting
+
 =head2 Chapter 2 - Operators, meta operators
+
+TODO: everything
 
 =head2 Chapter 3 - Subs and signatures,
    
@@ -47,16 +50,13 @@ TODO:
 
 =head2 Chapter 7 - Grammars
 
-Subrules, recursion, inheritance
+Subrules, recursion, inheritance, reduction methods
 
-TODO:
-
-reduction methods
+TODO: detailed explanation of the JSON reduction methods
 
 =head2 Chapter 8 - Roles (?)
 
-
-=head1 Conjectural chapter ideas
+=head1 Conjectural: chapter ideas
 
 Other suggestions:
 
