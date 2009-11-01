@@ -1,5 +1,5 @@
-CHAPTERS =src/basics.pod \
-          src/preface.pod \
+CHAPTERS =src/preface.pod \
+          src/basics.pod \
 		  src/multi-dispatch.pod \
 		  src/classes-and-objects.pod \
 		  src/regexes.pod \
@@ -18,7 +18,7 @@ build/mmd-table.pdf: src/mmd-table.svg
 build/book.pdf:	build/book.tex build/mmd-table.pdf
 	cd build && pdflatex book.tex && pdflatex book.tex
 
-build/book.tex: $(CHAPTERS)
+build/book.tex: $(CHAPTERS) bin/book-to-latex
 	perl bin/book-to-latex $(CHAPTERS) > build/book.tex
 
 clean: 
