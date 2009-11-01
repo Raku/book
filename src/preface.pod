@@ -33,7 +33,7 @@ book is not a comprehensive reference. It is a series of tutorials.
 Perl 6 is a specification. Any implementation that passes the official
 test suite can call itself "Perl 6". There are currently several
 implementations at various levels of maturity. All of the code in this
-book is tested using the Rakudo implementation of Perl 6.
+book is tested using the Rakudo Perl 6 compiler.
 
 =head1 Organization of the book
 
@@ -76,15 +76,18 @@ There is a channel #perl6 on irc.freenode.net dedicated to all things Perl 6.
 
 =item Mailing lists
 
-For issues regarding the Perl 6 language specification send email to
+If you need some programming help with Perl 6, send an email to
+C<perl6-users@perl.org>.
+
+For issues regarding the Perl 6 language specification you can contact
 C<perl6-language@perl.org>, for issues regarding the compiler send email to
 C<perl6-compiler@perl.org>
 
 =back
 
-=head1 Acknowledgements
-
 =for editors
+
+=head1 Acknowledgements
 
 Surely we'll want to thank some people!  :-)
 
