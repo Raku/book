@@ -159,10 +159,67 @@ have to write a function that traverses the match tree recursively, and
 search for bits and pieces you are interested in. Since this is a cumbersome
 task, an alternative solution exist: I<actions method>.
 
-    # TODO: example for JSON actions methods
-    # since this is going to change quite a bit
-    # with upcoming Rakudo changes I don't bother to
-    # put it in and explain it in detail right now
+    class JSON::Tiny::Actions {
+        method TOP($/, $what) {
+            make $/{$what}.ast;
+        }
+
+        method object($/) {
+            make %($<pairlist>.ast)
+        }
+
+        method pairlist($/) {
+            make = $<pair>».ast;
+        }
+
+        method pair($/) {
+            make ( $<string>.ast => $<value>.ast );
+        }
+
+        method array($/) {
+            make $<value>».ast;
+        }
+
+        method value($/, $what) {
+            given $what {
+                when 'true'     { make Bool::True  };
+                when 'false'    { make Bool::False };
+                when 'null'     { make undef       };
+                when *          { make $/{$_}.ast  };
+            }
+        }
+
+        method string($/) {
+            my $s = '';
+            for $0.chunks {
+                if .key eq '~' {
+                    next if .value eq '\\';
+                    $s ~= .value;
+                } else {
+                    $s ~= .value.ast;
+                }
+            }
+            make $s;
+        }
+
+        method str_escape($/) {
+            if $<xdigit> {
+                make chr(:16($<xdigit>.join));
+            } else {
+                given ~$/ {
+                    when '\\' { make '\\'; }
+                    when 'n'  { make "\n"; }
+                    when 't'  { make "\t"; }
+                    when 'f'  { make "\f"; }
+                    when 'r'  { make "\r"; }
+                }
+            }
+        }
+
+        method number($/) {
+            make +$/;
+        }
+    }
 
     my $actions = JSON::Tiny::Actions.new();
     JSON::Tiny::Grammar.parse($str, :$actions);
@@ -186,5 +243,25 @@ C<ast> attribute of the current match object to C<$thing>.
 
 In the case of our JSON parser the payload can be directly the data structure
 which corresponds that the JSON string represents.
+
+Although the rules and action methods live in different namespaces (and in a
+real-world project probably even in separate files), we show them side by
+side to make the correspondence easier to see.
+
+    rule TOP {
+        ^ [
+            | <object> {*}      #= object
+            | <array>  {*}      #= array
+        ]$
+    }
+    method TOP($/, $what) {
+        make $/{$what}.ast;
+    }
+
+The rule has an alternation with two branches, labeled by C<#= object>
+and C<#= array>. The first argument to the C<TOP> method is the current match
+object, the second is the label. The action method accesses the capture with
+the same name as branch, obtains the AST attached to it, and sets it to the
+AST of current match object by calling C<make>.
 
 =for vim: spell spelllang=en tw=78
