@@ -169,6 +169,9 @@ task, an alternative solution exist: I<actions method>.
         }
 
         method pairlist($/) {
+            # RAKUDO sets a $<pair> to undef instead of Nil
+            # if <pair>* matched 0 times, in which case
+            # this will fail
             make = $<pair>».ast;
         }
 
@@ -177,6 +180,7 @@ task, an alternative solution exist: I<actions method>.
         }
 
         method array($/) {
+            # RAKUDO see comment in pairlist
             make $<value>».ast;
         }
 
@@ -263,5 +267,39 @@ and C<#= array>. The first argument to the C<TOP> method is the current match
 object, the second is the label. The action method accesses the capture with
 the same name as branch, obtains the AST attached to it, and sets it to the
 AST of current match object by calling C<make>.
+
+    rule object     { '{' ~ '}' <pairlist>      {*}   }
+    method object($/) {
+        make %($<pairlist>.ast)
+    }
+
+The action method for C<object> extracts the AST of the C<pairlist> submatch,
+and turns it into a hash by putting it inside C<%( ... )>.
+
+    rule pairlist   {
+        <pair> ** ','
+        {*}
+    }
+    method pairlist($/) {
+        make = $<pair>».ast;
+    }
+
+The C<pairlist> rule just matches multiple pairs, and the corresponding action
+method calls the C<.ast> method on each matched pair, and installs the result
+list in its own AST.
+
+    rule pair {
+        <string> ':' <value>        {*}
+    }
+    method pair($/) {
+        make ( $<string>.ast => $<value>.ast );
+    }
+
+A pair consists of a string key and a value, so the action method constructs a
+Perl 6 pair with the C<< => >> operator.
+
+The other action methods work just the same: They transform the information
+they extract from the match object into "native" Perl 6 data structures, and
+call C<make> to set it as their own AST.
 
 =for vim: spell spelllang=en tw=78
