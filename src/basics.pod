@@ -81,7 +81,7 @@ Each sigil carries a meaning. Variables starting with a dollar can hold
 arbitrary values. Here the built-in function C<open> is called, which opens a
 file of name C<scores>, and returns an object describing that file, a
 I<file handle>. The equality sign C<=> I<assigns> that file handle to the
-variable on the left, which means it takes care the C<$file> stores that
+variable on the left, which means it takes care that C<$file> now stores the
 file handle.
 
 C<'scores'> is a I<string literal>. A string is a piece of text, or sequence
