@@ -96,7 +96,7 @@ Arrays store ordered lists of things and can be manipulated later. The
 right-hand side uses the previously declared and initialized variable
 C<$file>, and calls the C<get> method on it, which reads one line from the
 file, and returns it (with the line ending removed). We call the C<split>
-method on the result string, passing a string of a single blank to it.
+method on the resulting string, passing a string consisting of a single blank to it.
 C<split> decomposes the string it was called on into a list of strings, so it
 turns C<"Beth Ana Charlie Dave"> into C<"Beth", "Ana", "Charlie", "Dave">.
 This list is stored into the array C<@names>.
@@ -119,7 +119,7 @@ per player, and C<%sets> the number of won sets per player.
 C<$file.lines> produces a list of lines that are read from the file
 C<scores>.
 C<for> introduces a loop that runs the block indicated by C<...> once for
-each item of the list, setting the variable C<$line> to current value.
+each item of the list, setting the variable C<$line> to the current value.
 
 During the first iteration C<$line> contains the string
 C<Ana vs Dave | 3:0>, during the second C<Charlie vs Beth | 3:1> and so on.
