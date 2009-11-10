@@ -80,7 +80,7 @@ The C<Str> candidate does a bit more work: it adds quotes at the start and the
 end, and escapes literal characters that the JSON spec does not allow in
 strings -- a tab character becomes C<\t>, a newline C<\n>, and so on.
 
-The C<to-json(Array $d)> candidates converts all elements of the array to JSON
+The C<to-json(Array $d)> candidate converts all elements of the array to JSON
 -- with recursive calls to C<to-json>, joins them with commas and surrounds
 them with square brackets.  The recursive calls demonstrate a powerful truth of
 multidispatch: these calls do not necessarily recurse to the C<Array>
@@ -195,6 +195,11 @@ X<multidispatch; narrowness>
 
 C<A> and C<B> are abstract; how about Integer and Positive Integer?  That has
 its flaws too, but it's more concrete.  It also fixes the subsequent example.
+
+Good idea, but Positive Integer would be a subset type, which doesn't count as
+a narrower nominal type. Array and List would work, but are hard to get right.
+C<Int ~~ Num> is subject to change, so currently I can't think of a good idea
+with builtin types - any other idea? --moritz
 
 =end for
 
