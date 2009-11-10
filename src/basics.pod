@@ -267,7 +267,7 @@ The program then counts the number of won sets:
         %sets{$p1} += $r1;
         %sets{$p2} += $r2;
 
-=end programlisting:
+=end programlisting
 
 This is a shortcut for
 
@@ -288,7 +288,7 @@ called C<undef>. The addition and incrementing operators treat C<undef> as a
 number with the value of zero.
 
 X<fat arrow>
-X<< => >
+X<< => >>
 X<pair>
 
 Before these two lines execute, C<%sets> is empty. The assignment automatically
