@@ -137,7 +137,7 @@ C<$file>.  This method reads and returns one line from the file, removing the
 line ending.  C<split> is also a method, called on the string returned from
 C<get>.  C<split>'s single argument is a string containing a space character.
 C<split> decomposes its invocant string into a list of strings. It turns
-C<"Beth Ana Charlie Dave"> into C<"Beth", "Ana", "Charlie", "Dave">.  Finally,
+C<'Beth Ana Charlie Dave'> into C<'Beth', 'Ana', 'Charlie', 'Dave'>.  Finally,
 this list gets stored into the array C<@names>.  The C<@> sigil makes the
 declared variable an C<Array>.  Arrays store ordered lists.
 
@@ -357,7 +357,7 @@ won, which is the secondary criterion to decide who has won the tournament.
 X<stable sort>
 X<sort; stable>
 
-When two array items have the same valuenumber, C<sort> leaves their relative
+When two array items have the same value, C<sort> leaves their relative
 order unchanged. Computer scientists call that a I<stable> sort.  The program
 uses this property of Perl 6's C<sort> to achieve the goal by sorting twice:
 first by the number of sets won (the secondary criterion), then by the number
