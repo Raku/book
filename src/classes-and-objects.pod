@@ -271,6 +271,48 @@ before it ever prints C<'A'> or C<'B'>.
 C<perform> call? Is there even a way to prevent cycles from ever forming
 through C<add-dependency>?
 
+Answer: To detect the precese of a cycle during a C<perform> call, we can
+keep track of which C<Task>s have been started, and prevent a C<Task> from
+starting twice before finishing:
+
+    augment class Task {
+        has Bool $!started = False;
+
+        method perform() {
+            if $!started++ && !$!done {
+                die "Cycle detected, aborting";
+            }
+            unless $!done {
+                .perform() for @!dependencies;
+                &!callback();
+                $!done = True;
+            }
+        }
+    }
+
+We can detect cycles and stop them at the door on the C<add-dependency> stage
+by checking whether there's already a dependency running in the other
+direction. (Only in such a situation would a cycle occur.) To do this, we
+introduce the helper method C<depends-on>, which checks whether a task
+depends on another one, either directly or transitively. Note how we use
+C<»> and C<[||]> to write succinctly what would otherwise have involved
+looping over all the dependencies of the C<Task>.
+
+    augment class Task {
+        method depends-on(Task $some-task) {
+            $some-task === any(@!dependencies)
+            [||] @!dependencies».depends-on($some-task)
+        }
+
+        method add-dependency(Task $dependency) {
+            if $dependency.depends-on(self) {
+                warn 'Cannot add that task, since it would introduce a cycle.';
+                return;
+            }
+            push @!dependencies, $dependency;
+        }
+    }
+
 3. How could we modify the C<Task> class so that a C<Task> object executes
 its dependencies in parallel? (Think especially about how to avoid collisions
 in "diamond dependencies", where a C<Task> has two different dependencies
