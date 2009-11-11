@@ -254,6 +254,19 @@ eventually come back to the original C<Task>. Show how this can be done, and
 explain why the C<perform> method of a C<Task> whose dependencies contain a
 cycle would never terminate successfully.
 
+Answer: You can create two tasks, and then "short-circuit" them with
+C<add-dependency>:
+
+    my $a = Task.new({ say 'A' });
+    my $b = Task.new({ say 'B' }, $a);
+    $a.add-dependency($b);
+
+The C<permform> method would never terminate because the first thing the
+method does is to call all the C<perform> methods of its dependencies. Since
+C<$a> and C<$b> are dependencies of each other, none of them would ever
+get around to calling their callbacks. The program runs out of call stack
+before it ever prints C<'A'> or C<'B'>.
+
 2. Is there a way to detect the presence of a cycle during the course of a
 C<perform> call? Is there even a way to prevent cycles from ever forming
 through C<add-dependency>?
