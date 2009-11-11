@@ -317,3 +317,33 @@ looping over all the dependencies of the C<Task>.
 its dependencies in parallel? (Think especially about how to avoid collisions
 in "diamond dependencies", where a C<Task> has two different dependencies
 which in turn have the same dependency.)
+
+Answer: Turning on parallelism is really easy; we just change the line
+C<.perform() for @!dependencies;> into C<@!dependencies».perform()>. However,
+we might run into race conditions in the case of diamond dependencies,
+wherein C<Task>s C<A> starts C<B> and C<C> in parallel, and both start a
+copy of C<D>, making C<D> run twice. The solution to this is the same as
+with the cycle-detection in question 2 above: introducing an attribute
+C<$!started>. We also don't die if we find a C<Task> that's been started
+but not finished, because this time it might be due to parallelism rather
+than cycles.
+
+    augment class Task {
+        has Bool $!started = False;
+
+        method perform() {
+            unless $!started++ {
+                .perform() for @!dependencies;
+                &!callback();
+                $!done = True;
+            }
+        }
+    }
+
+=for authors
+
+It occurs to me that the above solution might not be 100% thread-safe. Is
+there a good way to guarantee, in Perl 6, that the attribute C<$!started>
+gets checked-and-set atomically?
+
+=end
