@@ -246,3 +246,19 @@ the output:
     making dinner
     eating dinner. NOM!
 
+Questions:
+
+1. The method C<add-dependency> in C<Task> permits the creation of I<cycles>
+in the dependency graph, i.e. chains of dependencies along which you would
+eventually come back to the original C<Task>. Show how this can be done, and
+explain why the C<perform> method of a C<Task> whose dependencies contain a
+cycle would never terminate successfully.
+
+2. Is there a way to detect the presence of a cycle during the course of a
+C<perform> call? Is there even a way to prevent cycles from ever forming
+through C<add-dependency>?
+
+3. How could we modify the C<Task> class so that a C<Task> object executes
+its dependencies in parallel? (Think especially about how to avoid collisions
+in "diamond dependencies", where a C<Task> has two different dependencies
+which in turn have the same dependency.)
