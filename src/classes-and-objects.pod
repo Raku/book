@@ -350,7 +350,7 @@ the various other dependencies in order, giving the output:
 
 B<1.> The method C<add-dependency> in C<Task> permits the creation of I<cycles>
 in the dependency graph.  That is, if you follow dependencies, you can
-eventually return to the original C<Task> Show how to create a graph with
+eventually return to the original C<Task>. Show how to create a graph with
 cycles and explain why the C<perform> method of a C<Task> whose dependencies
 contain a cycle would never terminate successfully.
 
