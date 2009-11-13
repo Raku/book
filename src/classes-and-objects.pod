@@ -5,8 +5,10 @@ It showcases custom constructors, private and public attributes, methods
 and various aspects of signatures. It's not very much code, and yet the
 result is interesting and, at times, useful.
 
+=begin programlisting
+
     class Task {
-        has &!callback;
+        has      &!callback;
         has Task @!dependencies;
         has Bool $.done;
 
@@ -41,111 +43,184 @@ result is interesting and, at times, useful.
 
     $eat.perform();
 
+=end programlisting
 
 =head1 Starting with class
 
-Perl 6, like many other languages, uses the C<class> keyword to introduce a
-new class. Anything inside of the block that follows is considered part of the
-class definition. While arbitrary code may be placed in there, just like any
-other block, the things that most commonly appear are declarations. In our
-example, we find declarations relating to state (attributes, introduced
-through the C<has> keyword) and behavior (methods, through the C<method>
-keyword).
+X<class>
+X<classes>
 
-Declaring a class results in the creation of a type object, which by default
-gets installed into the package (just like a variable declared with C<our>
-scope). This type object is a kind of "empty instance" of the class, and you
-are already used to dealing with them (every time you mentioned a type like
-Int or Str, you were actually referring to the type object of one of the
-Perl 6 built-in classes). In our example, we use the class name C<Task> to
-refer to the class later on, when we are creating instances of it by calling
-the C<new> method.
+X<state>
+X<has>
+X<classes; has>
+X<behavior>
+X<classes; behavior>
+
+Perl 6, like many other languages, uses the C<class> keyword to introduce a new
+class. Anything inside of the block that follows is part of the class
+definition. You may place arbitrary code there, just as you can with any other
+block, but classes commonly contain declarations.  The example code includes
+declarations relating to state (attributes, introduced through the C<has>
+keyword) and behavior (methods, through the C<method> keyword).
+
+=for author
+
+Which package?
+
+=end for
+
+X<type object>
+
+Declaring a class creates a I<type object>, which by default gets installed
+into the package (just like a variable declared with C<our> scope).  This type
+object is an "empty instance" of the class.  You've already seen these.  For
+example, types such as C<Int> and C<Str> refer to the type object of one of the
+Perl 6 built-in classes.  The example uses the class name C<Task> so that other
+code can refer to it later, such as to create class instances by calling the
+C<new> method.
 
 =head1 I can has state?
 
-The first 3 lines inside our class block all declare attributes (known in
-some other languages as fields or instance storage). These are storage
-locations that every instance of a class gets. They are also not accessible
-from the outside of the class, just as a C<my> variable can not be accessed
-from the outside of the scope it was declared in. This provides encapsulation,
-one of the key principles of object oriented design.
+X<attributes>
+X<classes; attributes>
 
-Our first declaration specifies instance storage for a callback - a bit of
-code that we will invoke in order to perform the task that the object is
-representing.
+X<encapsulation>
+X<classes; encapsulation>
+
+The first three lines inside the class block all declare attributes (called
+I<fields> or I<instance storage> in other languages).  These are storage
+locations that every instance of a class gets.  Just as a C<my> variable can
+not be accessed from the outside of its declared scope, attributes are not
+accessible outside of the class.  This I<encapsulation> is one of the key
+principles of object oriented design.
+
+The first declaration specifies instance storage for a callback -- a bit of
+code to invoke in order to perform the task that an object represents:
+
+=begin programlisting
 
     has &!callback;
 
-Since this is something that we should be able to call, we have used the C<&>
-sigil. Following that is something that we have not seen before: the C<!>
-twigil (or secondary sigil). This forms part of the name of the variable,
-and emphasizes that it is a per-instance storage location private to the
-class. The second declaration also uses this twigil:
+=end programlisting
+
+X<sigils; &>
+X<twigils>
+X<twigils; !>
+
+=for author
+
+A previous paragraph said that all attributes are private to the class.
+Explain the subtle distinction here.
+
+=end for
+
+The C<&> sigil indicates that this attribute represents something invocable.
+The C<!> character is a I<twigil>, or secondary sigil.  A twigil forms part of
+the name of the variable.  In this case, the C<!> twigil emphasizes that this
+attribute is private to the class.
+
+The second declaration also uses the private twigil:
+
+=begin programlisting
 
     has Task @!dependencies;
 
-However, this time we have an array of items, so we have chosen the C<@>
-sigil. These items each specify a task that must be completed before the
-present one can be. Furthermore, we have declared that the array may only
-hold instances of the Task class (or some subclass of it).
+=end programlisting
 
-As well as knowing what to do for a task and what its dependent tasks are,
-we also want to know whether the task has been completed yet. This is the
-purpose of our third attribute declaration.
+=for author
+
+The "subclass" language is slightly wrong, but I don't know if we want to get
+into allomorphism here.  Is there a rephrasing that's more correct?
+
+=end for
+
+However, this attribute represents an array of items, so it requires the C<@>
+sigil. These items each specify a task that must be completed before the
+present one can complete. Furthermore, the type declaration on this attribute
+indicates that the array may only hold instances of the Task class (or some
+subclass of it).
+
+The third attribute represents the state of completion of a task:
+
+=begin programlisting
 
     has Bool $.done;
 
-This time, we have declared a scalar attribute (the C<$> sigil) that is of
-type C<Bool>. Instead of the C<!> twigil, this time we have chosen the C<.>
-twigil. While Perl 6 does enforce encapsulation on you, it also saves you
-from writing accessor methods. Replacing the C<!> with a C<.> both declares
-the attribute C<$!done> and an accessor method named C<done>. It's as if you
-had written:
+=end programlisting
+
+X<twigils; .>
+X<twigils; accessors>
+X<accessor methods>
+X<classes; accessors>
+
+This scalar attribute (with the C<$> sigil) has a type of C<Bool>.  Instead of
+the C<!> twigil, this twigil is C<.>. While Perl 6 does enforce encapsulation
+on attributes, it also saves you from writing accessor methods.  Replacing the
+C<!> with a C<.> both declares the attribute C<$!done> and an accessor method
+named C<done>. It's as if you had written:
+
+=begin programlisting
 
     has Bool $!done;
     method done() { return $!done }
 
-Note that this is not like declaring a public attribute, as some languages
-allow; you really are getting both a private storage location and a method,
-just without having to write the method by hand. You are free to instead
-write your own accessor method, if at some future point you need to do
-something more complex than just hand back the value.
+=end programlisting
 
-Note that using the C<.> twigil has created a method that will provide us
-with readonly access to the attribute. We may decide that we'd like to be
-able to reset whether or not a task was done and perform it again. In that
-case, we would write:
+Note that this is not like declaring a public attribute, as some languages
+allow; you really get I<both> a private storage location and a method, without
+having to write the method by hand. You are free instead to write your own
+accessor method, if at some future point you need to do something more complex
+than return the value.
+
+Note that using the C<.> twigil has created a method that will provide with
+readonly access to the attribute. If instead the users of this object should be
+able to reset a task's completion state (perhaps to perform it again), you can
+change the attribute declaration:
+
+=begin programlisting
 
     has Bool $.done is rw;
 
-The use of the C<is rw> trait causes the generated accessor method to
-instead return something that can be assigned to and update the value of
-the attribute.
+=end programlisting
+
+X<traits; is rw>
+
+The C<is rw> trait causes the generated accessor method to return something
+external code can modify to change the value of the attribute.
 
 =head1 Methods
 
-While attributes give our objects state, methods give our objects behaviors.
-We'll put aside the C<new> method for a while - it's a constructor, and we'll
-consider it in more detail later - and look instead at the second method,
-C<add-dependency>. The purpose of this method is to add one new task to this
-task's dependency list.
+X<methods>
+X<classes; methods>
+
+While attributes give objects state, methods give objects behaviors.  Ignore
+the C<new> method temporarily; it's a special type of method.  Consider the
+second method, C<add-dependency>, which adds a new task to this task's
+dependency list.
+
+=begin programlisting
 
     method add-dependency(Task $dependency) {
         push @!dependencies, $dependency;
     }
 
+=end programlisting
+
+X<invocant>
+
 In many ways, this looks a lot like a C<sub> declaration. However, there are
-two important differences. First, this routine will be added to the list of
-methods for the current class, so that if we have an instance of the Task
-class we can use the C<.> method call operator to call it. Second, it places
-the object that the method was invoked on into the special variable C<self>.
+two important differences. First, declaring this routine as a method adds it to
+the list of methods for the current class.  Thus any instance of the C<Task>
+class can call this method with the C<.> method call operator.  Second, a
+method places its invocant into the special variable C<self>.
 
-Inside the method, we simply take the parameter that was passed - which must
-be an instance of the C<Task> class - and C<push> it (add it onto the end of)
-the array C<@!dependencies>, which is one of the attributes of the class.
+The method itself takes the passed parameter--which must be an instance of the
+C<Task> class--and C<push>es it onto the invocant's C<@!dependencies>
+attribute.
 
-The second method contains the main logic of our dependency handler, and so
-is a little more complex.
+The second method contains the main logic of the dependency handler:
+
+=begin programlisting
 
     method perform() {
         unless $!done {
@@ -155,72 +230,95 @@ is a little more complex.
         }
     }
 
-We take no parameters, but instead work with the object's attributes. First,
-we check if the task has already been done by checking its $!done attribute;
-if it has been, we won't do anything else.
+=end programlisting
 
-Next, we wish to perform all of this task's dependencies. For this, we use the
-C<for> construct to iterate over all of the items in the C<@!dependencies>
-attribute. Each item is put into the topic variable, C<$_>, and then the
-statement to the left - the C<.perform()> method call - is run. Using the
-C<.> method call operator without specifying what object to call the method on
-will use the current topic. Altogether, then, this line of code means, call
-the C<.perform> method on everything in C<@!dependencies>.
+It takes no parameters, working instead with the object's attributes. First, it
+checks if the task has already completed by checking the C<$!done> attribute.
+If so, there's nothing to do.
 
-With all of the dependencies done, it's time to perform this task. To do this,
-we grab the C<&!callback> attribute and put parentheses after it, which has the
-effect of calling the bit of code we stored in that attribute. Finally, we set
-the C<$!done> attribute to True, to say that we have done the task, in order
-that we will not repeat it.
+X<operators; .>
+
+Otherwise, the method performs all of the task's dependencies, using the C<for>
+construct to iterate over all of the items in the C<@!dependencies> attribute.
+This iteration places each item--each a C<Task> object--into the topic
+variable, C<$_>.  Using the C<.> method call operator without specifying an
+explicit invocant uses the current topic as the invocant.  Thus the iteration
+construct calls the C<.perform()> method on every C<Task> object in the
+C<@!dependencies> attribute of the current invocant.
+
+After all of the dependencies have completed, it's time to perform the current
+C<Task>'s task by invoking the C<&!callback> attribute directly; this is the
+purpose of the parentheses.  Finally, the method sets the C<$!done> attribute
+to True, so that subsequent invocations of C<perform> on this object (if this
+C<Task> is a dependency of another C<Task>, for example) will not repeat the
+task.
 
 =head1 Constructors
 
+X<constructors>
+
 Perl 6 is rather more liberal than many languages in the area of constructors.
-A constructor is pretty much anything that returns an instance of the class.
-Furthermore, constructors are just ordinary methods. You inherit a default
-constructor named C<new> from the base class C<Object>, which you are free to
-override. That is what we do in our example.
+A constructor is anything that returns an instance of the class.  Furthermore,
+constructors are ordinary methods. You inherit a default constructor named
+C<new> from the base class C<Object>, but you are free to override C<new>, as
+this example does:
+
+=begin programlisting
 
     # RAKUDO: Should really be '&callback' [perl #69766]
     method new(Callable $callback, Task *@dependencies) {
         return self.bless(*, :$callback, :@dependencies);
     }
 
-The biggest difference between constructors in Perl 6 and constructors in
-languages such as C# and Java is that rather than just setting up state on
-a somehow already magically created object, they actually handle the creation
-of the object themselves. This easiest way to do this is by calling the
-C<bless> method, also inherited from C<Object>. The C<bless> method expects
-to be given a positional parameter - the so-called "candidate" - and a set of
-named parameters providing the initial values for each attribute.
+=end programlisting
 
-Therefore, our custom constructor simply exists to turn positional arguments
-into named arguments, so that our class can provide a nice constructor for
-its users. The first parameter is the callback (the thing to do to execute the
-task). The rest of the parameters are dependent C<Task> instances, and are
-captured into the C<@dependencies> slurpy array. We simply pass these on as
-named parameters to bless (note that C<:$callback> just uses the name of the
-variable - minus the sigil - as the name of the parameter).
+X<objects; bless>
+X<bless>
+
+=for author
+
+What's the C<*> in the C<bless> call?
+
+=end for
+
+The biggest difference between constructors in Perl 6 and constructors in
+languages such as C# and Java is that rather than setting up state on a somehow
+already magically created object, Perl 6 constructors actually create of the
+object themselves. This easiest way to do this is by calling the C<bless>
+method, also inherited from C<Object>. The C<bless> method expects a positional
+parameter--the so-called "candidate"--and a set of named parameters providing
+the initial values for each attribute.
+
+The example's constructor turns positional arguments into named arguments, so
+that the class can provide a nice constructor for its users. The first
+parameter is the callback (the thing to do to execute the task). The rest of
+the parameters are dependent C<Task> instances.  The constructor captures these
+into the C<@dependencies> slurpy array and passes them as named parameters to
+C<bless> (note that C<:$callback> uses the name of the variable--minus the
+sigil--as the name of the parameter).
 
 =head1 Consuming our class
 
-Now that we have created our class, it's time to create some instances of it.
-Since we have gone to the effort of declaring a custom constructor, we have a
-neat way of declaring tasks along with their dependencies. To create just a
-single task with no dependencies, we could just write:
+After creating a class, you can create instances of the class.  Declaring a
+custom constructor provides a simple way of declaring tasks along with their
+dependencies. To create a single task with no dependencies, write:
+
+=begin programlisting
 
     my $eat = Task.new({ say 'eating dinner. NOM!' });
 
-Earlier I mentioned that by declaring the class C<Task>, a type object had been
-installed in the namespace. Since this is just a kind of "empty instance" of
-the class - an instance without any state - we are able to call methods on it that
-do not try to access any state. This includes C<new>, which just creates a new
-object rather than doing anything to the current one. Here, we have just passed
-a single item to the constructor - a code block specifying what to do when
-performing the task.
+=end programlisting
 
-Since, unfortunately, dinner never just magically happens, we also need to set
-up some dependent tasks.
+An earlier section explained that declaring the class C<Task> installed a type
+object had been installed in the namespace.  This type object is a kind of
+"empty instance" of the class, specifically an instance without any state.  You
+can call methods on that instance, as long as they do not try to access any
+state; C<new> is an example, as it creates a new object rather than modifying
+or accessing an existing object.
+
+Unfortunately, dinner never magically happens.  It has dependent tasks:
+
+=begin programlisting
 
     my $eat =
         Task.new({ say 'eating dinner. NOM!' },
@@ -233,11 +331,13 @@ up some dependent tasks.
             )
         );
 
-Notice how the custom constructor and sensible use of whitespace allow us to
-lay out our constructor calls nicely to make it clear what tasks are dependent
-on what. Finally, we can call the C<perform> method, which recursively calls
-the C<perform> method on the various other dependencies in order, giving us
-the output:
+=end programlisting
+
+Notice how the custom constructor and sensible use of whitespace allows a
+layout which makes task dependencies clear.
+
+Finally, the C<perform> method call recursively calls the C<perform> method on
+the various other dependencies in order, giving the output:
 
     making some money
     going to the store
@@ -246,34 +346,49 @@ the output:
     making dinner
     eating dinner. NOM!
 
-Questions:
+=head1 Exercises
 
-1. The method C<add-dependency> in C<Task> permits the creation of I<cycles>
-in the dependency graph, i.e. chains of dependencies along which you would
-eventually come back to the original C<Task>. Show how this can be done, and
-explain why the C<perform> method of a C<Task> whose dependencies contain a
-cycle would never terminate successfully.
+B<1.> The method C<add-dependency> in C<Task> permits the creation of I<cycles>
+in the dependency graph.  That is, if you follow dependencies, you can
+eventually return to the original C<Task> Show how to create a graph with
+cycles and explain why the C<perform> method of a C<Task> whose dependencies
+contain a cycle would never terminate successfully.
 
-Answer: You can create two tasks, and then "short-circuit" them with
+B<Answer:> You can create two tasks, and then "short-circuit" them with
 C<add-dependency>:
+
+=begin programlisting
 
     my $a = Task.new({ say 'A' });
     my $b = Task.new({ say 'B' }, $a);
     $a.add-dependency($b);
 
-The C<permform> method would never terminate because the first thing the
-method does is to call all the C<perform> methods of its dependencies. Since
-C<$a> and C<$b> are dependencies of each other, none of them would ever
-get around to calling their callbacks. The program runs out of call stack
-before it ever prints C<'A'> or C<'B'>.
+=end programlisting
 
-2. Is there a way to detect the presence of a cycle during the course of a
-C<perform> call? Is there even a way to prevent cycles from ever forming
-through C<add-dependency>?
+The C<perform> method will never terminate because the first thing the method
+does is to call all the C<perform> methods of its dependencies. Because C<$a>
+and C<$b> are dependencies of each other, none of them would ever get around to
+calling their callbacks. The program will exhaust memory before it ever prints
+C<'A'> or C<'B'>.
 
-Answer: To detect the precese of a cycle during a C<perform> call, we can
-keep track of which C<Task>s have been started, and prevent a C<Task> from
-starting twice before finishing:
+B<2.> Is there a way to detect the presence of a cycle during the course of a
+C<perform> call? Is there a way to prevent cycles from ever forming through
+C<add-dependency>?
+
+B<Answer:> To detect the presence of a cycle during a C<perform> call, keep
+track of which C<Task>s have started; prevent a C<Task> from starting twice
+before finishing:
+
+=for author
+
+It's time to introduce the C<augment> syntax.
+
+Also, C<!$!done> is unnecessarily hard to read if you see ! as a quasiquoting
+symbol.  It's a $ sandwich.
+
+=end for
+
+=begin programlisting
 
     augment class Task {
         has Bool $!started = False;
@@ -282,6 +397,7 @@ starting twice before finishing:
             if $!started++ && !$!done {
                 die "Cycle detected, aborting";
             }
+
             unless $!done {
                 .perform() for @!dependencies;
                 &!callback();
@@ -290,13 +406,17 @@ starting twice before finishing:
         }
     }
 
-We can detect cycles and stop them at the door on the C<add-dependency> stage
-by checking whether there's already a dependency running in the other
-direction. (Only in such a situation would a cycle occur.) To do this, we
-introduce the helper method C<depends-on>, which checks whether a task
-depends on another one, either directly or transitively. Note how we use
-C<»> and C<[||]> to write succinctly what would otherwise have involved
-looping over all the dependencies of the C<Task>.
+=end programlisting
+
+Another approach is to stop cycles from forming during C<add-dependency> by
+checking whether there's already a dependency running in the other direction.
+(This is the only situation in which a cycle can occur.)  This requires the
+addition of a helper method C<depends-on>, which checks whether a task depends
+on another one, either directly or transitively. Note the use of C<»> and
+C<[||]> to write succinctly what would otherwise have involved looping over all
+the dependencies of the C<Task>:
+
+=begin programlisting
 
     augment class Task {
         method depends-on(Task $some-task) {
@@ -313,20 +433,22 @@ looping over all the dependencies of the C<Task>.
         }
     }
 
-3. How could we modify the C<Task> class so that a C<Task> object executes
-its dependencies in parallel? (Think especially about how to avoid collisions
-in "diamond dependencies", where a C<Task> has two different dependencies
-which in turn have the same dependency.)
+=end programlisting
 
-Answer: Turning on parallelism is really easy; we just change the line
-C<.perform() for @!dependencies;> into C<@!dependencies».perform()>. However,
-we might run into race conditions in the case of diamond dependencies,
-wherein C<Task>s C<A> starts C<B> and C<C> in parallel, and both start a
-copy of C<D>, making C<D> run twice. The solution to this is the same as
-with the cycle-detection in question 2 above: introducing an attribute
-C<$!started>. We also don't die if we find a C<Task> that's been started
-but not finished, because this time it might be due to parallelism rather
-than cycles.
+B<3.> How could C<Task> objects execute their dependencies in parallel? (Think
+especially about how to avoid collisions in "diamond dependencies", where a
+C<Task> has two different dependencies which in turn have the same dependency.)
+
+B<Answer:> Enabling parallelism is easy; change the line C<.perform() for
+@!dependencies;> into C<@!dependencies».perform()>. However, there may be race
+conditions in the case of diamond dependencies, wherein C<Task>s C<A> starts
+C<B> and C<C> in parallel, and both start a copy of C<D>, making C<D> run
+twice. The solution to this is the same as with the cycle-detection in Question
+2: introducing an attribute C<$!started>. Note that it's impolite to die if a
+C<Task> has started but not yet finished, because this time it might be due to
+parallelism rather than cycles:
+
+=begin programlisting
 
     augment class Task {
         has Bool $!started = False;
@@ -339,6 +461,8 @@ than cycles.
             }
         }
     }
+
+=end programlisting
 
 =for authors
 
