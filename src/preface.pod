@@ -30,28 +30,26 @@ book is not a comprehensive reference. It is a series of tutorials.
 
 =head1 Relationship between Perl 6 and Perl 5
 
-While Perl 6 may seem like the next best version of Perl because 6 is greater
-than 5, that is a grosse over simplification.  In reality there is a family of
-languages that claim the Perl moniker with two main branches in the family tree:
-Perl 5 and Perl 6.  Both of these branches are growing independently
-of each other and will continue to do so for the foreseeable future.  Of course,
-since they are both Perl, if one branch comes up with a good idea, it's highly
-likely that the other branch will borrow it.
+Perl 6 is the next major evolution of the language known as Perl. It
+represents a major break in syntactic and semantic compatibility from
+Perl 5, thus a major version number increase. However, this does not
+mean that Perl 5 is going away. In fact, quite the opposite. Both Perl 5
+and Perl 6 have an active developer community that each mould the
+language in their own way. Perl 5 developers try to extend the language
+in various ways while keeping backwards compatibility with past versions
+of Perl. Perl 6 developers extend the language by adding new syntactic
+and semantic features that enable more power and expressiveness without
+the restriction of backward compatibility with Perl 5.
 
-On the Perl 5 side of the family tree we have things like Strawberry Perl,
-ActivePerl, and the canonical Perl 5 distribution.  On the Perl 6 side of the
-family tree we have Rakudo, SMOP, elf, kp6, pugs, and others.
-
-Perl is more than just a programming language.  It is the language and all of
-the cultural artifacts that have become part and parcel with using that
-language.  For instance, anyone using Perl today also uses the CPAN (Comprehensive Perl
-Archive Network).  CPAN is an extension of the language.  It's a resource that
-Perl programmers expect to have available.
-
-This is similar to the history of Unix. In the beginning there was AT&T
-Unix which was good. But some folks thought they could improve upon AT&T
-Unix and thus BSD Unix was born. These two Unixes grew independently for
-a while until they started borrowing good ideas from one another.  Then
+Some might ask, "Why call it Perl if it's a different language?" Perl is
+more than just the vagaries of syntax. Perl is philosophy (there's more
+than one way to do it; easy things easy, hard things possible); Perl is
+custom (unit testing); Perl is architectual edifice (Comprehensive Perl
+Archive Network); Perl is community (perl5porters, perl6-language).
+These are things that both Perl 5 and Perl 6 will share to varying
+degrees. Also, due to Perl's habit of stealing good ideas, Perl 5 and
+Perl 6 will converge in some areas as Perl 5 borrows ideas from Perl 6
+and vice versa.
 
 =head1 Perl 6 implementations
 
