@@ -14,7 +14,7 @@ should finalize in mid March 2010.
 
     Date            Release Manager
     2009-10-23      moritz
-    2009-11-20
+    2009-11-20      PerlJam
     2009-12-18      masak
     2010-01-22
     2010-02-19
