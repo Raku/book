@@ -23,5 +23,24 @@ should finalize in mid March 2010.
 
 =head1 RELEASE PROCEDURE
 
-Not fixed yet. The first release will be a blog post including a vision
-statement.
+=over 
+
+=item *
+
+Write a release announcement, and put it in F<docs/announce/>
+
+=item *
+
+Build the book by typing C<make>
+
+=item *
+
+Upload the generated file F<build/book.pdf> to
+L<http://github.com/perl6/book/downloads>
+
+=item *
+
+Post the blog to L<http://rakudo.org/> (node type I<story>).
+
+=back
+
