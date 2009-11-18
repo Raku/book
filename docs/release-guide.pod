@@ -27,16 +27,16 @@ should finalize in mid March 2010.
 
 =item *
 
-Write a release announcement, and put it in F<docs/announce/>
+Write a release announcement, and put it in F<docs/announce/>.
 
 =item *
 
-Build the book by typing C<make>
+Build the book by typing C<make>.
 
 =item *
 
 Upload the generated file F<build/book.pdf> to
-L<http://github.com/perl6/book/downloads>
+L<http://github.com/perl6/book/downloads>.
 
 =item *
 
