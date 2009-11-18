@@ -23,24 +23,49 @@ should finalize in mid March 2010.
 
 =head1 RELEASE PROCEDURE
 
+
 =over 
 
-=item *
+=item 0
 
-Write a release announcement, and put it in F<docs/announce/>
+Make sure you have the latest changes to the book by executing
 
-=item *
+    git pull
 
-Build the book by typing C<make>
+in your clone of the book repository.
 
-=item *
+=item 1
 
-Upload the generated file F<build/book.pdf> to
+Tag the release:
+
+    git tag -a -m'Release YYYY-MM' YYYY-MM
+    git push --tags
+
+where C<YYYY-MM> is the four digit year and 2 digit month.
+
+=item 2
+
+Summarize the major changes since the last release and put them in an
+announcement.  Place the announcement in F<docs/announce/>.
+
+Use the following command to see a chronology of changes:
+
+    git log --since=YYYY-MM-DD --reverse 
+
+=item 3
+
+Build the book by typing C<make release>.  This will create a file called
+F<build/book-YYYY-MM.pdf> where C<YYYY> and C<MM> are the current year 
+and month respectively.
+
+=item 4
+
+Upload the generated file F<build/book-YYYY-MM.pdf> to
 L<http://github.com/perl6/book/downloads>
 
-=item *
+=item 5
 
-Post the blog to L<http://rakudo.org/> (node type I<story>).
+Post the announcement to L<http://rakudo.org/> (node type I<story>).
 
 =back
 
