@@ -738,13 +738,13 @@ position (C<$m.orig.substr(0, $m.from)>), splitting it by newlines and
 counting the elements. The column is determined by searching backwards from
 the match position, and calculating the difference to the match position.
 
-=begin notetip
+=begin sidebar
 
 The C<rindex> method searches a string for another substring, starting at the
 end of the string, moving forward until the search string is found. It returns
 the position of search string.
 
-=end notetip
+=end sidebar
 
 Using a match object as an array yields access to the positional captures,
 using it as a hash reveals the named captures - which is what C<< $<dup> >>

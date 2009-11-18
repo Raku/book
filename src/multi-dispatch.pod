@@ -159,12 +159,12 @@ C<where> clause executes.  Any Perl 6 compiler is free to optimize away type
 checks it knows will succeed.  In the current Rakudo implementation, the second
 line with C<say> will print a higher number than the first.
 
-=begin notetip
+=begin sidebar
 
 You I<can> do this, but you should avoid it in anything other than example
 code.  Relying on the side effects of type checks produces unreliable code.
 
-=end notetip
+=end sidebar
 
 =head1 Narrowness
 
@@ -451,13 +451,13 @@ which prevents accidental overriding of built-insN<One of the very rare
 exceptions is the smart match operator C<< infix:<~~> >> which is not easily
 overloadable.  Instead it redispatches to overloadable multi methods.>>.
 
-=begin notetip
+=begin sidebar
 
 To hide all candidates of a multi and replace them by another sub, you can
 declare it as C<only sub YourSub>, though at the time of writing, no compiler
 supports this.
 
-=end notetip
+=end sidebar
 
 =head1 Multi Methods
 
