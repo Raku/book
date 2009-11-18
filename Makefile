@@ -12,6 +12,9 @@ INKSCAPE = inkscape
 
 default: build/book.pdf
 
+release: build/book.pdf
+	cp build/book.pdf build/book-$$(date +"%Y-%m").pdf
+
 build/mmd-table.pdf: src/mmd-table.svg
 	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
 
