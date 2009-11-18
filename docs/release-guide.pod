@@ -36,21 +36,21 @@ in your clone of the book repository.
 
 =item 1
 
-Tag the release:
-
-    git tag -a -m'Release YYYY-MM' YYYY-MM
-    git push --tags
-
-where C<YYYY-MM> is the four digit year and 2 digit month.
-
-=item 2
-
 Summarize the major changes since the last release and put them in an
 announcement.  Place the announcement in F<docs/announce/>.
 
 Use the following command to see a chronology of changes:
 
     git log --since=YYYY-MM-DD --reverse 
+
+=item 2
+
+Tag the release:
+
+    git tag -a -m'Release YYYY-MM' YYYY-MM
+    git push --tags
+
+where C<YYYY-MM> is the four digit year and 2 digit month.
 
 =item 3
 
