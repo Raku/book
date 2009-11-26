@@ -7,7 +7,7 @@ without developers trying to implement the specification and programmers
 trying to use those implementations to solve real programming problems.
 Because of this interplay between design and implementation, today we
 have more cohesive and consistent language specification and a compiler
-that implements a good bit of it. 
+that implements a good bit of it.
 
 In the pages that follow, you will be introduced to the Perl 6 language
 through its Rakudo implementation. Good luck and as the Perl 6 community
@@ -29,6 +29,14 @@ that they should be able to solve their own problems with Perl 6. This
 book is not a comprehensive reference. It is a series of tutorials.
 
 =head1 Relationship between Perl 6 and Perl 5
+
+=for author
+RFC:
+This first sentence may set a tone we would rather avoid. Should we use
+something more along the lines of it being the newest member of the Perl
+family, as in masak++'s "How Perl 6 could kill us all!" post? The
+subsequent sentences would be fine as they are. --eternaleye
+=end for
 
 Perl 6 is the next major evolution of the language known as Perl. It
 represents a major break in syntactic and semantic compatibility from
