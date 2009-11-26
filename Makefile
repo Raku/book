@@ -18,6 +18,9 @@ release: build/book.pdf
 build/mmd-table.pdf: src/mmd-table.svg
 	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
 
+build/book.html: $(CHAPTERS) bin/book-to-html
+	perl bin/book-to-html $(CHAPTERS) > build/book.html
+
 build/book.pdf:	build/book.tex build/mmd-table.pdf
 	cd build && pdflatex book.tex && pdflatex book.tex
 
