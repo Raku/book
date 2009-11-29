@@ -1,0 +1,145 @@
+=head0 Built-in types, operators and methods
+
+=for authors
+
+I'm not sure if this qualifies as a chapter on its own. I could imagine
+putting this at the end of the first chapter, or squeeze the sections into
+chapter 1 where appropriate.
+
+=end for
+
+X<type>
+X<coercion>
+
+Many operators work on a particular I<type> of data. If the type of the
+operands is different, a copy of the operands is converted to the needed type.
+For example C<$a + $b> will convert a copy of both C<$a> and C<$b> to numbers
+(unless they are numbers already). This implicit conversion is called
+I<coercion>.
+
+Not only operators coerce their arguments: C<if> and C<while> coerce to truth
+values (bool), C<for> views things as lists and so on.
+
+=head1 Numbers
+
+Perl 6 has a few different number types which you can intermix freely:
+Subtracting a floating point value from an integer works with C<123 - 12.1e1>
+without any further ado.
+
+The most important types are
+
+=over
+
+=item Int
+
+C<Int> objects store integer numbers of arbitrary size. If you write a literal
+that consists only of digits, like C<12>, it is an C<Int>.
+
+=item Rat
+
+C<Rat> is short for I<rational> and stores fractional numbers without loss of
+precision, by keeping track of numerator and denominator as integers.
+Since arithmetics with large integers can become quite slow,
+rationals with too large denominator automatically degrade to C<Num>.
+
+Writing a fractional value with a dot as the decimal separator produces a
+C<Rat>, for example C<3.14>.
+
+=item Num
+
+C<Num> is the floating point type. It stores sign, mantissa and exponent with
+a fixed width each. Calculations involving C<Num> numbers are usually quite
+fast, but subject to limited precision.
+
+Numbers in scientific notation like C<6.022e23> are of type C<Num>.
+
+=back
+
+The following operators are available for all number types.
+
+    Binary operators:
+    Operator     Description
+    **           Exponentation: $a**$b is $a to the power of $b
+    *            multiplication
+    /            division    
+    div          integer division
+    +            addition
+    -            subtraction
+
+    Unary oerators:
+    Operator     Description
+    +            conversion to number
+    -            negation
+
+Most mathematical functions are available both as methods and functions, so
+you can write both C<(-5).abs> and C<abs(-5)>.
+
+
+    Method      Description
+    abs         absolute value
+    sqrt        square root
+    log         natural logarithm
+    log10       logarithm to base 10
+
+    ceil        rounding up to an integer
+    floor       rounding down to an integer
+    round       rounding to next integer
+    sign        -1 for negative, 0 for 0, 1 for postive values
+
+The trigonometric functions C<sin, cos, tan, asin, acos, atan, sec, cosec,
+cotan, asec, acosec, acotan, sinh, cosh, tanh, asinh, acosh, atanh, sech,
+cosech, cotanh, asech, acosech> and C<acotanh> are available, and work in
+units of radians by defaults. The unit can be changed with an argument of
+C<Degree>, C<Gradians> or C<Circles>, for example C<180.sin(Degrees> is
+approximately C<0>.
+
+=head1 Strings
+
+Strings stored as C<Str> are sequences of characters, independent of character
+encoding. For storing binary data, C<Buf> is available. The C<encode> method
+converts a C<Str> to C<Buf>, C<decode> in the other direction.
+
+=for author
+
+TODO: Str and Buf operators, methods
+
+=end for
+
+=head1 Bool
+
+A Boolean value is either C<True> or C<False>. It is used for making all sorts
+of decisions in a program.
+
+Any value can be evaluated in boolean context, the rules for deciding if a
+value is true or false depends on the type of the value:
+
+=over
+
+=item Strings
+
+Empty strings and C<"0"> evaluate to C<False>, all other strings to C<True>.
+
+=item Numbers
+
+All numbers except zero evaluate to C<True>.
+
+=item Lists and Hashes
+
+Container types such as lists and hashes evaluate to C<False> if they are
+empty, and to C<True> if they contain at least one value.
+
+=back
+
+Constructs such as C<if> automatically evaluate their condition in boolean
+context. You can force numeric context by putting a C<?> in front of an
+expression. With a C<!> instead the meaning is negated.
+
+=begin programlisting
+
+    my $num = 5;
+    # implicit boolean context
+    if $num { say "True" }
+    # explicit boolean context
+    my $bool = ?$num;
+
+=end programlisting
