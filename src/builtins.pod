@@ -53,6 +53,14 @@ fast, but subject to limited precision.
 
 Numbers in scientific notation like C<6.022e23> are of type C<Num>.
 
+=item Complex
+
+C<Complex> is the complex number type. Complex numbers have two
+parts to them: a real part and in imaginary part. If either part
+is considered C<Nan>, then the entire number may possibly be C<Nan>.
+
+Numbers in the form C<a + bi> are of type C<Complex>.
+
 =back
 
 The following operators are available for all number types.
