@@ -54,7 +54,7 @@ Subrules, recursion, inheritance, reduction methods
 
 TODO: detailed explanation of the JSON reduction methods
 
-=head2 Chapter 8 - Roles (?)
+=head2 Chapter 8 - Roles
 
 =head1 Conjectural: chapter ideas
 
@@ -62,4 +62,4 @@ Other suggestions:
 
     database interface
     web programming
-
+    extending the language (traits, meta-programming)
