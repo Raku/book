@@ -1,0 +1,123 @@
+=head0 Roles
+
+The following program demonstrates a simple and pluggabe IRC bot framework
+along with an implementation of a few simple commands. It demonstrates the
+use of roles, re-usable pieces of functionality that can be safely composed
+into a class at compile time or mixed in per-object at runtime.
+
+=begin programlisting
+
+    # XXX This is VERY preliminary code and needs filling out. But it
+    # does provide opportunities to discuss runtime mixins, compile time
+    # composition, requirements and a few other bits.
+
+    regex nick { \w+ }
+    regex join-line { ... <nick> ... }
+    regex message-line { $<sender>=[...] $<message>=[...] }
+
+    class IRCBot {
+        has $.bot-nick;
+        method run($server) {
+            ...
+        }
+    }
+
+    role KarmaTracking {
+        has %!karma-scores;
+        multi method on-message($sender, $msg where /^karma <ws> <nick>/) {
+            if %!karma-scores{$<nick>} -> $karma {
+                return $<nick> ~ " has karma $karma";
+            }
+            else {
+                return $<nick> ~ " has neutrel karma";
+            }
+        }
+        multi method on-message($sender, $msg where /<nick> '++'/) {
+            %!karma-scores{$<nick>}++;
+        }
+        multi method on-message($sender, $msg where /<nick> '--'/) {
+            %!karma-scores{$<nick>}--;
+        }
+    }
+
+    role OpBot {
+        has @!whoz-op;
+        multi method on-join($nick) {
+            if $nick ~~ @!whoz-op {
+                return "/mode +o $nick";
+            }
+        }
+        multi method on-message($sender, $msg where /^trust <ws> <nick>/) {
+            if $sender ~~ @!whoz-op {
+                push @!whoz-op, $<nick>;
+                return "I now trust " ~ $<nick>;
+            }
+            else {
+                return "But $sender, I don't trust you";
+            }
+        }
+    }
+
+    role AnswerToAll {
+        method process($raw-in) {
+            if $raw-in ~~ /<on-join>/ {
+                self.*on-join($<nick>);
+            }
+            elsif $raw-in ~~ /<on-message>/ {
+                self.*on-message($<sender>, $<message>)
+            }
+        }
+    }
+
+    role AnswerIfTalkedTo {
+        method bot-nick() { ... }
+        method process($raw-in) {
+            if $raw-in ~~ /<on-join>/ {
+                self.*on-join($<nick>);
+            }
+            elsif $raw-in ~~ /<on-message>/ -> $msg {
+                my $my-nick = self.bot-nick();
+                if $msg<msg> ~~ /^ $my-nick ':'/ {
+                    self.*on-message($msg<sender>, $msg<message>)
+                }
+            }
+        }
+    }
+
+    my %pluggables =
+        karma => KarmaTracking,
+        op => OpBot;
+
+    role Plugins {
+        multi method on-message($sender, $msg where /^youdo <ws> (\w+)/) {
+            if %pluggables{$0} -> $plug-in {
+                self does $plug-in;
+                return "Loaded $0";
+            }
+        }
+    }
+
+    class KarmaKeeper is IRCBot does AnswerToAll does KarmaTracking {
+    }
+
+    class NothingBot is IRCBot does AnswerIfTalkedTo does Plugins {
+    }
+
+=end programlisting
+
+=head1 What is a role?
+
+
+=head1 Compile Time Composition
+
+
+=head1 Runtime Mixins
+
+
+=head1 Expressing requirements
+
+
+=head1 Parametric Roles
+
+
+
