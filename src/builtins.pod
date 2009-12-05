@@ -98,7 +98,7 @@ The trigonometric functions C<sin, cos, tan, asin, acos, atan, sec, cosec,
 cotan, asec, acosec, acotan, sinh, cosh, tanh, asinh, acosh, atanh, sech,
 cosech, cotanh, asech, acosech> and C<acotanh> are available, and work in
 units of radians by defaults. The unit can be changed with an argument of
-C<Degree>, C<Gradians> or C<Circles>, for example C<180.sin(Degrees> is
+C<Degree>, C<Gradians> or C<Circles>, for example C<180.sin(Degrees)> is
 approximately C<0>.
 
 =head1 Strings
