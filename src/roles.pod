@@ -29,7 +29,7 @@ into a class at compile time or mixed in per-object at runtime.
                 return $<nick> ~ " has karma $karma";
             }
             else {
-                return $<nick> ~ " has neutrel karma";
+                return $<nick> ~ " has neutral karma";
             }
         }
         multi method on-message($sender, $msg where /<nick> '++'/) {
@@ -43,12 +43,12 @@ into a class at compile time or mixed in per-object at runtime.
     role OpBot {
         has @!whoz-op;
         multi method on-join($nick) {
-            if $nick ~~ @!whoz-op {
+            if $nick eq any(@!whoz-op) {
                 return "/mode +o $nick";
             }
         }
         multi method on-message($sender, $msg where /^trust <ws> <nick>/) {
-            if $sender ~~ @!whoz-op {
+            if $sender eq any(@!whoz-op) {
                 push @!whoz-op, $<nick>;
                 return "I now trust " ~ $<nick>;
             }
