@@ -40,7 +40,7 @@ into a class at compile time or mixed in per-object at runtime.
         }
     }
 
-    role OpBot {
+    role Oping {
         has @!whoz-op;
         multi method on-join($nick) {
             if $nick eq any(@!whoz-op) {
@@ -86,12 +86,12 @@ into a class at compile time or mixed in per-object at runtime.
 
     my %pluggables =
         karma => KarmaTracking,
-        op => OpBot;
+        op => Oping;
 
     role Plugins {
-        multi method on-message($sender, $msg where /^youdo <ws> (\w+)/) {
+        multi method on-message($self is rw: $sender, $msg where /^youdo <ws> (\w+)/) {
             if %pluggables{$0} -> $plug-in {
-                self does $plug-in;
+                $self does $plug-in;
                 return "Loaded $0";
             }
         }
@@ -106,15 +106,217 @@ into a class at compile time or mixed in per-object at runtime.
 =end programlisting
 
 =head1 What is a role?
+In the previous chapters, you will have discovered classes and grammers. A
+role is another type of package. Like classes and grammars, you can put
+methods (including named regexes) and attributes into a role. However, a
+role cannot be used on its own. Instead, roles are designed to be incorporated
+into objects, classes and grammars.
 
+In traditional object orientation, classes are used both as a mechanism for
+code re-use and to represent entities in our system by providing a model from
+which we can create instances. These two tasks are somewhat in tension; for
+optimal re-use, classes should be small, but in order to represent a complex
+entity with many behaviors, classes tend to grow large.
+
+In Perl 6, classes retain the responsibility for instance management, whereas
+the task of code re-use is handled by roles. A role contains the methods and
+attributes required to provide a small and re-usable piece of functionality.
+Classes can then be built up out of roles, using a safe mechanism called
+flattening composition. A role can also be mixed in to an individual object.
+You will have spotted both of these taking place in the example code. Later
+on in the chapter, you'll also see how roles can be parameterized; they are
+also Perl 6's mechanism for providing generic programming, along the lines of
+generics in C# and Java, or templates in C++.
 
 =head1 Compile Time Composition
+Take a look at the C<KarmaKeeper> class definition. The body is empty; the class
+does not define any attributes or methods of its own. The class inherits from
+C<IRCBot>, using the C<is> trait modifier - something familiar from ealier
+chapters - but it also uses the C<does> trait modifier to compose two roles
+into the class.
 
+The process of role composition simply involves taking the attributes and
+methods defined in each role that is being composed and "copying" them into
+the class. Therefore, after composition, it is as if the things defined in
+the role bodies were defined within the class itself. This is part of the
+flattening property: after we have performed the composition, aside from
+being able to query the class to know if a role was composed into it at some
+point, the roles are no longer significant. Therefore, if introspection was
+used to query the methods of the C<KarmaKeeper> class, it would report that it
+has both a C<process> method and an C<on-message> multi method.
+
+If that was the whole story, roles would not seem to offer anything much
+over inheritance or mix-ins. The point things get interesting is what
+happens if there are conflicts. Consider the following class definition.
+
+=being programlisting
+
+    class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {
+    }
+
+=end programlisting
+
+Here, both the C<AnswerToAll> and C<AnswerIfTalkedTo> roles provide a method named
+C<process>. It's interesting to note at this point that these are semantically
+different options, and in a very real world sense the two behaviors conflict.
+It's also a conflict in the eyes of the role composer, which will give a
+compile-time error, indicating the conflict and asking the programmer to
+provide a resolution. This is rather different from multiple inheritance or
+mix-in mechanisms, whereas the order in which we inherit or mix in decides
+which method wins. In role composition, all possible roles are considered
+equals.
+
+So what can be done if there is a conflict? In this case, it likely does not
+make sense to compose both of the roles. Therefore a programmer here is most
+likely to realize their mistake and pick which of the two behaviors they want.
+An alternative way to resolve a conflict is to write a method with the same
+name in the class body itself.
+
+=being programlisting
+
+    class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {
+        method process($raw-in) {
+            # Do something sensible here...
+        }
+    }
+
+=end programlisting
+
+If the role composer detects a method with the same name in the class body, it
+will then disregard all of the (possibly conflicting) ones from the roles. Put
+simply, methods in the class always win.
+
+=head2 Multi-methods and composition
+Sometimes, it's OK if there are multiple methods of the same name, provided
+they have different signatures and therefore can be distinguished by the
+normal multi-dispatch mechanism. Therefore, if methods from different roles
+with matching names declare themselves as multi methods, they will not be
+in conflict. Instead, the candidates from all of the roles will be combined
+together and all of them will be composed into the class.
+
+If the class provides a method of the same name that is also multi, then the
+candidates from the class will also be included. On the other hand, if the
+class has a method of the same name that is not declared as a multi, then the
+multis from the roles will be disregarded and the method in the class - as
+usual - will win.
+
+This is the mechanism by which a class that composes both, for example, the
+KarmaTracking role and the Oping role would end up having the candidates that
+both roles provide for the C<on-message> method. As a class ends up getting
+composed of more than just a couple of roles, it may be preferable to use an
+alternative syntax that allows you to list the roles in the class body.
+
+=begin programlisting
+
+    class KarmaKeeper is IRCBot {
+        does AnswerToAll;
+        does KarmaTracking;
+        does Oping;
+    }
+
+=end programlisting
+
+=head2 Calling all cadidates
+In the C<process> methods of the roles C<AnswerToAll> and C<AnswerIfTalkedTo>,
+a slightly different method calling syntax is used:
+
+=begin programlisting
+
+    self.*on-message($msg<sender>, $msg<message>)
+
+=end programlisting
+
+The use of C<.*> instead of just a simple C<.> slightly changes the semantics
+of the method dispatch. Just as the C<*> quantifier in regexes means "zero or
+more", the C<.*> dispatch operator will call zero or more matching methods.
+This means that if there are no C<on-message> multi candidates that match, then
+the call does not result in an error. Additionally, C<.*> is greedy - once again
+like the C<*> quantifier in regexes. This means that it doesn't stop after one
+matching method has been called, but instead calls all candidates that it can,
+which may have been found either through multiple dispatch and/or by searching
+the inheritance hierarchy.
+
+There are two other variants, C<.+> which greedily calls all methods but dies
+if there is not at least one method that matches, and C<.?>, which calls one
+method just like C<.>, but if none is found just returns a C<Failure> rather
+then throwing an exception. You probably won't use C<.*> and C<.+> all that
+often, but they are especially handy when doing event driven programming,
+like in our example here. C<.?> plays a useful role when doing per-object
+mix-ins, however.
+
+=head2 Expressing requirements
+In the role C<AnswerIfTalkedTo>, the method C<bot-nick> is declared, but
+no implementation is given; it's just a method stub.
+
+=begin programlisting
+
+    method bot-nick() { ... }
+
+=end programlisting
+
+In the context of a role, this is your way of declaring that when the role is
+composed, a method C<bot-nick> must be provided. It may be provided either by
+the class itself, a parent class (which is true in this case - IRCBot defines
+an attribute C<$!bot-nick> along with an accessor method) or another role.
+
+You are not required to make explicit what methods your role depends on. Doing
+so, however, means that the problem can be detected at compile time, when the
+class is being composed. Leaving it out means that you won't know about the
+missing method until runtime, when another method in your role attempts to
+call it.
 
 =head1 Runtime Mixins
+Often, an object just being an instance of the class and having the methods
+and attributes of that class is sufficient. Sometimes, however, something a
+bit more dynamic is called for. In these situations, it's useful to be able
+to add extra behaviors on a per-object basis. Perl 6 provides for this by
+allowing you to mix a role into an individual object at runtime.
 
+The example in this chapter uses this in order to allow a bot to gain new
+abilities during its lifetime. The C<Plugins> role is at the heart of this.
+The first thing to note is the signature of the method C<on-message>. It
+captures the invocant into a variable C<$self>, but also notes that it is
+C<rw> - that is, something that may be modified. This is because inside the
+method, the object itself needs to be modified. Then comes the key part of
+this code, and an example of a runtime mix-in.
 
-=head1 Expressing requirements
+=begin programlisting
+
+    if %pluggables{$0} -> $plug-in {
+        $self does $plug-in;
+        return "Loaded $0";
+    }
+
+=end programlisting
+
+The C<%pluggables> hash maps names of plug-ins to Role objects (like classes,
+roles are first-class in Perl 6 and can be passed around just like any other
+object). Therefore, the lookup in this hash leaves us with a C<Role> in the
+variable C<$plug-in>. The C<does> operator is then used to add this role to
+C<$self>. From this point on, C<$self> now has all of the methods from the
+role, in addition to all of the ones that it had before. Importantly, this
+does not have any influence on any other instances of the same class; only
+this one instance has changed.
+
+=head2 Differences from compile time composition
+The key difference is that methods in the role being mixed in will
+automatically override any of the same name within the class of the
+object. It's as if you had written an anonymous subclass of the current
+class of the object that composed the role into it. This means that C<.*>
+will find both those methods that were mixed into the object from a role
+(or many roles, if the object is mixed in to many times) along with any
+that already existing in the class.
+
+All of that said, if you wish to mix in multiple roles at a time, you
+may do so by putting a list of them on the right hand side of the C<does>
+operator. In this case, the roles are not composed one by one, but instead
+are composed together into our imaginary anonymous subclass, meaning that
+conflicts will be flagged up at this point. This gives a degree of safety,
+but since runtime mix-ins happen at runtime, it's never as safe as compile
+time composition. Therefore, compile time composition is usually preferable,
+if you have to choose.
+
+=head2 The C<but> operator
 
 
 =head1 Parametric Roles
