@@ -1,0 +1,22 @@
+We want a Perl 6 book. We want it badly enough to write it ourselves. So that's
+what we're doing: writing one.
+
+Changes/additions to the Perl 6 book since the previous release:
+
+* Builtins chapter
+    - created this chapter
+    - added description of the Complex type
+* Roles chapter
+    - created this chapter
+
+There have also been some changes to the support scripts and support
+documents for producing the book.  These include:
+
+* new HTML make target
+* updated the release guide
+
+You can download the preliminary PDF version of the book at
+http://cloud.github.com/downloads/perl6/book/book-2009-12.pdf
+
+Interested? Check out the git repository at <http://github.com/perl6/book>,
+and join us in irc://freenode.net#perl6book.
