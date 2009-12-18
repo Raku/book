@@ -1,0 +1,37 @@
+
+We want a Perl 6 book. We want it badly enough to write it ourselves. So that's
+what we're doing: writing one.
+
+Changes/additions to the Perl 6 book since the previous release:
+
+* Lots of grammar and typo fixes
+* Added relationship between Perl 6 and Perl 5 to preface
+* avoid mojibake where possble
+* Basics chapter
+    - created this chapter
+    - fleshed out some examples
+    - added some exercises
+* Regex chapter
+    - added some text on subsitution and look-arounds
+    - added explanation of Match objects
+    - added character classes
+* Grammar chapter
+    - added explanation of inheritance in Perl 6 grammars
+    - added explanation of grammar action methods
+* Objects chapter
+    - added some exercises with answers
+
+There have also been some changes to the support scripts and support
+documents for producing the book.  These include:
+
+* updated outline of the book
+* Added technical TODOs
+* added some sample scripts to be worked into various chapters
+* add a release target for the Makefile
+* updated the release guide
+
+You can download the preliminary PDF version of the book at
+http://cloud.github.com/downloads/perl6/book/book-2009-11.pdf
+
+Interested? Check out the git repository at <http://github.com/perl6/book>,
+and join us in irc://freenode.net#perl6book.
