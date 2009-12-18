@@ -52,7 +52,7 @@ the restriction of backward compatibility with Perl 5.
 Some might ask, "Why call it Perl if it's a different language?" Perl is
 more than just the vagaries of syntax. Perl is philosophy (there's more
 than one way to do it; easy things easy, hard things possible); Perl is
-custom (unit testing); Perl is architectual edifice (Comprehensive Perl
+custom (unit testing); Perl is architectural edifice (Comprehensive Perl
 Archive Network); Perl is community (perl5porters, perl6-language).
 These are things that both Perl 5 and Perl 6 will share to varying
 degrees. Also, due to Perl's habit of stealing good ideas, Perl 5 and

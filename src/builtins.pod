@@ -92,7 +92,7 @@ you can write both C<(-5).abs> and C<abs(-5)>.
     ceil        rounding up to an integer
     floor       rounding down to an integer
     round       rounding to next integer
-    sign        -1 for negative, 0 for 0, 1 for postive values
+    sign        -1 for negative, 0 for 0, 1 for positive values
 
 The trigonometric functions C<sin, cos, tan, asin, acos, atan, sec, cosec,
 cotan, asec, acosec, acotan, sinh, cosh, tanh, asinh, acosh, atanh, sech,
