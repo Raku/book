@@ -43,6 +43,11 @@ Use the following command to see a chronology of changes:
 
     git log --since=YYYY-MM-DD --reverse 
 
+When you're done, commit the announcement and push it to the repo:
+
+    git commit docs/announce/YYYY-MM
+    git push
+
 =item 2
 
 Tag the release:
