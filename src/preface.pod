@@ -30,15 +30,7 @@ book is not a comprehensive reference. It is a series of tutorials.
 
 =head1 Relationship between Perl 6 and Perl 5
 
-=for author
-RFC:
-This first sentence may set a tone we would rather avoid. Should we use
-something more along the lines of it being the newest member of the Perl
-family, as in masak++'s "How Perl 6 could kill us all!" post? The
-subsequent sentences would be fine as they are. --eternaleye
-=end for
-
-Perl 6 is the next major evolution of the language known as Perl. It
+Perl 6 is the newest member of the family of languages known as Perl. It
 represents a major break in syntactic and semantic compatibility from
 Perl 5, thus a major version number increase. However, this does not
 mean that Perl 5 is going away. In fact, quite the opposite. Both Perl 5
