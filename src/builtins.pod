@@ -30,7 +30,7 @@ here too.
 
 =head1 Numbers
 
-Sometimes coercion is intuitively transparent.  Perl 6 has sevearl numeric
+Sometimes coercion is intuitively transparent.  Perl 6 has several numeric
 types which you can intermix freely.  For example, subtracting a floating point
 value from an integer works, as in C<123 - 12.1e1>.
 
@@ -130,7 +130,7 @@ The trigonometric functions C<sin>, C<cos>, C<tan>, C<asin>, C<acos>, C<atan>,
 C<sec>, C<cosec>, C<cotan>, C<asec>, C<acosec>, C<acotan>, C<sinh>, C<cosh>,
 C<tanh>, C<asinh>, C<acosh>, C<atanh>, C<sech>, C<cosech>, C<cotanh>, C<asech>,
 C<acosech> and C<acotanh> are available, and work in units of radians by
-default. You may specify the unit with an argument of C<Degree>, C<Gradians> or
+default. You may specify the unit with an argument of C<Degrees>, C<Gradians> or
 C<Circles>. For example, C<180.sin(Degrees)> is approximately C<0>.
 
 =head1 Strings
@@ -178,9 +178,10 @@ empty, and to C<True> if they contain at least one value.
 
 =back
 
-Constructs such as C<if> automatically evaluate their conditions in boolean
-context. You can force numeric context by putting a C<?> in front of an
-expression.  The C<!> prefix negates the boolean value.
+Constructs such as C<if> automatically evaluate their conditions in
+boolean context. You can force an explicit boolean context by
+putting a C<?> in front of an expression. The C<!> prefix negates
+the boolean value.
 
 =begin programlisting
 
