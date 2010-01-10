@@ -107,6 +107,32 @@ Strings stored as C<Str> are sequences of characters, independent of character
 encoding. For storing binary data, C<Buf> is available. The C<encode> method
 converts a C<Str> to C<Buf>, C<decode> in the other direction.
 
+The following operations are available for strings:
+
+
+    Binary operators:
+    Operator     Description
+    ~            concatenation: 'a' ~ 'b' is 'ab'
+    x            replication: 'a' x 2 is 'aa'
+
+    Unary oerators:
+    Operator     Description
+    ~            conversion to string: ~1 becomes '1'
+
+    Methods:
+    .chomp       remove trailing newline
+    .substr($start, $length)    extract a part of the string. $length defaults
+                                to the rest of the string
+    .chars       number of characters in the string
+    .uc          upper case
+    .lc          lower case
+    .ucfirst     convert first character to upper case
+    .lcfirst     convert first character to lower case
+    .capitalize  convert the first character of each word to upper case, and
+                 all other characters to lower case
+
+
+
 =for author
 
 TODO: Str and Buf operators, methods
