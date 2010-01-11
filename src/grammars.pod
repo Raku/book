@@ -5,6 +5,8 @@ example demonstrates how to parse JSON, a data exchange format already
 introduced in the chapter on multi dispatch (TODO: make this a proper
 reference).
 
+=begin programlisting
+
     # file lib/JSON/Tiny/Grammar.pg
 
     grammar JSON::Tiny::Grammar {
@@ -85,6 +87,8 @@ reference).
         say "Not quite...";
     }
 
+=end programlisting
+
 A grammar contains various named regexes, one of which is
 called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
 
@@ -123,6 +127,8 @@ C<:sigspace> modifier. Which in turn internally replaces all whitespaces in
 the regex to calls to the C<ws> token. So all you've got to do is to override
 that:
 
+=begin programlisting
+
     grammar JSON::Tiny::Grammar::WithComments
         is JSON::Tiny::Grammar {
 
@@ -139,6 +145,8 @@ that:
     if JSON::Tiny::Grammar::WithComments.parse($tester) {
         say "It's valid (modified) JSON";
     }
+
+=end programlisting
 
 The first two lines introduce a grammar that inherits from
 C<JSON::Tiny::Grammar>. The inheritance is specified with the C<is> trait.
@@ -158,6 +166,8 @@ captures you can access all the relevant information. However to do that you
 have to write a function that traverses the match tree recursively, and
 search for bits and pieces you are interested in. Since this is a cumbersome
 task, an alternative solution exist: I<actions method>.
+
+=begin programlisting
 
     class JSON::Tiny::Actions {
         method TOP($/, $what) {
@@ -231,6 +241,8 @@ task, an alternative solution exist: I<actions method>.
     # RAKUDO doesn't call action methods at the
     # end of each each rule yet
 
+=end programlisting
+
 We pass an actions object to the grammar's C<parse> method. Whenever the
 grammar engine finishes parsing one rule, or encounters a C<{*}> token in the
 grammar, it calls an method of the match object, with the same name as
@@ -252,6 +264,8 @@ Although the rules and action methods live in different namespaces (and in a
 real-world project probably even in separate files), we show them side by
 side to make the correspondence easier to see.
 
+=begin programlisting
+
     rule TOP {
         ^ [
             | <object> {*}      #= object
@@ -262,19 +276,27 @@ side to make the correspondence easier to see.
         make $/{$what}.ast;
     }
 
+=end programlisting
+
 The rule has an alternation with two branches, labeled by C<#= object>
 and C<#= array>. The first argument to the C<TOP> method is the current match
 object, the second is the label. The action method accesses the capture with
 the same name as branch, obtains the AST attached to it, and sets it to the
 AST of current match object by calling C<make>.
 
+=begin programlisting
+
     rule object     { '{' ~ '}' <pairlist>      {*}   }
     method object($/) {
         make %($<pairlist>.ast)
     }
 
+=end programlisting
+
 The action method for C<object> extracts the AST of the C<pairlist> submatch,
 and turns it into a hash by putting it inside C<%( ... )>.
+
+=begin programlisting
 
     rule pairlist   {
         <pair> ** ','
@@ -284,9 +306,13 @@ and turns it into a hash by putting it inside C<%( ... )>.
         make = $<pair>».ast;
     }
 
+=end programlisting
+
 The C<pairlist> rule just matches multiple pairs, and the corresponding action
 method calls the C<.ast> method on each matched pair, and installs the result
 list in its own AST.
+
+=begin programlisting
 
     rule pair {
         <string> ':' <value>        {*}
@@ -294,6 +320,8 @@ list in its own AST.
     method pair($/) {
         make ( $<string>.ast => $<value>.ast );
     }
+
+=end programlisting
 
 A pair consists of a string key and a value, so the action method constructs a
 Perl 6 pair with the C<< => >> operator.
