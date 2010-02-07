@@ -198,7 +198,7 @@ task, an alternative solution exist: I<actions method>.
             given $what {
                 when 'true'     { make Bool::True  };
                 when 'false'    { make Bool::False };
-                when 'null'     { make undef       };
+                when 'null'     { make Mu          };
                 when *          { make $/{$_}.ast  };
             }
         }

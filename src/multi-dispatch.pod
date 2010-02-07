@@ -44,7 +44,7 @@ U<http://github.com/moritz/json/>.
                 ~ ' }';
     }
 
-    multi to-json($d where undef) { 'null' }
+    multi to-json($d where {!defined $d}) { 'null' }
 
     multi to-json($d) {
         die "Can't serialize an object of type " ~ $d.WHAT.perl
@@ -98,7 +98,7 @@ X<multidispatch; constraints>
 
 =begin programlisting
 
-    to-json($d where undef) { 'null' }
+    to-json($d where {!defined $d}) { 'null' }
 
 =end programlisting
 
@@ -115,7 +115,8 @@ X<subset type>
 
 This candidate adds two new twists.  It contains no type definition, in which
 case the type of the parameter defaults to C<Any>, the root of the "normal"
-branch of the type hierarchy.  More interestingly, the C<where undef> clause is
+branch of the type hierarchy.  More interestingly, the C<where {!defined $d}>
+clause is
 a I<constraint>, which defines a so-called I<subset type>.  In this case, this
 candidate will matches only I<some> values of the type C<Any> -- those where
 the value is undefined.
@@ -123,9 +124,7 @@ the value is undefined.
 X<nominal type>
 X<types; nominal>
 
-Perl 6 translates the C<where undef> part to a smart match operation.  In
-explicit form, that's C<Any $d where { $d ~~ undef }>.
- Whenever the compiler performs a type check on
+Whenever the compiler performs a type check on
 the parameter C<$d>, it first checks the I<nominal> type (which is C<Any>
 here).  If that check succeeds, it calls the code block. The entire type check
 can only succeed if the code block returns a true value.
@@ -216,7 +215,7 @@ of a constraint.  In the case of:
 =begin programlisting
 
     multi to-json($d) { ... }
-    multi to-json($d where undef) { ... }
+    multi to-json($d where {!defined $d}) { ... }
 
 =end programlisting
 
@@ -246,7 +245,7 @@ nominal types.
 With some trickery it is possible to get an object which both conforms to a
 built-in type (C<Num>, for example) but which is also an undefined value. In
 this case the candidate that is specific to C<Num> wins, because the nominal
-type check is narrower than the C<where undef> constraint.
+type check is narrower than the C<where {!defined $d}> constraint.
 
 =head1 Multiple arguments
 
