@@ -109,7 +109,7 @@ X<regex; \w>
 Suppose you have a big chunk of text.  For solving a crossword puzzle you are
 looking for words containing C<pe>, then an arbitrary letter, and then an C<l>
 (but not a space, as your puzzle has extra markers for those). The appropriate
-regex for that is C<m/pe \w l/>.  The C<\w> control sequence that stands for a
+regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
 "word" character--a letter, digit, or an underscore. Several other common
 control sequences each match a single character:
 
