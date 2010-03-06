@@ -64,6 +64,10 @@ escape it:
 
 What are the C<index> and C<rindex> ops in Perl 6?
 
+There's a sidebar explaining rindex -- did you miss that? Is it too far
+away from the example? (I've also added an explanation for index() now)
+    --moritz
+
 =end for
 
 X<regex; metasyntactic characters>
@@ -845,9 +849,11 @@ the match position and calculating the difference to the match position.
 
 =begin sidebar
 
-The C<rindex> method searches a string for another substring, starting at the
-end of the string, and moving backward until it finds the search string. It
-returns the position of the search string.
+The C<index> method searches a string for another substring, and returns the
+position of the search string.
+
+The C<rindex> method does the same, but searches backwards from the end of the
+string, so it finds the position of the last occurrence of the substring.
 
 =end sidebar
 
