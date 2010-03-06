@@ -1,0 +1,219 @@
+=head0 Operators
+
+X<operator>
+
+Operators are very short names for often used routines. They have special
+calling syntax, and can be manipulated by other operators.
+
+Suppose you want to plot the number of sets that each player won in a
+tournament. This example uses the numbers from the previous chapter, and makes
+a very simple text output by just printing a number of C<X> signs to represent
+horizontal bars.
+
+=begin programlisting
+
+    use v6;
+
+    my @scores = 'Ana' => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
+
+    my $screen-width   = 20;
+
+    my $label-area-width = 1 + [max] @scores».key».chars;
+    my $max-score        = [max] @scores;
+    my $unit             = ($screen-width - $label-area-width) / $max-score;
+
+
+    for @scores {
+        printf "%- $label-area-width%s\n", .key, 'X' x ($unit * .value);
+    }
+
+=end programlisting
+
+=for author
+
+    TODO: example doesn't work right now; fix rakudo,
+    and put output in =begin screen ... =end screen section
+
+=end for
+
+The first line, C<use v6;>, declares that this is Perl 6.
+
+The second non-empty line
+
+=begin programlisting
+
+    my @scores = 'Ana' => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
+
+=end programlisting
+
+already contains three different operators: C<=>, C<< => >> and C<,>.
+
+X<assignment>
+X<operator; assignment>
+X<operator; =>
+
+The C<=> operator is the so-called I<assignment operator> -- it takes the
+values from the right-hand side, and stores them in the variable on the
+left-hand side, here C<@scores>.
+
+X<pair>
+X<< operator;=> >>
+X< operator; fat arrow>
+
+The C<< => >> operator (the so-called C<fat arrow>) constructs C<Pair>
+objects. A Pair stores a key and a value; the key is on the left-hand side of
+the C<< => >> operator, the value on the right. It also has a specialty: if
+the value on the right is an identifier, it is taken to be a string. So one
+could also write the example above as
+
+=begin programlisting
+
+    my @scores = Ana => 8, Dave => 6, Charlie => 4, Beth => 4;
+
+=end programlisting
+
+Finally the C<,> operator constructs a C<List>, which is an immutable sequence
+of objects. In this case the objects are pairs.
+
+X<infix>
+X<operator; infix operators>
+X<term>
+
+All of the three operators above are I<infix> operators, which means they
+stand in between two I<terms>. A term can be a literal like C<8> or C<'Dave'>,
+or a combination of other terms and operators.
+
+X<postcircumfix>
+X<operator; postcircumfix>
+X<postfix>
+X<operator; postfix>
+
+The previous chapter already used other types of operators, too. It contained
+the line C<%games{$p1}++;> which uses the I<postcircumfix> operator C<{...}>.
+It stands behind (I<post>) a term, and consists of two symbols (an opening and
+a closing curly bracket) which enclose (I<circumfix>) another term. Behind
+this postcircumfix operator is an ordinary I<postfix> operator with name
+C<++>, which increments the value it qualifies. No whitespaces are allowed
+between a term and its postfix or postcircumfix operators.
+
+X<postfix>
+X<operator; prefix>
+
+Yet another operator type is the I<prefix> operator, which stands in front of
+a term. An example is the C<-> operator, which negates the following numeric
+value, as in C<my $x = -4>.
+
+But the C<-> operator can also mean subtraction, so C<say 5 - 4> will print a
+C<1>. To distinguish the prefix operator C<-> from the infix operator C<->,
+the Perl 6 compiler always keeps track of whether it expects an infix
+operator or a term. A term can have zero or more prefix operators, so you can
+actually write C<say 4 + -5>. After the C<+> (an infix operator), the compiler
+expects a term, thus the C<-> is interpreted as a prefix operator to the term
+C<5>.
+
+The next new line containing new features is
+
+=begin programlisting
+
+    my $label-area-width = 1 + [max] @scores».key».chars;
+
+=end programlisting
+
+It begins harmlessly with a variable declaration C<my $label-area-width> and an
+assignment to it. Next comes a simple numeric addition, C<1 + ...>. The right
+side of the C<+> operator is more complicated.
+
+X<operator; max>
+
+In Perl 6 there is an infix C<max> operator which returns the greater of two
+values, so C<2 max 3> returns 3. When there are angle brackets around an infix
+operator, it is applied to a list piece by piece. So C<[max] 1, 5, 3, 7> is
+the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
+
+After the C<[max]> you see the expression C<@scores».key».chars>. Just like
+C<@variable.method> calls a method on the C<@variable>, C<@array».method>
+calls a method for each item in C<@array>, and returns the list of the return
+values.
+
+So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
+and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
+
+Finally C<[max] @scores».key».chars> returns the largest of these values. It is
+the same as
+
+=begin programlisting
+
+    @scores[0].key.chars
+        max @scores[1].key.chars
+        max @scores[2].key.chars
+        max ...
+
+=end programlisting
+
+X<meta operator; reduction>
+X<meta operator; []>
+
+The square brackets are called the I<reduction meta operator>: it transforms
+the enclosed infix operator into an operator that exepects a list (a
+I<listop>), and carries out the operation between each two conscutive list
+items.
+
+For plotting the names of the players and bar charts, the program needs to
+know how much space to allocate for the player names. Adding 1 to it leaves
+space for a single blank space between the name of the longest player and the
+left edge of the bars.
+
+=begin programlisting
+
+    my $max-score       = [max] @scores;
+
+=end programlisting
+
+With this line the program determines the maximum score. The drawing area has
+the width C<$screen-width - $label-area-width>, so for each score we can print
+
+=begin programlisting
+
+    my $unit = ($screen-width - $label-area-width) / $max-score;
+
+=end programlisting
+
+amount of C<X> characters. This expression uses the infix operators C<-> and
+C</> for numerical calculations.
+
+Now all the necessary informations are in place and the chart can be printed:
+
+=begin programlisting
+
+    for @scores {
+        printf "%- {$label-area-width}s%s\n", .key, 'X' x ($unit * .value);
+    }
+
+=end programlisting
+
+These lines loop over the items in C<@scores>, binding them to the special
+variable C<$_> one at a time. For each such item, the program uses the
+C<printf> built-in function to print both the name of the player and a bar.
+
+X<printf>
+
+It is similar to C<printf> functions of the C and Perl 5 programming
+languages. It takes a format string, which specifies how to print the
+following parameters. If C<$label-area-width> is 8, the format string is
+C<"%- 8s%s\n">, which means a string (C<'s'>) filled to 8 spaces (C<' 8'>) and
+left-justified (C<'-'>), followed by another string and a newline.
+
+The first string is the name of the player, the second is the bar.
+
+X<operator; xx>
+X<repetition operator>
+
+The bar is generated with the infix C<xx> operator, the
+I<repetition operator>. It takes a string on the left-hand side and a number
+on the right-hand side, and sticks the strings together as many times as the
+number specifies. So C<'ab' x 3> returns the string C<'ababab'>. C<.value>
+returns the value of the current pair, C<($unit * .value)> multiplies that
+values with C<$unit>, and C<'X' x ($unit * .value)> returns as that many C<X>
+characters.
+
+=for vim: spell
