@@ -95,37 +95,42 @@ called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
 Rule C<TOP> anchors the match to the start and end of the string, so that the
 whole string has to be in valid JSON format for the match to succeed. It then
 either matches an C<< <array> >> or an C<< <object> >>, both of which are
-defined later on. The C<{*}> provides hook which will later make it easier to
-access specific parts of the string. The C<#= object> and C<#= array> markers
-don't influence the match in any way,  the just provide labels that makes it
-easier to determine which of the two alternatives matched.
+defined later on. The symbol C<{*}> provides a hook which makes it possible to
+plug in custom "actions" during the matching process. The C<#= object> and
+C<#= array> markers don't influence the match in any way; they just provide
+labels to make it easier for the action to determine which of the two
+alternatives matched. We discuss actions in the secion "Extracting
+data", below.
 
 The following calls are straightforward, and reflect the structure in which
 JSON components can appear. This includes some recursive calls: For example
-C<array> calls C<value>, and C<value> again calls C<array>. That's fine as
-long as at least one regex per recursion cycle consumes at least one
-character. If not, the (mutual) recursion can go on infinitely, never
-progressing in the string, or to other parts of the grammar.
+C<array> calls C<value>, and C<value> again calls C<array>. That's won't
+cause any infinite loops as long as at least one regex per recursive call
+consumes at least one character. If a set of regexes were to call each other
+recursively without ever progressing in the string, the recursion could
+go on infinitely, never progressing in the string, or to other parts of the
+grammar.
 
 The only new regex syntax used in the C<JSON::Tiny> grammar is the
 I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
-like C<'{' ... '}'>, but gives a better error message if it fails.
+to C<'{' ... '}'>, but which gives a better error message upon failure.
 
 =head1 Grammar Inheritance
 
-It was mentioned earlier that grammars manage regexes just like classes manage
-methods. This analogy goes deeper than just having a namespace to put routines
-or regexes into - you can inherit grammars just like classes, mix roles into
-them, and benefit from the usual polymorphism.
+As mentioned earlier, grammars manage regexes just like classes manage
+methods. This analogy goes deeper than just having a namespace into which we
+put routines or regexes -- you can inherit grammars just like classes, mix
+roles into them, and benefit from the usual method call polymorphism.
 
 Suppose you wanted to enhance the JSON grammar to allow single-line javascript
-comments. The simplest enhancement is to allow it in any place where
+comments. (Those are the ones starting with C<//> and going on for the rest of
+the line.) The simplest enhancement is to allow it in any place where
 whitespace is also allowed.
 
-Whitespace is currently done by having some rules which implicitly enable the
-C<:sigspace> modifier. Which in turn internally replaces all whitespaces in
-the regex to calls to the C<ws> token. So all you've got to do is to override
-that:
+Whitespace is currently done by using I<rules>, which work just like tokens
+except that they also implicitly enable the C<:sigspace> modifier. This
+modifier in turn internally replaces all whitespace in the regex with calls to
+the C<ws> token. So all you've got to do is to override that token:
 
 =begin programlisting
 
@@ -150,22 +155,22 @@ that:
 
 The first two lines introduce a grammar that inherits from
 C<JSON::Tiny::Grammar>. The inheritance is specified with the C<is> trait.
-This means that the grammar rules are now called from the child grammar if it
-exists there, and from the parent grammar otherwise - just like normal method
-calls.
+This means that the grammar rules are now called from the derived grammar if
+it exists there, and from the base grammar otherwise -- just like with method
+call semantics.
 
-In (our relaxed) JSON whitespaces are never mandatory, so the C<ws> is allowed
-to match nothing at all. After optional spaces two slashes C<'//'>  introduce a
-comment, which is followed by an arbitrary number of characters that are not
-newlines, and then a newline -- in prose: it extends to the rest of the line.
+In (our relaxed) JSON, whitespace is never mandatory, so the C<ws> is allowed
+to match nothing at all. After optional spaces, two slashes C<'//'> introduce a
+comment, which is followed by an arbitrary number of non-newline characters,
+and then a newline -- in prose: it extends to the rest of the line.
 
 =head1 Extracting data
 
-The C<parse> method of a grammar returns a C<Match> object, and through the
-captures you can access all the relevant information. However to do that you
-have to write a function that traverses the match tree recursively, and
-search for bits and pieces you are interested in. Since this is a cumbersome
-task, an alternative solution exist: I<actions method>.
+The C<parse> method of a grammar returns a C<Match> object, and through its
+captures you can access all the relevant information. However, in order to do
+that you have to write a function that traverses the match tree recursively,
+and search for bits and pieces you are interested in. Since this is a
+cumbersome task, an alternative solution exist: I<actions method>.
 
 =begin programlisting
 
