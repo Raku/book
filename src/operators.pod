@@ -216,4 +216,64 @@ returns the value of the current pair, C<($unit * .value)> multiplies that
 values with C<$unit>, and C<'X' x ($unit * .value)> returns as that many C<X>
 characters.
 
+=head1 A Word on Precedence
+
+X<operator precdence>
+X<precedence>
+
+The explanations of the example above have one implication, which was not yet
+explicitly mentioned. In the line
+
+=begin programlisting
+
+    my @scores = 'Ana' => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
+
+=end programlisting
+
+The right-hand side of the assignment produces a list (because of the C<,>
+operator) that is made of pairs (because of C<< => >>), and the result is then
+assigned to the array variable. But you could think of
+other ways that Perl 6 interprets this program. If you pass this line to the
+Perl 5 interpreter, it parses it as
+
+=begin programlisting
+
+    (my @scores = 'Ana') => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
+
+=end programlisting
+
+and thus stores only one item in the variable C<@scores>, the rest is
+parsed as a list  N<and discarded, because it is not stored in any variable>.
+
+The ways in which this statement is parsed in Perl 6 is governed by
+I<precedence rules>. For example they state that the infix C<< => >> operator
+binds its arguments tighter than the infix C<,> operator, which in turn binds
+tighter than the C<=> assignment operator N<there are actually two assignment
+operators with different precedence. When the right-hand side appears to be a
+list or an array, the looser one is used, otherwise the I<item assignment
+operator> with tighter precedence is used. This allows the two expressions C<$a = 1, $b = 2>
+and C<@a = 1, 2> to both mean something sensible: assignment to two variables in a list,
+and assignment of a two-item list to a single variable>.
+
+
+The precedence rules for Perl 6 allow very natural expression of many commonly
+used idioms without any parenthesis, or even without thinking about
+precedence. If you want to force a different way of parsing, parenthesis can
+be used around an expression. Then this parenthesis group has the tightest
+possible precedence.
+
+=begin programlisting
+
+    say 5 - 7 / 2;      # 5 - 3.5  = 1.5
+    say (5 - 7) / 2;    # (-2) / 2 =  -1
+
+=end programlisting
+
+=for author
+
+    TODO: list of precedence levels?
+
+=end for
+
+
 =for vim: spell
