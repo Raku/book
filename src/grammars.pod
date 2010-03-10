@@ -104,7 +104,7 @@ data", below.
 
 The following calls are straightforward, and reflect the structure in which
 JSON components can appear. This includes some recursive calls: For example
-C<array> calls C<value>, and C<value> again calls C<array>. That's won't
+C<array> calls C<value>, and C<value> again calls C<array>. That won't
 cause any infinite loops as long as at least one regex per recursive call
 consumes at least one character. If a set of regexes were to call each other
 recursively without ever progressing in the string, the recursion could
