@@ -246,7 +246,7 @@ and thus stores only one item in the variable C<@scores>, the rest is
 parsed as a list  N<and discarded, because it is not stored in any variable>.
 
 The ways in which this statement is parsed in Perl 6 is governed by
-I<precedence rules>. For example they state that the infix C<< => >> operator
+I<precedence rules>. For example, they state that the infix C<< => >> operator
 binds its arguments tighter than the infix C<,> operator, which in turn binds
 tighter than the C<=> assignment operator N<there are actually two assignment
 operators with different precedence. When the right-hand side appears to be a
@@ -257,8 +257,8 @@ and assignment of a two-item list to a single variable>.
 
 
 The precedence rules for Perl 6 allow very natural expression of many commonly
-used idioms without any parenthesis, or even without thinking about
-precedence. If you want to force a different way of parsing, parenthesis can
+used idioms without any parentheses, or even without thinking about
+precedence. If you want to force a different way of parsing, parentheses can
 be used around an expression. Then this parenthesis group has the tightest
 possible precedence.
 
