@@ -23,7 +23,9 @@ list quoting
 
 =head2 Chapter 2 - Operators, meta operators
 
-TODO: everything
+Done: Operators
+
+TODO: list some common operators. Meta-operators
 
 =head2 Chapter 3 - Subs and signatures,
    
