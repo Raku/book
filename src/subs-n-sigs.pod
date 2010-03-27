@@ -1,0 +1,249 @@
+=head0 Subs and Signatures
+
+A subroutine is a piece of code that performs some specific task. It may take
+some arguments, which are bits of data that it will work with. The expected
+arguments are described by a signature. It may also produce some result, which
+is known as a return value.
+
+You have already seen some simple subroutines in the first chapter, and looked at
+operators in the second chapter, which in a sense are subrouties that are parsed
+in an interesting way. However, these just scratch on the surface of what's
+possible.
+
+
+=head1 Declaring A Subroutine
+
+Most often, a subroutine is declared with a name. This name can then be used to
+call the subroutine.
+
+=begin programlisting
+
+sub panic() {
+    say "Oh no! Something has gone most terribly wrong!";
+}
+
+panic();
+
+=end programlisting
+
+By default, this name is lexically scoped. This means that, just like any variable
+declared with C<my>, it only exists within the current block. Therefore, unless it
+is explicitly marked as being exported in some way, you can have a good idea of
+where the sub might be called from. If you want to sub to be more widely available,
+you can use C<our> to put it in the package.
+
+=begin programlisting
+
+{
+    our sub eat() {
+        say "om nom nom";
+    }
+
+    sub drink() {
+        say "glug glug";
+    }   
+}
+
+eat();    # om nom nom
+drink();  # fails, can't drink outside of the block
+
+=end programlisting
+
+While all of the subs we have seen so far have names, the name is in fact
+optional. In Perl 6, subs are objects and can be passed around and stored in
+data structures just like any other bit of data. For example, if we wanted to
+make a little ASCII art dancing figure, we could build up a hash. The keys are
+names of the dance moves, and the values are anonymous subroutines.
+
+=begin programlisting
+
+my $dance = '';
+my %moves =
+    hands-over-head => sub { $dance ~= '/o\ '   },
+    bird-arms       => sub { $dance ~= '|/o\| ' },
+    left            => sub { $dance ~= '>o '    },
+    right           => sub { $dance ~= 'o< '    },
+    arms-up         => sub { $dance ~= '\o/ '   };
+
+my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+for @awesome-dance -> $move {
+    %moves{$move}.();
+}
+say $dance;
+
+=end programlisting
+
+From the output of this program, you can observe that doing the YMCA dance in
+ASCII art looks just about as bad as doing it in real life.
+
+
+=head1 Adding Signatures
+
+A sub's signature performs two roles. First, it declares what arguments may or
+must be passed to the subroutine. Second, it declares what variables in the sub
+the arguments should be bound to. Perl 6 signatures provide a lot of power in
+both of these areas, allowing you to constrain the values that may be passed in
+a whole range of ways and also to dig into data structures and extract the parts
+that are of interest.
+
+=head2 The basics
+
+In its most simple form, a signature is a comma seperated list of variable names
+that incoming arguments should be bound to.
+
+=begin programlisting
+
+sub order_beer($type, $pints) {
+    say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+}
+
+order_beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
+order_beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
+
+=end programlisting
+
+Our use of the term bound over assigned is signficant here. The variables in
+your signature really are read-only references to the arguments that were
+passed. This means that you can not modify them within the sub. If this is
+too limiting, then you have two different ways to relax this restriction.
+
+Marking a parameter as C<is rw> means that you are allowed to modify the
+argument that was passed in. Doing so modifies the original thing that was
+passed. If a literal or some other constant value was passed in, then this
+will fail. 
+
+=begin programlisting
+
+sub make-it-more-so($it is rw) {
+    $it ~= substr($it, $it.chars - 1) x 5;
+}
+
+my $happy = "yay!";
+make-it-more-so($happy);
+say $happy;                # yay!!!!!!
+make-it-more-so("uh-oh");  # Fails; can't modify a constant
+
+=end programlisting
+
+If, on the other hand, you just want your own copy of the argument
+to work with inside the subroutine, and to leave the original untouched, then
+mark the parameter C<is copy>.
+
+=begin programlisting
+
+sub say-it-one-higher($it is copy) {
+    $it++;
+    say $it;
+}
+
+my $unanswer = 41;
+say-it-one-higher($unanswer);  # 42
+say-it-one-higher(41);         # 42
+
+=end programlisting
+
+Perl 6 makes you write more to do either of these, but the good news is that
+you probably won't need to often. One common pattern in some languages is to
+use C<rw> style parameters when more than one result needs to be returned. In
+Perl 6, on the other hand, you're simply just allowed to return multiple
+values. Why not?
+
+=head2 Passing Arrays, Hashes and Code
+
+You have already seen how sigils can be used on variables to indicate how they
+can be used. In a signature, a variable with a sigil acts as a constraint on
+the type of argument that can be passed. Using the C<@> sigil, for example,
+checks that what is passed is capable of being iterated over. Failing to pass
+something that matches this constraint will cause the call to fail.
+
+=begin programlisting
+
+sub shout-them(@words) {
+    for @words -> $w {
+        print uc("$w ");
+    }
+}
+
+my @last_words = <do not want>;
+shout-them(@last_words);  # DO NOT WANT
+shout-them('help');       # Fails; a string is not iterable
+
+=end programlisting
+
+Similarly, using the C<%> sigil implies that the caller must pass something that
+can be indexed into associatively, e.g. using C<< <...> >> or C<{...}>. There is
+also the C<&> sigil, which requires that the caller pass something that itself may
+be called (for example, an anonymous subroutine). It also has the added benefit of
+allowing you to call it inside the subroutine body without having to put the C<&>
+at the start.
+
+=begin programlisting
+
+sub do-it-lots(&it, $how-many-times) {
+    for 1..$how-many-times {
+        it();
+    }
+}
+
+do-it-lots(sub { say "Eating a stroopwafel" }, 10);
+
+=end programlisting
+
+A scalar (the C<$> sigil) does not imply any constraints at all, so anything
+may be bound to it, even if it could be bound to one of the other sigils too.
+
+=head2 Optional Parameters
+
+Sometimes there are parameters that can have a sensible default value, or are
+just not needed in every situation. In these cases, it is nice to mark such
+parameters as optional, so those calling the subroutine can choose whether or
+not they want to pass a value.
+
+
+=head2 Named Paramters
+
+
+=head2 Slurpy Parameters
+
+
+=head1 Working With Types
+
+
+=head2 Basic Types
+
+
+=head2 Adding Constraints
+
+
+=head2 Type Captures
+
+
+=head1 Returning Results
+
+
+=head1 Captures
+
+A signature can be viewed as a collection of parameters. Captures fill the
+same niche for arguments. Most of the time, you don't have to think about
+captures, just as you don't often think about a signature as a whole but
+instead focus more on the parameters in it. However, Perl 6 does provide
+you with a way to deal with captures directly, and occasionally it's useful
+to do so.
+
+Captures have both a positional part and a named part, which act like a list
+and a hash respectively. From the point of view of making a call, the list-like
+part contains the positional parameters and the hash-like part contains the
+named parameters.
+
+=head2 Creating And Using A Capture
+
+
+=head2 Captures In Signatures
+
+
+=head1 Unpacking
+
+
+=head1 Introspection
+
+
