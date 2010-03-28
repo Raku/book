@@ -98,7 +98,7 @@ sub order-beer($type, $pints) {
 }
 
 order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
-order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
+order-beer('ZlatÃ½ BaÅ¾ant', 3); # 3 pints of ZlatÃ½ BaÅ¾ant, please.
 
 =end programlisting
 
@@ -200,6 +200,22 @@ just not needed in every situation. In these cases, it is nice to mark such
 parameters as optional, so those calling the subroutine can choose whether or
 not they want to pass a value.
 
+This can be done by assigning a default value in the signature, or by
+appending a question mark to the parameter name:
+
+=begin programlisting
+
+ # with a default value
+ sub order-steak($how = 'medium') {
+     say "I'd like a steak, $how";
+ }
+ order-steak();
+ order-steak('through');
+
+ # without a defalt value
+ # TODO: come up with a good example
+
+=end programlisting
 
 =head2 Named Paramters
 
