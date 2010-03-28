@@ -219,6 +219,100 @@ appending a question mark to the parameter name:
 
 =head2 Named Paramters
 
+When a subroutine has many parameters, it is sometimes hard to remember their
+respective order. When that happens, it is often easier to call them by name
+instead:
+
+=begin programlisting
+
+sub order-beer($type, $pints) {
+    say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+}
+
+order-beer(type => 'Hobgoblin', pints => 1);    # A pint of Hobgoblin, please.
+order-beer(pints => 3, type => 'Zlatý Bažant'); # 3 pints of Zlatý Bažant, please.
+
+=end programlisting
+
+The names are just the ones that appeared as parameter names in the signature.
+When arguments are passed by name, the order in which they appear does not
+matter anymore.
+
+When a parameter name in a signature is preceeded by a colon, then it can only
+be filled by name, not by position:
+
+=begin programlisting
+
+ sub order-shrimps($count, :$from = 'North Sea') {
+     say "I'd like $count pieces of shrimp from the $from, please";
+ }
+ 
+ order-shrimps(6);                      # takes the default value 'North Sea'
+ order-shrimps(4, from => 'Atlantic Ocean');
+ order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
+
+=end programlisting
+
+Named parameters are optional by default, adding a C<!> at the end makes it
+mandatory.
+
+# TODO: example
+
+=head3 Renaming Parameters
+
+The name of named parameters is not tied to the variable name that is used
+inside the subroutine.
+
+=begin programlisting
+
+sub announce-time(:dinner($supper) = '8pm') {
+    say "We eat dinner at $supper";
+}
+
+announce-time(dinner => '9pm');      # We eat dinner at 9pm
+
+=end programlisting
+
+Parameters can also have multiple names. If the users are both British and
+Americans, one might write C<:color(:colour($c))>  or C<:color(:$colour))>.
+
+=head3 Other Syntax for Calling by Name
+
+Just like parameters can be written in the form C<:name($value)>, arguments
+can also be supplied with the so-called I<colon pair> notation. So these three
+lines mean the same thing:
+
+=begin programlisting
+
+announce-time(dinner => '9pm');
+announce-time(:dinner('9pm'));
+announce-time(:dinner<9pm>);
+
+=end programlisting
+
+The parens after the name are optional. If they are omitted, the value is
+C<Bool::True>. The shorthand for a value of C<Bool::False> is C<:!name>.
+
+Other possible forms and their meanings are listed in the table below.
+
+    Shorthand           Long form                   Description
+
+    :allowed            allowed => Bool::True       Boolean flag
+    :!allowed           allowed => Bool::False      Boolean flag
+    :bev<tea coffee>    bev => ('tee', 'coffee')    List
+    :times[1, 3]        times => [1, 3]             Array
+    :hash{ a => 2}      hash => { a => 2}           Hash
+    :$var               var => $var                 Scalar variable
+    :@var               var => @var                 Array variable
+    :%var               var => %var                 Hash variable
+
+All of these forms can also be used in other contexts too, where they
+construct C<Pair> objects.
+
+If you want to create a C<Pair> object and pass that to a subroutine not by
+name, but by position, you can either put it in parenthesis (like
+C<(:$thing)>), or you can use the C<< => >> operator with a quoted string on
+the left-hand side: C<< "thing" => $thing >>.
 
 =head2 Slurpy Parameters
 
