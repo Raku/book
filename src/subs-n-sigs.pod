@@ -210,7 +210,7 @@ appending a question mark to the parameter name:
      say "I'd like a steak, $how";
  }
  order-steak();
- order-steak('through');
+ order-steak('well done');
 
  # without a defalt value
  # TODO: come up with a good example
@@ -222,6 +222,7 @@ appending a question mark to the parameter name:
 
 =head2 Slurpy Parameters
 
+=head1 Returning Results
 
 =head1 Working With Types
 
@@ -233,10 +234,6 @@ appending a question mark to the parameter name:
 
 
 =head2 Type Captures
-
-
-=head1 Returning Results
-
 
 =head1 Captures
 
