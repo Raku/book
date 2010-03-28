@@ -318,6 +318,69 @@ the left-hand side: C<< "thing" => $thing >>.
 
 =head1 Returning Results
 
+Subroutines can also return values.
+
+The ASCII art examples from earlier would have been prettier if you used
+return values instead:
+
+=begin programlisting
+
+my %moves =
+    hands-over-head => sub { return '/o\ '   },
+    bird-arms       => sub { return '|/o\| ' },
+    left            => sub { return '>o '    },
+    right           => sub { return 'o< '    },
+    arms-up         => sub { return '\o/ '   };
+
+my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+for @awesome-dance -> $move {
+    print %moves{$move}.();
+}
+print "\n";
+
+=end programlisting
+
+Instead of modifying a variable inside the subroutine, a string is returned,
+and used by the code that called the subroutine. Multiple values can also be
+returned:
+
+=begin programlisting
+
+sub menu {
+    if rand < 0.5 {
+        return ('fish', 'white wine')
+    } else {
+        return ('steak', 'read wine');
+    }
+}
+
+my ($food, $beverage) = menu();
+
+=end programlisting
+
+The C<return> is actually not necessary - the last statement that is run
+inside a subroutine is returned. So the example can be simplified to
+
+=begin programlisting
+
+sub menu {
+    if rand < 0.5 {
+        'fish', 'white wine'
+    } else {
+        'steak', 'read wine';
+    }
+}
+
+my ($food, $beverage) = menu();
+
+=end programlisting
+
+However C<return> has the additional effect of immediatly exiting the
+subroutine, so the following statements are not executed if the C<return>
+statement is run:
+
+# TODO: example
+
 =head1 Working With Types
 
 
