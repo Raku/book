@@ -93,12 +93,12 @@ that incoming arguments should be bound to.
 
 =begin programlisting
 
-sub order_beer($type, $pints) {
+sub order-beer($type, $pints) {
     say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
 }
 
-order_beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
-order_beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
+order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
+order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
@@ -109,8 +109,9 @@ too limiting, then you have two different ways to relax this restriction.
 
 Marking a parameter as C<is rw> means that you are allowed to modify the
 argument that was passed in. Doing so modifies the original thing that was
-passed. If a literal or some other constant value was passed in, then this
-will fail. 
+passed. If a literal or some other constant value was passed in for an rw
+parameter, then binding of the signature fails, and the subroutine cannot be
+called with the constant argument.
 
 =begin programlisting
 
