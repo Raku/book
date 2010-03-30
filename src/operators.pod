@@ -130,6 +130,9 @@ values, so C<2 max 3> returns 3. When there are angle brackets around an infix
 operator, it is applied to a list piece by piece. So C<[max] 1, 5, 3, 7> is
 the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
 
+Likewise you can write C<[+]> to get the sum of a list of values, C<[*]> for
+the product, and use C<< [<=] >> to check if a list is ordered ascendingly.
+
 After the C<[max]> you see the expression C<@scores».key».chars>. Just like
 C<@variable.method> calls a method on the C<@variable>, C<@array».method>
 calls a method for each item in C<@array>, and returns the list of the return
@@ -208,7 +211,7 @@ The first string is the name of the player, the second is the bar.
 X<operator; xx>
 X<repetition operator>
 
-The bar is generated with the infix C<xx> operator, the
+The bar is generated with the infix C<x> operator, the
 I<repetition operator>. It takes a string on the left-hand side and a number
 on the right-hand side, and sticks the strings together as many times as the
 number specifies. So C<'ab' x 3> returns the string C<'ababab'>. C<.value>
