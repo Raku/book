@@ -412,7 +412,53 @@ named parameters.
 
 =head1 Unpacking
 
+Sometimes you don't want to access access an array or hash as a whole, but
+rather extract some of the values. You could do that with ordinary accesses,
+or with signatures by doing another signature binding:
+
+=begin programlisting
+
+  sub first-is-largest(@a) {
+      my $first = @a.shift;
+      # TODO: either explain junctions, or find a
+      # concise way to write without them
+      return $first >= all(@a);
+  }
+
+  # same thing:
+  sub first-is-largest(@a) {
+      my :($first, *@rest) ::= \(|@a)
+      return $first >= all(@rest);
+  }
+
+=end programlisting
+
+The signature binding approch might seem clumsy, but it can be incorporated
+into the main signature of the subroutine:
+
+=begin programlisting
+
+  sub first-is-largest([$first, *@rest]) {
+      return $first >= all(@rest);
+  }
+
+=end programlisting
+
+The brackets in the signature tell the compiler that a list-like parameter is
+expected, but instead of binding it to an array, it is I<unpacked> into more
+parameters - here a single scalar, and an array containing the rest. This
+I<subsignature> also acts as a constraint on the array parameter: the
+signature binding will fail unless the list in the capture contains at least
+one item.
+
+Likewise a hash can be unpacked by using C<%(...)> instead of the brackets,
+and named arguments inside them.
+
+# TODO: come up with a good example
+
+# TODO: generic object unpacking
 
 =head1 Introspection
 
 
+=for editor vim: se spell
