@@ -390,8 +390,6 @@ statement is run:
 =head2 Adding Constraints
 
 
-=head2 Type Captures
-
 =head1 Captures
 
 A signature can be viewed as a collection of parameters. Captures fill the
