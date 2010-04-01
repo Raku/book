@@ -258,6 +258,10 @@ mandatory.
 
 # TODO: example
 
+Just like C<*@rest> slurps up all remaining positional arguments, C<*%rest>
+is bound to a hash of all named arguments that have not been bound to an
+individual named parameters.
+
 =head3 Renaming Parameters
 
 The name of named parameters is not tied to the variable name that is used
