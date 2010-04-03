@@ -1,17 +1,21 @@
 =head0 Preface
 
-Perl 6 has had a long gestation period. During that time several
-implementations have been created. These implementations have, in turn,
-informed the design of Perl 6 in ways that wouldn't have been possible
-without developers trying to implement the specification and programmers
-trying to use those implementations to solve real programming problems.
-Because of this interplay between design and implementation, today we
-have more cohesive and consistent language specification and a compiler
-that implements a good bit of it.
+Perl 6 is a versatile, intuitive and flexible programming language in
+active development. It embraces several paradigms like procedural,
+object oriented and functional programming, as well as offering very
+powerful tools for parsing text.
 
-In the pages that follow, you will be introduced to the Perl 6 language
-through its Rakudo implementation. Good luck and as the Perl 6 community
-often says: have fun!
+Perl 6 is a language specification, and multiple compilers and interpreters
+exists in various stages of completeness. These implementations have in turn
+influenced the design of the Perl 6 programming language by highlighting
+clumsy features, or those that are unnecessary hard to implement with little
+benefit. So after a gestation period, we have a more cohesive and consistent
+language specification and a compiler that implements a good bit of it.
+
+In the pages that follow, you will be introduced to the Perl 6 language.
+The examples can be run with the I<Rakudo Perl 6> Compiler, but they are in no
+way specific to Rakudo -- any sufficiently advanced Perl 6 implementation can
+run them.  Good luck and as the Perl 6 community often says: have fun!
 
 This book is a work-in-progress, and it is expected that even releases
 will contain some amount of C<TODO> comments prior to the printing of the
@@ -62,7 +66,7 @@ book is tested using the Rakudo Perl 6 compiler.
 
 Each chapter is a mini-tutorial covering some aspect of Perl 6.
 Later chapters build on concepts introduced in earlier chapters.
-Each chapter contains a sample program in its entirety followed by
+Most chapters contain a sample program in its entirety followed by
 prose that explains the code in detail.
 
 =head1 Installing Rakudo
@@ -92,6 +96,11 @@ If you are inspired by the contents of this book and want to contribute
 to the Perl 6 community, there are more resources available to you:
 
 =over
+
+=item World Wide Web
+
+The Perl 6 homepage can be found at C<http://perl6.org/>. It contains pointers
+to many useful resources.
 
 =item IRC
 
