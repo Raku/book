@@ -193,6 +193,23 @@ do-it-lots(sub { say "Eating a stroopwafel" }, 10);
 A scalar (the C<$> sigil) does not imply any constraints at all, so anything
 may be bound to it, even if it could be bound to one of the other sigils too.
 
+=head2 Interpolating Arrays and Hashes
+
+Sometimes you want to fill positional arguments from an array. Instead of
+writing C<eat(@food[0], @food[1], @food[2], ...)> and so on for every array
+item, you can I<interpolate> it into the argument list by prepending a
+vertical bar: C<eat(@food)>.
+
+Likewise hashes can be interpolated into named arguments:
+
+=begin programlisting
+
+ my %user-preferences = from => 'Northern Sea';
+ order-shrimps(3, |%user-preferences)
+
+=end programlisting
+
+
 =head2 Optional Parameters
 
 Sometimes there are parameters that can have a sensible default value, or are
@@ -319,6 +336,48 @@ C<(:$thing)>), or you can use the C<< => >> operator with a quoted string on
 the left-hand side: C<< "thing" => $thing >>.
 
 =head2 Slurpy Parameters
+
+In an earlier example the function C<shout-it> accepted an array argument.
+There is no need to actually require the user to build an array and pass that
+to the function:
+
+=begin programlisting
+
+ sub shout-them(*@words) {
+     for @words -> $w {
+         print uc("$w ");
+     }
+ }
+ 
+ # now you can pass items
+ shout-them('go')            # GO
+ shout-them('go', 'home');   # GO HOME
+ 
+ my @words = ('go', 'home');
+ shout-them(@words);         # still works
+
+=end programlisting
+
+The asterisk in front of an array parameter marks it as I<slurpy>. It takes
+all remaining positional arguments and stores them in an array.
+
+Likewise C<*%hash> slurps all the remaining named arguments into an array.
+
+With slurpy arrays and hashes you can pass on all positional and named
+arguments to another routine:
+
+=begin programlisting
+
+sub debug-wrapper(&code, *@positional, *%named) {
+    warn "Calling '&code.name()' with arguments "
+         ~ "@positional.perl(), %named.perl()\n";
+    code(|@positional, %named);
+    warn "... back from '&code.name()'\n";
+}
+
+debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
+
+=end programlisting
 
 =head1 Returning Results
 
