@@ -18,11 +18,11 @@ call the subroutine.
 
 =begin programlisting
 
-sub panic() {
-    say "Oh no! Something has gone most terribly wrong!";
-}
-
-panic();
+ sub panic() {
+     say "Oh no! Something has gone most terribly wrong!";
+ }
+ 
+ panic();
 
 =end programlisting
 
@@ -34,18 +34,18 @@ you can use C<our> to put it in the package.
 
 =begin programlisting
 
-{
-    our sub eat() {
-        say "om nom nom";
-    }
-
-    sub drink() {
-        say "glug glug";
-    }   
-}
-
-eat();    # om nom nom
-drink();  # fails, can't drink outside of the block
+ {
+     our sub eat() {
+         say "om nom nom";
+     }
+ 
+     sub drink() {
+         say "glug glug";
+     }   
+ }
+ 
+ eat();    # om nom nom
+ drink();  # fails, can't drink outside of the block
 
 =end programlisting
 
@@ -57,19 +57,19 @@ names of the dance moves, and the values are anonymous subroutines.
 
 =begin programlisting
 
-my $dance = '';
-my %moves =
-    hands-over-head => sub { $dance ~= '/o\ '   },
-    bird-arms       => sub { $dance ~= '|/o\| ' },
-    left            => sub { $dance ~= '>o '    },
-    right           => sub { $dance ~= 'o< '    },
-    arms-up         => sub { $dance ~= '\o/ '   };
-
-my @awesome-dance = <arms-up bird-arms right hands-over-head>;
-for @awesome-dance -> $move {
-    %moves{$move}.();
-}
-say $dance;
+ my $dance = '';
+ my %moves =
+     hands-over-head => sub { $dance ~= '/o\ '   },
+     bird-arms       => sub { $dance ~= '|/o\| ' },
+     left            => sub { $dance ~= '>o '    },
+     right           => sub { $dance ~= 'o< '    },
+     arms-up         => sub { $dance ~= '\o/ '   };
+ 
+ my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+ for @awesome-dance -> $move {
+     %moves{$move}.();
+ }
+ say $dance;
 
 =end programlisting
 
@@ -93,12 +93,12 @@ that incoming arguments should be bound to.
 
 =begin programlisting
 
-sub order-beer($type, $pints) {
-    say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
-}
-
-order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
-order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
+ sub order-beer($type, $pints) {
+     say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+ }
+ 
+ order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
+ order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
@@ -115,14 +115,14 @@ called with the constant argument.
 
 =begin programlisting
 
-sub make-it-more-so($it is rw) {
-    $it ~= substr($it, $it.chars - 1) x 5;
-}
-
-my $happy = "yay!";
-make-it-more-so($happy);
-say $happy;                # yay!!!!!!
-make-it-more-so("uh-oh");  # Fails; can't modify a constant
+ sub make-it-more-so($it is rw) {
+     $it ~= substr($it, $it.chars - 1) x 5;
+ }
+ 
+ my $happy = "yay!";
+ make-it-more-so($happy);
+ say $happy;                # yay!!!!!!
+ make-it-more-so("uh-oh");  # Fails; can't modify a constant
 
 =end programlisting
 
@@ -132,14 +132,14 @@ mark the parameter C<is copy>.
 
 =begin programlisting
 
-sub say-it-one-higher($it is copy) {
-    $it++;
-    say $it;
-}
-
-my $unanswer = 41;
-say-it-one-higher($unanswer);  # 42
-say-it-one-higher(41);         # 42
+ sub say-it-one-higher($it is copy) {
+     $it++;
+     say $it;
+ }
+ 
+ my $unanswer = 41;
+ say-it-one-higher($unanswer);  # 42
+ say-it-one-higher(41);         # 42
 
 =end programlisting
 
@@ -159,15 +159,15 @@ something that matches this constraint will cause the call to fail.
 
 =begin programlisting
 
-sub shout-them(@words) {
-    for @words -> $w {
-        print uc("$w ");
-    }
-}
-
-my @last_words = <do not want>;
-shout-them(@last_words);  # DO NOT WANT
-shout-them('help');       # Fails; a string is not iterable
+ sub shout-them(@words) {
+     for @words -> $w {
+         print uc("$w ");
+     }
+ }
+ 
+ my @last_words = <do not want>;
+ shout-them(@last_words);  # DO NOT WANT
+ shout-them('help');       # Fails; a string is not iterable
 
 =end programlisting
 
@@ -180,13 +180,13 @@ at the start.
 
 =begin programlisting
 
-sub do-it-lots(&it, $how-many-times) {
-    for 1..$how-many-times {
-        it();
-    }
-}
-
-do-it-lots(sub { say "Eating a stroopwafel" }, 10);
+ sub do-it-lots(&it, $how-many-times) {
+     for 1..$how-many-times {
+         it();
+     }
+ }
+ 
+ do-it-lots(sub { say "Eating a stroopwafel" }, 10);
 
 =end programlisting
 
@@ -241,13 +241,13 @@ respective order. When that happens, it is often easier to call them by name
 instead:
 
 =begin programlisting
-
-sub order-beer($type, $pints) {
-    say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
-}
-
-order-beer(type => 'Hobgoblin', pints => 1);    # A pint of Hobgoblin, please.
-order-beer(pints => 3, type => 'Zlatý Bažant'); # 3 pints of Zlatý Bažant, please.
+ 
+ sub order-beer($type, $pints) {
+     say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+ }
+ 
+ order-beer(type => 'Hobgoblin', pints => 1);    # A pint of Hobgoblin, please.
+ order-beer(pints => 3, type => 'Zlatý Bažant'); # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
@@ -285,12 +285,12 @@ The name of named parameters is not tied to the variable name that is used
 inside the subroutine.
 
 =begin programlisting
-
-sub announce-time(:dinner($supper) = '8pm') {
-    say "We eat dinner at $supper";
-}
-
-announce-time(dinner => '9pm');      # We eat dinner at 9pm
+ 
+ sub announce-time(:dinner($supper) = '8pm') {
+     say "We eat dinner at $supper";
+ }
+ 
+ announce-time(dinner => '9pm');      # We eat dinner at 9pm
 
 =end programlisting
 
@@ -305,9 +305,9 @@ lines mean the same thing:
 
 =begin programlisting
 
-announce-time(dinner => '9pm');
-announce-time(:dinner('9pm'));
-announce-time(:dinner<9pm>);
+ announce-time(dinner => '9pm');
+ announce-time(:dinner('9pm'));
+ announce-time(:dinner<9pm>);
 
 =end programlisting
 
@@ -368,14 +368,14 @@ arguments to another routine:
 
 =begin programlisting
 
-sub debug-wrapper(&code, *@positional, *%named) {
-    warn "Calling '&code.name()' with arguments "
-         ~ "@positional.perl(), %named.perl()\n";
-    code(|@positional, %named);
-    warn "... back from '&code.name()'\n";
-}
-
-debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
+ sub debug-wrapper(&code, *@positional, *%named) {
+     warn "Calling '&code.name()' with arguments "
+          ~ "@positional.perl(), %named.perl()\n";
+     code(|@positional, %named);
+     warn "... back from '&code.name()'\n";
+ }
+ 
+ debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
 
 =end programlisting
 
@@ -388,18 +388,18 @@ return values instead:
 
 =begin programlisting
 
-my %moves =
-    hands-over-head => sub { return '/o\ '   },
-    bird-arms       => sub { return '|/o\| ' },
-    left            => sub { return '>o '    },
-    right           => sub { return 'o< '    },
-    arms-up         => sub { return '\o/ '   };
-
-my @awesome-dance = <arms-up bird-arms right hands-over-head>;
-for @awesome-dance -> $move {
-    print %moves{$move}.();
-}
-print "\n";
+ my %moves =
+     hands-over-head => sub { return '/o\ '   },
+     bird-arms       => sub { return '|/o\| ' },
+     left            => sub { return '>o '    },
+     right           => sub { return 'o< '    },
+     arms-up         => sub { return '\o/ '   };
+ 
+ my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+ for @awesome-dance -> $move {
+     print %moves{$move}.();
+ }
+ print "\n";
 
 =end programlisting
 
@@ -409,15 +409,15 @@ returned:
 
 =begin programlisting
 
-sub menu {
-    if rand < 0.5 {
-        return ('fish', 'white wine')
-    } else {
-        return ('steak', 'read wine');
-    }
-}
-
-my ($food, $beverage) = menu();
+ sub menu {
+     if rand < 0.5 {
+         return ('fish', 'white wine')
+     } else {
+         return ('steak', 'read wine');
+     }
+ }
+ 
+ my ($food, $beverage) = menu();
 
 =end programlisting
 
@@ -426,15 +426,15 @@ inside a subroutine is returned. So the example can be simplified to
 
 =begin programlisting
 
-sub menu {
-    if rand < 0.5 {
-        'fish', 'white wine'
-    } else {
-        'steak', 'read wine';
-    }
-}
-
-my ($food, $beverage) = menu();
+ sub menu {
+     if rand < 0.5 {
+         'fish', 'white wine'
+     } else {
+         'steak', 'read wine';
+     }
+ }
+ 
+ my ($food, $beverage) = menu();
 
 =end programlisting
 
