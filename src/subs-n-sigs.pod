@@ -88,7 +88,7 @@ that are of interest.
 
 =head2 The basics
 
-In it's most simple form, a signature is a comma separated list of variable names
+In its most simple form, a signature is a comma separated list of variable names
 that incoming arguments should be bound to.
 
 =begin programlisting
