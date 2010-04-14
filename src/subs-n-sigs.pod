@@ -6,7 +6,7 @@ arguments are described by a signature. It may also produce some result, which
 is known as a return value.
 
 You have already seen some simple subroutines in the first chapter, and looked at
-operators in the second chapter, which in a sense are subrouties that are parsed
+operators in the second chapter, which in a sense are subroutines that are parsed
 in an interesting way. However, these just scratch on the surface of what's
 possible.
 
@@ -88,7 +88,7 @@ that are of interest.
 
 =head2 The basics
 
-In its most simple form, a signature is a comma seperated list of variable names
+In it's most simple form, a signature is a comma separated list of variable names
 that incoming arguments should be bound to.
 
 =begin programlisting
@@ -102,7 +102,7 @@ that incoming arguments should be bound to.
 
 =end programlisting
 
-Our use of the term bound over assigned is signficant here. The variables in
+Our use of the term bound over assigned is significant here. The variables in
 your signature really are read-only references to the arguments that were
 passed. This means that you can not modify them within the sub. If this is
 too limiting, then you have two different ways to relax this restriction.
@@ -229,12 +229,12 @@ appending a question mark to the parameter name:
  order-steak();
  order-steak('well done');
 
- # without a defalt value
+ # without a default value
  # TODO: come up with a good example
 
 =end programlisting
 
-=head2 Named Paramters
+=head2 Named Parameters
 
 When a subroutine has many parameters, it is sometimes hard to remember their
 respective order. When that happens, it is often easier to call them by name
@@ -255,7 +255,7 @@ The names are just the ones that appeared as parameter names in the signature.
 When arguments are passed by name, the order in which they appear does not
 matter anymore.
 
-When a parameter name in a signature is preceeded by a colon, then it can only
+When a parameter name in a signature is preceded by a colon, then it can only
 be filled by name, not by position:
 
 =begin programlisting
@@ -438,7 +438,7 @@ inside a subroutine is returned. So the example can be simplified to
 
 =end programlisting
 
-However C<return> has the additional effect of immediatly exiting the
+However C<return> has the additional effect of immediately exiting the
 subroutine, so the following statements are not executed if the C<return>
 statement is run:
 
@@ -475,7 +475,7 @@ named parameters.
 
 =head1 Unpacking
 
-Sometimes you don't want to access access an array or hash as a whole, but
+Sometimes you don't want to access an array or hash as a whole, but
 rather extract some of the values. You could do that with ordinary accesses,
 or with signatures by doing another signature binding:
 
@@ -496,7 +496,7 @@ or with signatures by doing another signature binding:
 
 =end programlisting
 
-The signature binding approch might seem clumsy, but it can be incorporated
+The signature binding approach might seem clumsy, but it can be incorporated
 into the main signature of the subroutine:
 
 =begin programlisting
