@@ -1,20 +1,20 @@
 =head0 Preface
 
-Perl 6 is a versatile, intuitive and flexible programming language in
+Perl 6 is a versatile, intuitive and flexible programming language in
 active development. It embraces several paradigms like procedural,
 object oriented and functional programming, as well as offering very
 powerful tools for parsing text.
 
 Perl 6 is a language specification, and multiple compilers and interpreters
 exists in various stages of completeness. These implementations have in turn
-influenced the design of the Perl 6 programming language by highlighting
+influenced the design of the Perl 6 programming language by highlighting
 clumsy features, or those that are unnecessary hard to implement with little
 benefit. So after a gestation period, we have a more cohesive and consistent
 language specification and a compiler that implements a good bit of it.
 
 In the pages that follow, you will be introduced to the Perl 6 language.
 The examples can be run with the I<Rakudo Perl 6> Compiler, but they are in no
-way specific to Rakudo -- any sufficiently advanced Perl 6 implementation can
+way specific to Rakudo -- any sufficiently advanced Perl 6 implementation can
 run them.  Good luck and as the Perl 6 community often says: have fun!
 
 This book is a work-in-progress, and it is expected that even releases
@@ -99,7 +99,7 @@ to the Perl 6 community, there are more resources available to you:
 
 =item World Wide Web
 
-The Perl 6 homepage can be found at C<http://perl6.org/>. It contains pointers
+The Perl 6 homepage can be found at C<http://perl6.org/>. It contains pointers
 to many useful resources.
 
 =item IRC
@@ -108,7 +108,7 @@ There is a channel #perl6 on irc.freenode.net dedicated to all things Perl 6.
 
 =item Mailing lists
 
-If you need some programming help with Perl 6, send an email to
+If you need some programming help with Perl 6, send an email to
 C<perl6-users@perl.org>.
 
 For issues regarding the Perl 6 language specification you can contact
