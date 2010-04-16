@@ -103,7 +103,7 @@ This prints
 =end screen
 
 The dot matched an C<l>, C<r>, and C<n>, but it would also match a space in
-the sentence I<< the spectroscoB<pe l>acks resolution >>--regexes don't care
+the sentence I<< the spectroscoB<pe l>acks resolution >>--regexes don't care
 about word boundaries at all. The special variable C<$/> stores (among other
 things) only the part of the string the matched the regular expression. C<$/>
 holds the so-called I<match object>.
@@ -551,8 +551,8 @@ X<regex; :sigspace modifier>
 X<regex; :s modifier>
 
 This works, but the repeated "I don't care about whitespace" units are clumsy.
-The desire to allow whitespace I<anywhere>way to just say "allow whitespaces
-anywhere" is common, and Perl 6 regexes provide such an option: the
+The desire to allow whitespace I<anywhere> in a string  is common, and Perl 6
+regexes provide such an option: the
 C<:sigspace> modifier (shortened to C<:s>):
 
 =begin programlisting
