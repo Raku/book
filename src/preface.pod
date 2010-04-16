@@ -53,7 +53,7 @@ Archive Network); Perl is community (perl5porters, perl6-language).
 These are things that both Perl 5 and Perl 6 will share to varying
 degrees. Also, due to Perl's habit of stealing good ideas, Perl 5 and
 Perl 6 will converge in some areas as Perl 5 borrows ideas from Perl 6
-and vice versa.
+and vice-versa.
 
 =head1 Perl 6 implementations
 

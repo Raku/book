@@ -99,7 +99,7 @@ defined later on. The symbol C<{*}> provides a hook which makes it possible to
 plug in custom "actions" during the matching process. The C<#= object> and
 C<#= array> markers don't influence the match in any way; they just provide
 labels to make it easier for the action to determine which of the two
-alternatives matched. We discuss actions in the secion "Extracting
+alternatives matched. We discuss actions in the section "Extracting
 data", below.
 
 The following calls are straightforward, and reflect the structure in which

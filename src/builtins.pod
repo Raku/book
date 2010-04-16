@@ -55,7 +55,7 @@ X<types; Rat>
 
 C<Rat>, short for I<rational>, stores fractional numbers without loss of
 precision.  Because C<Rat> tracks its numerator and denominator as integers,
-mathmatical operations on C<Rat>s with large components can become quite slow.
+mathematical operations on C<Rat>s with large components can become quite slow.
 For this reason, rationals with large denominators automatically degrade to
 C<Num>.
 
@@ -90,7 +90,7 @@ The following operators are available for all number types:
 
     Binary operators:
     Operator     Description
-    **           Exponentation: $a**$b is $a to the power of $b
+    **           Exponentiation: $a**$b is $a to the power of $b
     *            multiplication
     /            division    
     div          integer division
@@ -153,7 +153,7 @@ The following operations are available for strings:
     ~            concatenation: 'a' ~ 'b' is 'ab'
     x            replication: 'a' x 2 is 'aa'
 
-    Unary oerators:
+    Unary operators:
     Operator     Description
     ~            conversion to string: ~1 becomes '1'
 

@@ -118,7 +118,7 @@ simple commands.
 
 =head1 What is a role?
 
-Previous chapters have explained classes and grammers. A role is another type
+Previous chapters have explained classes and grammars. A role is another type
 of package. Like classes and grammars, a role can contain methods (including
 named regexes) and attributes. However, a role cannot stand on its own.  To use
 a role, you must incorporate it into an object, a class, or a grammar.
@@ -151,7 +151,7 @@ X<composition; conflicts>
 
 Take a look at the C<KarmaKeeper> class definition. The body is empty; the
 class defines no attributes or methods of its own. The class inherits from
-C<IRCBot>, using the C<is> trait modifier -- something familiar from ealier
+C<IRCBot>, using the C<is> trait modifier -- something familiar from earlier
 chapters -- but it also uses the C<does> trait modifier to compose two roles
 into the class.
 
@@ -258,7 +258,7 @@ Just as the C<*> quantifier in regexes means "zero or more", the C<.*> dispatch
 operator will call zero or more matching methods.  If no C<on-message> multi
 candidates match, the call will not produce an error.  If more than one
 C<on-message> multi candidate matches, Perl will call all of them, whether
-found by multiple dispatch, searching the inheritance hierarch, or both.
+found by multiple dispatch, searching the inheritance hierarchy, or both.
 
 There are two other variants. C<.+> greedily calls all methods but dies if
 there is not at least one method that matches. C<.?>, which tries to call one

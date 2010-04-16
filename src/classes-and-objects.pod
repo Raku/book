@@ -383,7 +383,7 @@ before finishing:
 
 It's time to introduce the C<augment> syntax.
 
-Also, C<!$!done> is unnecessarily hard to read if you see ! as a quasiquoting
+Also, C<!$!done> is unnecessarily hard to read if you see ! as a quasi-quoting
 symbol.  It's a $ sandwich.
 
 =end for

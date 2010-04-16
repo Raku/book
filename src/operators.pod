@@ -131,7 +131,7 @@ operator, it is applied to a list piece by piece. So C<[max] 1, 5, 3, 7> is
 the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
 
 Likewise you can write C<[+]> to get the sum of a list of values, C<[*]> for
-the product, and use C<< [<=] >> to check if a list is ordered ascendingly.
+the product, and use C<< [<=] >> to check if a list is ordered ascending.
 
 After the C<[max]> you see the expression C<@scores».key».chars>. Just like
 C<@variable.method> calls a method on the C<@variable>, C<@array».method>
@@ -157,8 +157,8 @@ X<meta operator; reduction>
 X<meta operator; []>
 
 The square brackets are called the I<reduction meta operator>: it transforms
-the enclosed infix operator into an operator that exepects a list (a
-I<listop>), and carries out the operation between each two conscutive list
+the enclosed infix operator into an operator that expects a list (a
+I<listop>), and carries out the operation between each two consecutive list
 items.
 
 For plotting the names of the players and bar charts, the program needs to
@@ -221,7 +221,7 @@ characters.
 
 =head1 A Word on Precedence
 
-X<operator precdence>
+X<operator precedence>
 X<precedence>
 
 The explanations of the example above have one implication, which was not yet
