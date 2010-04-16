@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Pod::PseudoPod::LaTeX;
+use Pod::PseudoPod::LaTeX 1.101050;
 
 print <<'HEADER';
 \documentclass[11pt,a4paper,oneside]{report}
