@@ -329,10 +329,10 @@ list in its own AST.
 =end programlisting
 
 A pair consists of a string key and a value, so the action method constructs a
-Perl 6 pair with the C<< => >> operator.
+Perl 6 pair with the C<< => >> operator.
 
 The other action methods work just the same: They transform the information
-they extract from the match object into "native" Perl 6 data structures, and
+they extract from the match object into "native" Perl 6 data structures, and
 call C<make> to set it as their own AST.
 
 =for vim: spell spelllang=en tw=78

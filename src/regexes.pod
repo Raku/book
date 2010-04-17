@@ -119,6 +119,9 @@ control sequences each match a single character:
 
 =begin table Backslash sequences and their meaning
 
+# TODO: Add a non-latin digit to \d
+# we used to have \c[ARABIC-INDIC DIGIT NINE], but LaTeX didn't like that :/
+
 =headrow
 
 =row
@@ -145,7 +148,7 @@ control sequences each match a single character:
 
 =cell digit
 
-=cell 0, 1, ٩
+=cell 0, 1,
 
 =row
 
@@ -389,7 +392,7 @@ a $ /> matches strings that consist only of an C<a>.
 
 =row
 
-=cell C< << >
+=cell C<<< << >>>
 
 =cell left word boundary
 
@@ -793,7 +796,9 @@ assertions, though usually not quite as efficient:
 
 =cell >>
 
-=cell right word boundary <?after \w> <!before \w>
+=cell right word boundary
+
+=cell <?after \w> <!before \w>
 
 =end table
 

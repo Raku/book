@@ -10,6 +10,7 @@ print <<'HEADER';
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage[scaled]{beramono}
+\usepackage[utf8]{inputenc}
  
 \begin{document}
 HEADER
