@@ -8,14 +8,14 @@ powerful tools for parsing text.
 Perl 6 is a language specification, and multiple compilers and interpreters
 exist in various stages of completeness. These implementations have in turn
 influenced the design of the Perl 6 programming language by highlighting
-clumsy features, or those that are unnecessary hard to implement with little
+misfeatures, or features that are unnecessarily hard to implement with little
 benefit. So after a gestation period, we have a more cohesive and consistent
 language specification and a compiler that implements a good bit of it.
 
 In the pages that follow, you will be introduced to the Perl 6 language.
 The examples can be run with the I<Rakudo Perl 6> Compiler, but they are in no
 way specific to Rakudo -- any sufficiently advanced Perl 6 implementation can
-run them.  Good luck and as the Perl 6 community often says: have fun!
+run them.  Good luck and -- as the Perl 6 community often says -- have fun!
 
 This book is a work-in-progress, and it is expected that even releases
 will contain some amount of C<TODO> comments prior to the printing of the
