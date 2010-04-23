@@ -6,7 +6,7 @@ object oriented and functional programming, as well as offering very
 powerful tools for parsing text.
 
 Perl 6 is a language specification, and multiple compilers and interpreters
-exists in various stages of completeness. These implementations have in turn
+exist in various stages of completeness. These implementations have in turn
 influenced the design of the Perl 6 programming language by highlighting
 clumsy features, or those that are unnecessary hard to implement with little
 benefit. So after a gestation period, we have a more cohesive and consistent
