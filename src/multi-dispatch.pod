@@ -140,28 +140,32 @@ this to count how often a type check occurs:
     a(3);
     say $counter;       # says B<0>
     a('str');
-    say $counter;       # says 1 or a higher number,
-                        # implementation dependent
+    say $counter;       # says B<2>
 
 =end programlisting
 
-The first counter output is always C<0>, since the nominal types alone already
-determine which candidate matches best, so the where-block is never executed.
+This code defines three multis, one of which increases a counter whenever its
+C<where> clause executes.  Any Perl 6 compiler is free to optimize away type
+checks it knows will succeed.  In the current Rakudo implementation, the second
+line with C<say> will print a higher number than the first.
+
+The first C<$counter> output is always C<0>, since the nominal types
+alone already determine which candidate matches best, so the where-block
+is never executed.
 
 The second output is at least C<1>. The compiler has to execute the
 where-block at least once to check if the third candidate can be called, but
-the specification doesn not require the minimal possible number of runs.
+the specification does not require the minimal possible number of runs.
+This is illustrated in the second C<$counter> output. The specific
+implementation used to run this test actually executes the where-block twice.
+Keep in mind that the number of times the subtype checks blocks are
+executed is implementation specific.
 
 =for author
 
 Verify Rakudo * behavior at press time.
 
 =end for
-
-This code defines three multis, one of which increases a counter whenever its
-C<where> clause executes.  Any Perl 6 compiler is free to optimize away type
-checks it knows will succeed.  In the current Rakudo implementation, the second
-line with C<say> will print a higher number than the first.
 
 =begin sidebar
 
