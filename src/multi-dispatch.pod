@@ -18,10 +18,7 @@ U<http://github.com/moritz/json/>.
 
 =begin programlisting
 
-    # TODO: Clarify numeric types. Only need one of the following two, but
-    # maybe s/Num/Numeric/.
-    multi to-json(Num  $d) { ~$d }
-    multi to-json(Int  $d) { ~$d }
+    multi to-json(Real  $d) { ~$d }
     multi to-json(Bool $d) { $d ?? 'true' !! 'false'; }
     multi to-json(Str  $d) {
         '"'
@@ -63,15 +60,15 @@ The various candidates all look like:
 =begin programlisting
 
     multi to-json(Bool $data) { code here }
-    multi to-json(Num  $data) { code here }
+    multi to-json(Real $data) { code here }
 
 =end programlisting
 
 Which one is actually called depends on the type of the data passed to the
 subroutine.  If you call C<to-json(Bool::True)>, the first one is called. If
-you pass a C<Num> instead, the second one is called.
+you pass a numeric value of type C<Real> instead, the second one is called.
 
-The candidates for handling C<Num> and C<Int> are very simple; because JSON's
+The candidate for handling C<Real> is very simple; because JSON's
 and Perl 6's number formats coincide, the JSON converter can rely on Perl's
 conversion of these numbers to strings. The C<Bool> candidate returns a literal
 string C<'true'> or C<'false'>.
