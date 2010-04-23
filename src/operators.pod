@@ -5,10 +5,10 @@ X<operator>
 Operators are very short names for often used routines. They have special
 calling syntax, and can be manipulated by other operators.
 
-Suppose you want to plot the number of sets that each player won in a
-tournament. This example uses the numbers from the previous chapter, and makes
-a very simple text output by just printing a number of C<X> signs to represent
-horizontal bars.
+Returning to the table tennis example, suppose you want to plot the number of
+sets that each player won in a tournament. This example uses the numbers from
+the previous chapter, and makes a very simple text output by just printing a
+number of C<X> characters to represent horizontal bars.
 
 =begin programlisting
 
@@ -40,10 +40,7 @@ Output:
 
 =end screen
 
-
-The first line, C<use v6;>, declares that this is Perl 6.
-
-The second non-empty line
+The line
 
 =begin programlisting
 
@@ -57,7 +54,7 @@ X<assignment>
 X<operator; assignment>
 X<operator; =>
 
-The C<=> operator is the so-called I<assignment operator> -- it takes the
+The C<=> operator is the I<assignment operator> -- it takes the
 values from the right-hand side, and stores them in the variable on the
 left-hand side, here C<@scores>.
 
@@ -65,10 +62,10 @@ X<pair>
 X<< operator;=> >>
 X< operator; fat arrow>
 
-The C<< => >> operator (the so-called C<fat arrow>) constructs C<Pair>
+The C<< => >> operator (the C<fat arrow>) constructs C<Pair>
 objects. A Pair stores a key and a value; the key is on the left-hand side of
 the C<< => >> operator, the value on the right. It also has a specialty: if
-the value on the right is an identifier, it is taken to be a string. So one
+the value on the right is a bare identifier, it is taken to be a string. So one
 could also write the example above as
 
 =begin programlisting
@@ -77,7 +74,7 @@ could also write the example above as
 
 =end programlisting
 
-Finally the C<,> operator constructs a C<List>, which is an immutable sequence
+Finally, the C<,> operator constructs a C<List>, which is an immutable sequence
 of objects. In this case the objects are pairs.
 
 X<infix>
@@ -94,10 +91,10 @@ X<postfix>
 X<operator; postfix>
 
 The previous chapter already used other types of operators, too. It contained
-the line C<%games{$p1}++;> which uses the I<postcircumfix> operator C<{...}>.
-It stands behind (I<post>) a term, and consists of two symbols (an opening and
-a closing curly bracket) which enclose (I<circumfix>) another term. Behind
-this postcircumfix operator is an ordinary I<postfix> operator with name
+the statement C<%games{$p1}++;> which uses the I<postcircumfix> operator
+C<{...}>. It stands behind (I<post>) a term, and consists of two symbols (an
+opening and a closing curly bracket) which enclose (I<circumfix>) another term.
+Behind this postcircumfix operator is an ordinary I<postfix> operator with name
 C<++>, which increments the value it qualifies. No whitespace is allowed
 between a term and its postfix or postcircumfix operators.
 
@@ -110,7 +107,7 @@ value, as in C<my $x = -4>.
 
 But the C<-> operator can also mean subtraction, so C<say 5 - 4> will print a
 C<1>. To distinguish the prefix operator C<-> from the infix operator C<->,
-the Perl 6 compiler always keeps track of whether it expects an infix
+the Perl 6 parser always keeps track of whether it expects an infix
 operator or a term. A term can have zero or more prefix operators, so you can
 actually write C<say 4 + -5>. After the C<+> (an infix operator), the compiler
 expects a term, thus the C<-> is interpreted as a prefix operator to the term
@@ -131,12 +128,13 @@ side of the C<+> operator is more complicated.
 X<operator; max>
 
 In Perl 6 there is an infix C<max> operator which returns the greater of two
-values, so C<2 max 3> returns 3. When there are angle brackets around an infix
-operator, it is applied to a list piece by piece. So C<[max] 1, 5, 3, 7> is
-the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
+values, so C<2 max 3> returns 3. Angle brackets around an infix
+operator indicate that it is applied to a list piece by piece. So C<[max] 1, 5,
+3, 7> is the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
 
-Likewise you can write C<[+]> to get the sum of a list of values, C<[*]> for
-the product, and use C<< [<=] >> to check if a list is ordered ascending.
+Likewise, you can write C<[+]> to get the sum of a list of values, C<[*]> for
+the product, and use C<< [<=] >> to check if a list is ordered by ascending
+values.
 
 After the C<[max]> you see the expression C<@scores».key».chars>. Just like
 C<@variable.method> calls a method on the C<@variable>, C<@array».method>
@@ -146,8 +144,8 @@ values.
 So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
 and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
 
-Finally C<[max] @scores».key».chars> returns the largest of these values. It is
-the same as
+The expression C<[max] @scores».key».chars> gives the largest of these
+values. It is the same as
 
 =begin programlisting
 
@@ -264,10 +262,10 @@ and C<@a = 1, 2> to both mean something sensible: assignment to two variables in
 and assignment of a two-item list to a single variable>.
 
 
-The precedence rules for Perl 6 allow very natural expression of many commonly
-used idioms without any parentheses, or even without thinking about
-precedence. If you want to force a different way of parsing, parentheses can
-be used around an expression. Then this parenthesis group has the tightest
+The precedence rules for Perl 6 allow many commonly used idioms to be expressed
+naturally and without any parentheses, or even without thinking about
+precedence. If you want to force a different way of parsing, parentheses can be
+used around an expression. Then this parenthesis group has the tightest
 possible precedence.
 
 =begin programlisting
