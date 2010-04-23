@@ -140,7 +140,8 @@ this to count how often a type check occurs:
     a(3);
     say $counter;       # says B<0>
     a('str');
-    say $counter;       # says B<2>
+    say $counter;       # says 1 or a higher number,
+                        # implementation dependent
 
 =end programlisting
 
