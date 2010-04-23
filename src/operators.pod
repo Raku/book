@@ -16,25 +16,30 @@ horizontal bars.
 
     my @scores = 'Ana' => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
 
-    my $screen-width   = 20;
+    my $screen-width   = 30;
 
     my $label-area-width = 1 + [max] @scores».key».chars;
-    my $max-score        = [max] @scores;
+    my $max-score        = [max] @scores».value;
     my $unit             = ($screen-width - $label-area-width) / $max-score;
 
-
     for @scores {
-        printf "%- $label-area-width%s\n", .key, 'X' x ($unit * .value);
+        my $format = '%- ' ~ $label-area-width ~ "s%s\n";
+        printf $format, .key, 'X' x ($unit * .value);
     }
 
 =end programlisting
 
-=for author
+Output:
 
-    TODO: example doesn't work right now; fix rakudo,
-    and put output in =begin screen ... =end screen section
+=begin screen
 
-=end for
+ Ana     XXXXXXXXXXXXXXXXXXXXXX
+ Dave    XXXXXXXXXXXXXXXX
+ Charlie XXXXXXXXXXX
+ Beth    XXXXXXXXXXX
+
+=end screen
+
 
 The first line, C<use v6;>, declares that this is Perl 6.
 
@@ -93,7 +98,7 @@ the line C<%games{$p1}++;> which uses the I<postcircumfix> operator C<{...}>.
 It stands behind (I<post>) a term, and consists of two symbols (an opening and
 a closing curly bracket) which enclose (I<circumfix>) another term. Behind
 this postcircumfix operator is an ordinary I<postfix> operator with name
-C<++>, which increments the value it qualifies. No whitespaces are allowed
+C<++>, which increments the value it qualifies. No whitespace is allowed
 between a term and its postfix or postcircumfix operators.
 
 X<postfix>
@@ -168,7 +173,7 @@ left edge of the bars.
 
 =begin programlisting
 
-    my $max-score       = [max] @scores;
+    my $max-score       = [max] @scores».value;
 
 =end programlisting
 
