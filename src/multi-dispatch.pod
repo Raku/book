@@ -141,9 +141,9 @@ this to count how often a type check occurs:
     multi a($x where { $counter++; True }) { };
 
     a(3);
-    say $counter;
+    say $counter;       # says B<0>
     a('str');
-    say $counter;
+    say $counter;       # says B<2>
 
 =end programlisting
 
@@ -315,7 +315,7 @@ X<parameters; anonymous>
 
 The only new thing here is that the parameters don't have names. The bodies of
 the subroutines do not use them, so there's no reason to force the programmer
-to name them.  A C<$> in a signature stands for a single, anonymous scalar
+to name them.  A single C<$> in a signature stands for an anonymous scalar
 variable.
 
 X<types; capture>
@@ -455,7 +455,7 @@ latter by installing a I<proto> routine:
 Nearly all Perl 6 built-in functions and operators export a proto definition,
 which prevents accidental overriding of built-insN<One of the very rare
 exceptions is the smart match operator C<< infix:<~~> >> which is not easily
-overloadable.  Instead it redispatches to overloadable multi methods.>>.
+overloadable.  Instead it redispatches to overloadable multi methods.>.
 
 =begin sidebar
 

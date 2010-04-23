@@ -663,8 +663,8 @@ X<subst>
 X<substitutions>
 
 Regexes are not only popular for data validation and extraction, but also data
-manipulation. The C<subst> method matches a regex against a string.  If it
-finds a match is found, it substitutes the portion of the string that matches
+manipulation. The C<subst> method matches a regex against a string.  If
+a match is found, it substitutes the portion of the string that matches
 with its second argument.
 
 =begin programlisting

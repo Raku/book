@@ -137,7 +137,7 @@ into allomorphism here.  Is there a rephrasing that's more correct?
 However, this attribute represents an array of items, so it requires the C<@>
 sigil. These items each specify a task that must be completed before the
 present one can complete. Furthermore, the type declaration on this attribute
-indicates that the array may only hold instances of the Task class (or some
+indicates that the array may only hold instances of the C<Task> class (or some
 subclass of it).
 
 The third attribute represents the state of completion of a task:
@@ -249,7 +249,7 @@ C<@!dependencies> attribute of the current invocant.
 After all of the dependencies have completed, it's time to perform the current
 C<Task>'s task by invoking the C<&!callback> attribute directly; this is the
 purpose of the parentheses.  Finally, the method sets the C<$!done> attribute
-to True, so that subsequent invocations of C<perform> on this object (if this
+to C<True>, so that subsequent invocations of C<perform> on this object (if this
 C<Task> is a dependency of another C<Task>, for example) will not repeat the
 task.
 
