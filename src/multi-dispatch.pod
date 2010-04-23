@@ -147,6 +147,13 @@ this to count how often a type check occurs:
 
 =end programlisting
 
+The first counter output is always C<0>, since the nominal types alone already
+determine which candidate matches best, so the where-block is never executed.
+
+The second output is at least C<1>. The compiler has to execute the
+where-block at least once to check if the third candidate can be called, but
+the specification doesn not require the minimal possible number of runs.
+
 =for author
 
 Verify Rakudo * behavior at press time.
