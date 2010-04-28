@@ -1,36 +1,49 @@
 =head0 Subs and Signatures
 
-A subroutine is a piece of code that performs some specific task. It may take
-some arguments, which are bits of data that it will work with. The expected
-arguments are described by a signature. It may also produce some result, which
-is known as a return value.
+X<subroutine>
+X<arguments>
+X<signature>
+X<return value>
 
-You have already seen some simple subroutines in the first chapter, and looked at
-operators in the second chapter, which in a sense are subroutines that are parsed
-in an interesting way. However, these just scratch on the surface of what's
-possible.
+A I<subroutine> is a piece of code that performs a specific task. It may
+operate in provided data, also known as I<arguments>.  It may also produce some
+result, which is known as a return value.  The I<signature> of a subroutine is
+a description of the arguments it takes and the return value it produces.
 
+You have already seen some simple subroutines in the first chapter.  The second
+chapter described operators.  In a sense, these are also subroutines that Perl
+6 parses in interesting ways.  However, these just scratch on the surface of
+what's possible.
 
 =head1 Declaring A Subroutine
 
-Most often, a subroutine is declared with a name. This name can then be used to
-call the subroutine.
+=for author
+
+Is "keyword" the right word?
+
+=end for
+
+Most subroutines have names, which you can use to call them.  The C<sub>
+keyword declares a subroutine, followed by a name, a signature, and a block of
+code:
 
 =begin programlisting
 
  sub panic() {
      say "Oh no! Something has gone most terribly wrong!";
  }
- 
+
  panic();
 
 =end programlisting
 
-By default, this name is lexically scoped. This means that, just like any variable
-declared with C<my>, it only exists within the current block. Therefore, unless it
-is explicitly marked as being exported in some way, you can have a good idea of
-where the sub might be called from. If you want to sub to be more widely available,
-you can use C<our> to put it in the package.
+X<subroutines; scoping>
+X<scoping; subroutines>
+
+By default, subroutines are lexically scoped, just like any variable declared
+with C<my>.  In the absence of any code indicating otherwise, you can only call
+a subroutine within its given scope.  If you want to sub to be more widely
+available, use C<our> to put it in the package.
 
 =begin programlisting
 
@@ -38,22 +51,30 @@ you can use C<our> to put it in the package.
      our sub eat() {
          say "om nom nom";
      }
- 
+
      sub drink() {
          say "glug glug";
-     }   
+     }
  }
- 
+
  eat();    # om nom nom
  drink();  # fails, can't drink outside of the block
 
 =end programlisting
 
-While all of the subs we have seen so far have names, the name is in fact
-optional. In Perl 6, subs are objects and can be passed around and stored in
-data structures just like any other bit of data. For example, if we wanted to
-make a little ASCII art dancing figure, we could build up a hash. The keys are
-names of the dance moves, and the values are anonymous subroutines.
+X<anonymous subroutines>
+X<subroutines; anonymous>
+X<subroutines; first-class>
+X<first-class subroutines>
+
+Perl 6 subs are objects.  You can pass them around and store them in data
+structures just like you can do with any other piece of data.  Programming
+language designers often call these I<first-class subroutines>, because they
+behave like other built-in data structures.  This offers tremendous potential.
+Just like you don't have to name every variable, you don't have to name every
+subroutine.  For example, to make a little ASCII art dancing figure, you could
+build up a hash where the keys are names of the dance moves, and the values are
+anonymous subroutines:
 
 =begin programlisting
 
@@ -64,61 +85,60 @@ names of the dance moves, and the values are anonymous subroutines.
      left            => sub { $dance ~= '>o '    },
      right           => sub { $dance ~= 'o< '    },
      arms-up         => sub { $dance ~= '\o/ '   };
- 
+
  my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+
  for @awesome-dance -> $move {
      %moves{$move}.();
  }
+
  say $dance;
 
 =end programlisting
 
 From the output of this program, you can observe that doing the YMCA dance in
-ASCII art looks just about as bad as doing it in real life.
-
+ASCII art looks as bad as in real life.
 
 =head1 Adding Signatures
 
-A sub's signature performs two roles. First, it declares what arguments may or
-must be passed to the subroutine. Second, it declares what variables in the sub
-the arguments should be bound to. Perl 6 signatures provide a lot of power in
-both of these areas, allowing you to constrain the values that may be passed in
-a whole range of ways and also to dig into data structures and extract the parts
-that are of interest.
+A sub's signature performs two roles. First, it declares the arguments callers
+may or must pass to the subroutine. Second, it declares the variables in the
+sub to which to bind those arguments. Perl 6 signatures go further; they
+allowing you to constrain the values of arguments and to extract specific
+pieces of data structures.
 
 =head2 The Basics
 
-In its most simple form, a signature is a comma separated list of variable names
-that incoming arguments should be bound to.
+In its most simple form, a signature is a comma separated list of variable
+names to which to bind incoming arguments.
 
 =begin programlisting
 
  sub order-beer($type, $pints) {
      say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
  }
- 
+
  order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
  order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
-Our use of the term bound over assigned is significant here. The variables in
-your signature really are read-only references to the arguments that were
-passed. This means that you can not modify them within the sub. If this is
-too limiting, then you have two different ways to relax this restriction.
+The use of the term I<bound> instead of I<assigned> is significant. The
+variables in your signature are read-only references to the passed arguments.
+You cannot modify them within the sub.  If this is too limiting, then you have
+two different ways to relax this restriction.
 
-Marking a parameter as C<is rw> means that you are allowed to modify the
-argument that was passed in. Doing so modifies the original thing that was
-passed. If a literal or some other constant value was passed in for an C<rw>
-parameter, then binding of the signature fails, and the subroutine cannot be
-called with the constant argument.
+Marking a parameter as C<is rw> means that you are allowed to modify the passed
+argument.  If you modify that value, you modify the original in place.  If you
+attempt to pass a literal or some other constant value for an C<rw> parameter,
+binding of that signature will fail and the subroutine call will not occur.
 
 =begin programlisting
 
  sub make-it-more-so($it is rw) {
      $it ~= substr($it, $it.chars - 1) x 5;
  }
- 
+
  my $happy = "yay!";
  make-it-more-so($happy);
  say $happy;                # yay!!!!!!
@@ -126,9 +146,9 @@ called with the constant argument.
 
 =end programlisting
 
-If, on the other hand, you just want your own copy of the argument
-to work with inside the subroutine, and to leave the original untouched, then
-mark the parameter C<is copy>.
+If instead you want your own copy of the argument to work with inside the
+subroutine--if you want to leave the original untouched--then mark the
+parameter C<is copy>.
 
 =begin programlisting
 
@@ -136,25 +156,23 @@ mark the parameter C<is copy>.
      $it++;
      say $it;
  }
- 
+
  my $unanswer = 41;
  say-it-one-higher($unanswer);  # 42
  say-it-one-higher(41);         # 42
 
 =end programlisting
 
-Perl 6 makes you write more to do either of these, but the good news is that
-you probably won't need to often. One common pattern in some languages is to
-use C<rw> style parameters when more than one result needs to be returned. In
-Perl 6, on the other hand, you're simply just allowed to return multiple
-values. Why not?
+The extra verbosity of marking arguments as mutable may seem excessive, but
+it's likely you won't use these modifiers often.  While certain languages
+require you to mark arguments as C<rw> to emulate returning multiple result
+from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
 
-You have already seen how sigils can be used on variables to indicate how they
-can be used. In a signature, a variable with a sigil acts as a constraint on
-the type of argument that can be passed. Using the C<@> sigil, for example,
-checks that what is passed is capable of being iterated over. Failing to pass
+Sigils on variables indicate their intended use.  In a signature, a variable
+with a sigil acts as a constraint on the type of argument passed.  The C<@>
+sigil, for example, checks that the passed value is iterable.  Failing to pass
 something that matches this constraint will cause the call to fail.
 
 =begin programlisting
@@ -164,19 +182,18 @@ something that matches this constraint will cause the call to fail.
          print uc("$w ");
      }
  }
- 
+
  my @last_words = <do not want>;
  shout-them(@last_words);  # DO NOT WANT
  shout-them('help');       # Fails; a string is not iterable
 
 =end programlisting
 
-Similarly, using the C<%> sigil implies that the caller must pass something that
-can be indexed into associatively, e.g. using C<< <...> >> or C<{...}>. There is
-also the C<&> sigil, which requires that the caller pass something that itself may
-be called (for example, an anonymous subroutine). It also has the added benefit of
-allowing you to call it inside the subroutine body without having to put the C<&>
-at the start.
+Similarly, the C<%> sigil implies that the caller must pass something that
+allows associative indexing through the C<< <...> >> or C<{...}> operations.
+The C<&> sigil requires that the caller pass something callable, such as an
+anonymous subroutine. In that case, you may call the callable parameter without
+having to use the C<&> sigil.
 
 =begin programlisting
 
@@ -185,22 +202,22 @@ at the start.
          it();
      }
  }
- 
+
  do-it-lots(sub { say "Eating a stroopwafel" }, 10);
 
 =end programlisting
 
-A scalar (the C<$> sigil) does not imply any constraints at all, so anything
-may be bound to it, even if it could be bound to one of the other sigils too.
+A scalar (the C<$> sigil) implies no constraints.  Anything may bind to it,
+even if that anything could bind to one of the other sigils.
 
 =head2 Interpolating Arrays and Hashes
 
 Sometimes you want to fill positional arguments from an array. Instead of
 writing C<eat(@food[0], @food[1], @food[2], ...)> and so on for every array
-item, you can I<interpolate> it into the argument list by prepending a
-vertical bar: C<eat(|@food)>.
+item, you can I<interpolate> it into the argument list by prepending a vertical
+bar: C<eat(|@food)>.
 
-Likewise hashes can be interpolated into named arguments:
+Likewise you can interpolate hashes into named arguments:
 
 =begin programlisting
 
@@ -209,16 +226,23 @@ Likewise hashes can be interpolated into named arguments:
 
 =end programlisting
 
-
 =head2 Optional Parameters
 
-Sometimes there are parameters that can have a sensible default value, or are
-just not needed in every situation. In these cases, it is nice to mark such
-parameters as optional, so those calling the subroutine can choose whether or
-not they want to pass a value.
+=for author
 
-This can be done by assigning a default value in the signature, or by
-appending a question mark to the parameter name:
+Until now, the distinction between "arguments" and "parameters" has been clear.
+Here's where it gets confusing.  We should use one consistently, or define the
+distinction between the two clearly for readers (if they even need to know a
+distinction) and use them precisely.
+
+=end for
+
+Sometimes parameters have sensible defaults values.  Sometimes, certain
+parameters are unnecessary.  In these cases, it is nice to mark such parameters
+as optional, so those calling the subroutine can choose whether to pass values.
+
+Either assign a default value to the parameter in the signature or append a
+question mark to the parameter's name:
 
 =begin programlisting
 
@@ -226,6 +250,7 @@ appending a question mark to the parameter name:
  sub order-steak($how = 'medium') {
      say "I'd like a steak, $how";
  }
+
  order-steak();
  order-steak('well done');
 
@@ -241,11 +266,11 @@ respective order. When that happens, it is often easier to call them by name
 instead:
 
 =begin programlisting
- 
+
  sub order-beer($type, $pints) {
      say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
  }
- 
+
  order-beer(type => 'Hobgoblin', pints => 1);    # A pint of Hobgoblin, please.
  order-beer(pints => 3, type => 'Zlatý Bažant'); # 3 pints of Zlatý Bažant, please.
 
@@ -263,7 +288,7 @@ be filled by name, not by position:
  sub order-shrimps($count, :$from = 'North Sea') {
      say "I'd like $count pieces of shrimp from the $from, please";
  }
- 
+
  order-shrimps(6);                      # takes the default value 'North Sea'
  order-shrimps(4, from => 'Atlantic Ocean');
  order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
@@ -285,11 +310,11 @@ The name of named parameters is not tied to the variable name that is used
 inside the subroutine.
 
 =begin programlisting
- 
+
  sub announce-time(:dinner($supper) = '8pm') {
      say "We eat dinner at $supper";
  }
- 
+
  announce-time(dinner => '9pm');      # We eat dinner at 9pm
 
 =end programlisting
@@ -348,11 +373,11 @@ to the function:
          print uc("$w ");
      }
  }
- 
+
  # now you can pass items
  shout-them('go')            # GO
  shout-them('go', 'home');   # GO HOME
- 
+
  my @words = ('go', 'home');
  shout-them(@words);         # still works
 
@@ -374,7 +399,7 @@ arguments to another routine:
      code(|@positional, %named);
      warn "... back from '&code.name()'\n";
  }
- 
+
  debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
 
 =end programlisting
@@ -394,7 +419,7 @@ return values instead:
      left            => sub { return '>o '    },
      right           => sub { return 'o< '    },
      arms-up         => sub { return '\o/ '   };
- 
+
  my @awesome-dance = <arms-up bird-arms right hands-over-head>;
  for @awesome-dance -> $move {
      print %moves{$move}.();
@@ -416,7 +441,7 @@ returned:
          return ('steak', 'read wine');
      }
  }
- 
+
  my ($food, $beverage) = menu();
 
 =end programlisting
@@ -433,7 +458,7 @@ inside a subroutine is returned. So the example can be simplified to
          'steak', 'read wine';
      }
  }
- 
+
  my ($food, $beverage) = menu();
 
 =end programlisting
