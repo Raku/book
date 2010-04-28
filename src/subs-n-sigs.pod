@@ -106,7 +106,7 @@ A sub's signature performs two roles. First, it declares the arguments callers
 may or must pass to the subroutine. Second, it declares the variables in the
 sub to which to bind those arguments. These variables are called
 I<parameters>.  Perl 6 signatures go further; they
-allowing you to constrain the values of arguments and to extract specific
+allow you to constrain the values of arguments and to extract specific
 pieces of data structures.
 
 =head2 The Basics
