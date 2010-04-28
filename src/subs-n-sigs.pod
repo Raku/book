@@ -100,10 +100,12 @@ From the output of this program, you can observe that doing the YMCA dance in
 ASCII art looks as bad as in real life.
 
 =head1 Adding Signatures
+X<parameter>
 
 A sub's signature performs two roles. First, it declares the arguments callers
 may or must pass to the subroutine. Second, it declares the variables in the
-sub to which to bind those arguments. Perl 6 signatures go further; they
+sub to which to bind those arguments. These variables are called
+I<parameters>.  Perl 6 signatures go further; they
 allowing you to constrain the values of arguments and to extract specific
 pieces of data structures.
 
@@ -163,9 +165,9 @@ parameter C<is copy>.
 
 =end programlisting
 
-The extra verbosity of marking arguments as mutable may seem excessive, but
+The extra verbosity of marking parameters as mutable may seem excessive, but
 it's likely you won't use these modifiers often.  While certain languages
-require you to mark arguments as C<rw> to emulate returning multiple result
+require you to mark parameters as C<rw> to emulate returning multiple result
 from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
@@ -238,7 +240,7 @@ distinction) and use them precisely.
 =end for
 
 Sometimes parameters have sensible defaults values.  Sometimes, certain
-parameters are unnecessary.  In these cases, it is nice to mark such parameters
+arguments are unnecessary.  In these cases, it is nice to mark such parameters
 as optional, so those calling the subroutine can choose whether to pass values.
 
 Either assign a default value to the parameter in the signature or append a
@@ -306,7 +308,8 @@ individual named parameters.
 
 =head3 Renaming Parameters
 
-The name of named parameters is not tied to the variable name that is used
+The name of named parameters is not necessarily tied to the variable name
+that is used
 inside the subroutine.
 
 =begin programlisting
@@ -532,15 +535,16 @@ into the main signature of the subroutine:
 
 =end programlisting
 
-The brackets in the signature tell the compiler that a list-like parameter is
-expected, but instead of binding it to an array, it is I<unpacked> into more
+The brackets in the signature tell the compiler that a list-like argument is
+expected, but instead of binding it to an array, it is I<unpacked> into
+several
 parameters - here a single scalar, and an array containing the rest. This
 I<subsignature> also acts as a constraint on the array parameter: the
 signature binding will fail unless the list in the capture contains at least
 one item.
 
 Likewise a hash can be unpacked by using C<%(...)> instead of the brackets,
-and named arguments inside them.
+and named parameters inside them.
 
 # TODO: come up with a good example
 
