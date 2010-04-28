@@ -273,17 +273,19 @@ instead:
      say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
  }
 
- order-beer(type => 'Hobgoblin', pints => 1);    # A pint of Hobgoblin, please.
- order-beer(pints => 3, type => 'Zlatý Bažant'); # 3 pints of Zlatý Bažant, please.
+ order-beer(type => 'Hobgoblin', pints => 1);
+    # A pint of Hobgoblin, please.
+
+ order-beer(pints => 3, type => 'Zlatý Bažant');
+    # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
-The names are just the ones that appeared as parameter names in the signature.
-When arguments are passed by name, the order in which they appear does not
-matter anymore.
+The names are those that appeared as parameter names in the signature.  When
+you pass arguments by name, the order in which they appear does not matter.
 
-When a parameter name in a signature is preceded by a colon, then it can only
-be filled by name, not by position:
+You may also specify that an incoming argument may only fill a parameter by
+name, never by position; precede the name of the parameter with a colon:
 
 =begin programlisting
 
@@ -291,26 +293,29 @@ be filled by name, not by position:
      say "I'd like $count pieces of shrimp from the $from, please";
  }
 
- order-shrimps(6);                      # takes the default value 'North Sea'
+ order-shrimps(6);                       # takes the default value 'North Sea'
  order-shrimps(4, from => 'Atlantic Ocean');
  order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
 
 =end programlisting
 
-Named parameters are optional by default, adding a C<!> at the end makes it
+Named parameters are optional by default.  Adding a C<!> at the end makes one
 mandatory.
 
-# TODO: example
+=begin programlisting
 
-Just like C<*@rest> slurps up all remaining positional arguments, C<*%rest>
-is bound to a hash of all named arguments that have not been bound to an
-individual named parameters.
+ sub design-ice-cream-mixture($name!, $base = 'Vanilla', @mixins) {
+    say "Creating a new recipe named $name!"
+ }
+
+ design-ice-cream-mixture(name => 'Plain');
+ design-ice-cream-mixture(base => 'Strawberry chip'); # missing $name
+
+=end programlisting
 
 =head3 Renaming Parameters
 
-The name of named parameters is not necessarily tied to the variable name
-that is used
-inside the subroutine.
+Argument names do not necessarily have to correspond exactly to parameter names within the subroutine; you may remap them as you desire:
 
 =begin programlisting
 
@@ -322,14 +327,28 @@ inside the subroutine.
 
 =end programlisting
 
+=for author
+
+Does this imply that the binder will bind either color => 'Blue' or colour =>
+'Bluue'?  An example is I<very> useful, if so.
+
+=end for
+
 Parameters can also have multiple names. If the users are both British and
 Americans, one might write C<:color(:colour($c))>  or C<:color(:$colour))>.
 
-=head3 Other Syntax for Calling by Name
+=head3 Alternative Named Argument Syntaxes
 
-Just like parameters can be written in the form C<:name($value)>, arguments
-can also be supplied with the so-called I<colon pair> notation. So these three
-lines mean the same thing:
+=for author
+
+This section is confusing.  I've tried to clarify.
+
+=end for
+
+Named arguments are actually C<Pair>s.  There are multiple ways to write
+C<Pair>s; each of them provides a different mechanism for quoting.  The
+difference between the approaches is primarily one of clarity.  This allows you
+to pass arguments in multiple ways.  These three calls all mean the same thing:
 
 =begin programlisting
 
@@ -339,10 +358,21 @@ lines mean the same thing:
 
 =end programlisting
 
-The parens after the name are optional. If they are omitted, the value is
-C<Bool::True>. The shorthand for a value of C<Bool::False> is C<:!name>.
+If you're only passing a boolean value, you don't even need the value portion
+of the pair:
 
-Other possible forms and their meanings are listed in the table below.
+=begin programlisting
+
+ toggle-blender( :enabled); # enables  the blender
+ toggle-blender(:!enabled); # disables the blender
+
+=end programlisting
+
+A named argument of the form C<:name> with no value has an implicit value of
+C<Bool::True>.  The negated form of this, C<:!name>, has an implicit value of
+C<Bool::False>.
+
+The following table lists other possible C<Pair> forms and their meanings:
 
     Shorthand           Long form                   Description
 
@@ -355,19 +385,23 @@ Other possible forms and their meanings are listed in the table below.
     :@var               var => @var                 Array variable
     :%var               var => %var                 Hash variable
 
-All of these forms can also be used in other contexts too, where they
-construct C<Pair> objects.
+You can use all of these forms in any context where you can use a C<Pair>
+object.
 
-If you want to create a C<Pair> object and pass that to a subroutine not by
-name, but by position, you can either put it in parenthesis (like
-C<(:$thing)>), or you can use the C<< => >> operator with a quoted string on
-the left-hand side: C<< "thing" => $thing >>.
+=for author
+
+This also needs an example.
+
+=end for
+
+Finally, to pass an existing C<Pair> object to a subroutine by position, not
+name, either put it in parentheses (like C<(:$thing)>), or use the C<< => >>
+operator with a quoted string on the left-hand side: C<< "thing" => $thing >>.
 
 =head2 Slurpy Parameters
 
 In an earlier example the function C<shout-it> accepted an array argument.
-There is no need to actually require the user to build an array and pass that
-to the function:
+There is no need to the user to build an array and pass that to the function:
 
 =begin programlisting
 
@@ -386,10 +420,11 @@ to the function:
 
 =end programlisting
 
-An asterisk C<*> preceding an array parameter marks it as I<slurpy>. It takes
-all remaining positional arguments and stores them in an array.
+X<slurpy>
 
-Likewise C<*%hash> slurps all the remaining named arguments into an array.
+An asterisk C<*> preceding an array parameter marks it as I<slurpy>. It takes
+all remaining positional arguments and stores them in an array.  Likewise
+C<*%hash> slurps all the remaining named arguments into an array.
 
 With slurpy arrays and hashes you can pass on all positional and named
 arguments to another routine:
@@ -409,10 +444,10 @@ arguments to another routine:
 
 =head1 Returning Results
 
-Subroutines can also return values.
-
-The ASCII art examples from earlier would have been prettier if you used
-return values instead:
+Subroutines can also return values.  The ASCII art dancing example from earlier
+in this chapter is prettier and simpler when its anonymous subroutines return
+values.  Instead of modifying a variable inside the subroutine, these
+subroutines now each return a new string for their callers to use:
 
 =begin programlisting
 
@@ -431,9 +466,7 @@ return values instead:
 
 =end programlisting
 
-Instead of modifying a variable inside the subroutine, a string is returned,
-and used by the code that called the subroutine. Multiple values can also be
-returned:
+A Perl subroutine can return multiple values:
 
 =begin programlisting
 
@@ -449,8 +482,11 @@ returned:
 
 =end programlisting
 
-The C<return> is actually not necessary - the last statement that is run
-inside a subroutine is returned. So the example can be simplified to
+X<return>
+
+Even C<return> itself is not necessary.  If you exclude it, Perl will return
+the expression produced by the last statement run inside the subroutine.  This
+simplifies the example code:
 
 =begin programlisting
 
@@ -466,11 +502,28 @@ inside a subroutine is returned. So the example can be simplified to
 
 =end programlisting
 
-However C<return> has the additional effect of immediately exiting the
-subroutine, so the following statements are not executed if the C<return>
-statement is run:
+X<return; implicit>
 
-# TODO: example
+Be wary of relying on this, however: sometimes the flow of control within a
+subroutine is sufficiently complex that adding explicit C<return> clarifies.
+As a general rule, only the simplest subroutines benefit from implicit
+C<return>.
+
+C<return> has the additional effect of immediately exiting the subroutine:
+
+=begin programlisting
+
+ sub create-world(*%characteristics) {
+    my $world = World.new(%characteristics);
+    return $world if %characteristics<temporary>;
+
+    save-world($world);
+ }
+
+=end programlisting
+
+... and you'd better not misplace your new C<$world> if it's temporary, as it's
+the only one you're going to get.
 
 =head1 Working With Types
 
@@ -483,17 +536,18 @@ statement is run:
 
 =head1 Captures
 
-A signature can be viewed as a collection of parameters. Captures fill the
-same niche for arguments. Most of the time, you don't have to think about
-captures, just as you don't often think about a signature as a whole but
-instead focus more on the parameters in it. However, Perl 6 does provide
-you with a way to deal with captures directly, and occasionally it's useful
-to do so.
+X<captures>
+X<Capture>
 
-Captures have both a positional part and a named part, which act like a list
-and a hash respectively. From the point of view of making a call, the list-like
-part contains the positional parameters and the hash-like part contains the
-named parameters.
+In one senes, a signature is a collection of parameters. Captures fill the same
+niche as arguments. Just as you rarely think of a signature as a whole--instead
+focusing on individual parameters--you rarely have to think about captures.
+When you do, Perl 6 allows you to manipulate captures directly. This can be
+useful.
+
+Captures have both positional and named parts, which act like lists and a
+hashes respectively. The list-like part contains the positional parameters and
+the hash-like part contains the named parameters.
 
 =head2 Creating And Using A Capture
 
@@ -503,9 +557,8 @@ named parameters.
 
 =head1 Unpacking
 
-Sometimes you don't want to access an array or hash as a whole, but
-rather extract some of the values. You could do that with ordinary accesses,
-or with signatures by doing another signature binding:
+Sometimes you need to work with only part of an array or a hash.  You can do
+that with ordinary slicing access, or you can use signature binding:
 
 =begin programlisting
 
@@ -524,8 +577,8 @@ or with signatures by doing another signature binding:
 
 =end programlisting
 
-The signature binding approach might seem clumsy, but it can be incorporated
-into the main signature of the subroutine:
+The signature binding approach might seem clumsy, but when you use it in the
+main signature of a subroutine, you get tremendous power:
 
 =begin programlisting
 
@@ -535,16 +588,36 @@ into the main signature of the subroutine:
 
 =end programlisting
 
-The brackets in the signature tell the compiler that a list-like argument is
-expected, but instead of binding it to an array, it is I<unpacked> into
-several
-parameters - here a single scalar, and an array containing the rest. This
-I<subsignature> also acts as a constraint on the array parameter: the
-signature binding will fail unless the list in the capture contains at least
-one item.
+X<unpacking>
+X<signature unpacking>
+X<subsignature>
 
-Likewise a hash can be unpacked by using C<%(...)> instead of the brackets,
-and named parameters inside them.
+The brackets in the signature tell the compiler to expect a list-like argument.
+Instead of binding to an array parameter, it instead gets I<unpacked> into
+several parameters--in this case, a scalar for the first element and an array
+for the rest.  This I<subsignature> also acts as a constraint on the array
+parameter: the signature binding will fail unless the list in the capture
+contains at least one item.
+
+Likewise you can unpack a hash by using C<%(...)> instead of square brackets.
+You must access named parameters instead of positional.
+
+=for author
+
+Is this a little too cute?
+
+=end for
+
+=begin programlisting
+
+ sub create-world(%{:temporary, *%characteristics}) {
+    my $world = World.new(%characteristics);
+    return $world if :temporary;
+
+    save-world($world);
+ }
+
+=end programlisting
 
 # TODO: come up with a good example
 
