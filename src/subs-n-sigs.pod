@@ -6,26 +6,28 @@ X<signature>
 X<return value>
 
 A I<subroutine> is a piece of code that performs a specific task. It may
-operate in provided data, also known as I<arguments>.  It may also produce some
+operate on provided data, also known as I<arguments>.  It may also produce some
 result, which is known as a return value.  The I<signature> of a subroutine is
 a description of the arguments it takes and the return value it produces.
 
 You have already seen some simple subroutines in the first chapter.  The second
 chapter described operators.  In a sense, these are also subroutines that Perl
-6 parses in interesting ways.  However, these just scratch on the surface of
+6 parses in interesting ways.  However, these just scratch the surface of
 what's possible.
 
 =head1 Declaring A Subroutine
 
-=for author
+X<subroutines; declaration>
 
-Is "keyword" the right word?
+A subroutine declaration consists of several parts, some of which are
+optional. First, there is the subroutine declarator, C<sub>, which
+signifies that you are starting a subroutine declaration. The declarator
+may be followed by a name and/or a signature, each optional. Finally, a
+block of code enclosed in curly braces that is the body of the
+subroutine. It is this block of code that will be executed each time the
+subroutine is called.
 
-=end for
-
-Most subroutines have names, which you can use to call them.  The C<sub>
-keyword declares a subroutine, followed by a name, a signature, and a block of
-code:
+Below is a simple example subroutine declaration:
 
 =begin programlisting
 
@@ -33,17 +35,17 @@ code:
      say "Oh no! Something has gone most terribly wrong!";
  }
 
- panic();
-
 =end programlisting
 
 X<subroutines; scoping>
 X<scoping; subroutines>
 
-By default, subroutines are lexically scoped, just like any variable declared
-with C<my>.  In the absence of any code indicating otherwise, you can only call
-a subroutine within its given scope.  If you want to sub to be more widely
-available, use C<our> to put it in the package.
+By default, subroutines are lexically scoped, just like any variable
+declared with C<my>. In the absence of any code indicating otherwise, a
+subroutine may only be called within the scope it was declared. To make
+the subroutine more widely available, the scoping declarator C<our> may
+be used to also place the subroutine within the symbol table of the
+current package.
 
 =begin programlisting
 
@@ -67,14 +69,13 @@ X<subroutines; anonymous>
 X<subroutines; first-class>
 X<first-class subroutines>
 
-Perl 6 subs are objects.  You can pass them around and store them in data
-structures just like you can do with any other piece of data.  Programming
-language designers often call these I<first-class subroutines>, because they
-behave like other built-in data structures.  This offers tremendous potential.
-Just like you don't have to name every variable, you don't have to name every
-subroutine.  For example, to make a little ASCII art dancing figure, you could
-build up a hash where the keys are names of the dance moves, and the values are
-anonymous subroutines:
+Perl 6 subroutines are objects. You can pass them around and store them
+in data structures just like you can do with any other piece of data.
+Programming language designers often call these I<first-class subroutines>,
+because they behave like other built-in data structures.  This offers 
+tremendous potential. For example, to make a little ASCII art dancing 
+figure, you could build up a hash where the keys are names of the dance
+moves, and the values are anonymous subroutines:
 
 =begin programlisting
 
@@ -100,11 +101,14 @@ From the output of this program, you can observe that doing the YMCA dance in
 ASCII art looks as bad as in real life.
 
 =head1 Adding Signatures
-X<parameter>
 
-A sub's signature performs two roles. First, it declares the arguments callers
+X<parameter>
+X<subroutines; signature>
+X<signatures; subroutines>
+
+A subroutine signature performs two roles. First, it declares the arguments callers
 may or must pass to the subroutine. Second, it declares the variables in the
-sub to which to bind those arguments. These variables are called
+subroutine to which the arguments are bound. These variables are called
 I<parameters>.  Perl 6 signatures go further; they
 allow you to constrain the values of arguments and to extract specific
 pieces of data structures.
@@ -112,7 +116,7 @@ pieces of data structures.
 =head2 The Basics
 
 In its most simple form, a signature is a comma separated list of variable
-names to which to bind incoming arguments.
+names to which incoming arguments are bound.
 
 =begin programlisting
 
@@ -126,9 +130,9 @@ names to which to bind incoming arguments.
 =end programlisting
 
 The use of the term I<bound> instead of I<assigned> is significant. The
-variables in your signature are read-only references to the passed arguments.
-You cannot modify them within the sub.  If this is too limiting, then you have
-two different ways to relax this restriction.
+variables in your signature are read-only references to the passed
+arguments. You cannot modify them within the subroutine. If this is too
+limiting, then you have two different ways to relax this restriction.
 
 Marking a parameter as C<is rw> means that you are allowed to modify the passed
 argument.  If you modify that value, you modify the original in place.  If you
@@ -148,7 +152,7 @@ binding of that signature will fail and the subroutine call will not occur.
 
 =end programlisting
 
-If instead you want your own copy of the argument to work with inside the
+If, instead, you want your own copy of the argument to work with inside the
 subroutine--if you want to leave the original untouched--then mark the
 parameter C<is copy>.
 
@@ -172,8 +176,8 @@ from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
 
-Sigils on variables indicate their intended use.  In a signature, a variable
-with a sigil acts as a constraint on the type of argument passed.  The C<@>
+Sigils on variables indicate their intended use.  In a signature, a variable's
+sigil acts as a constraint on the type of argument passed.  The C<@>
 sigil, for example, checks that the passed value is iterable.  Failing to pass
 something that matches this constraint will cause the call to fail.
 
@@ -216,10 +220,10 @@ even if that anything could bind to one of the other sigils.
 
 Sometimes you want to fill positional arguments from an array. Instead of
 writing C<eat(@food[0], @food[1], @food[2], ...)> and so on for every array
-item, you can I<interpolate> it into the argument list by prepending a vertical
+item, you can I<interpolate> them into the argument list by prepending a vertical
 bar: C<eat(|@food)>.
 
-Likewise you can interpolate hashes into named arguments:
+Likewise, you can interpolate hashes into named arguments:
 
 =begin programlisting
 
@@ -422,12 +426,12 @@ There is no need to the user to build an array and pass that to the function:
 
 X<slurpy>
 
-An asterisk C<*> preceding an array parameter marks it as I<slurpy>. It takes
-all remaining positional arguments and stores them in an array.  Likewise
-C<*%hash> slurps all the remaining named arguments into an array.
+An asterisk C<*> preceding an array parameter marks it as I<slurpy>. It stores
+all remaining unbound positional arguments in an array.  Likewise C<*%hash>
+slurps all the remaining unbound named arguments into a hash.
 
-With slurpy arrays and hashes you can pass on all positional and named
-arguments to another routine:
+Slurpy arrays and hashes allow you to pass all positional and named arguments
+to another routine, for example:
 
 =begin programlisting
 
