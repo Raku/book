@@ -308,7 +308,7 @@ mandatory.
 
 =begin programlisting
 
- sub design-ice-cream-mixture($name!, $base = 'Vanilla', @mixins) {
+ sub design-ice-cream-mixture(:$name!, $base = 'Vanilla', @mixins) {
     say "Creating a new recipe named $name!"
  }
 
