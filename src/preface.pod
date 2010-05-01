@@ -104,7 +104,7 @@ to many useful resources.
 
 =item IRC
 
-There is a channel #perl6 on irc.freenode.net dedicated to all things Perl 6.
+There is a channel C<#perl6> on C<irc.freenode.net> dedicated to all things Perl 6.
 
 =item Mailing lists
 
