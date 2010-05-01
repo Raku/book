@@ -283,7 +283,7 @@ What's the C<*> in the C<bless> call?
 
 The biggest difference between constructors in Perl 6 and constructors in
 languages such as C# and Java is that rather than setting up state on a somehow
-already magically created object, Perl 6 constructors actually create of the
+already magically created object, Perl 6 constructors actually create the
 object themselves. This easiest way to do this is by calling the C<bless>
 method, also inherited from C<Object>. The C<bless> method expects a positional
 parameter--the so-called "candidate"--and a set of named parameters providing
