@@ -18,6 +18,7 @@ To build the book, you need to have the following software installed:
     * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101050 or newer
     * inkscape (for svg -> pdf conversion)
     * pdflatex
+    * the 'bera' font as a LaTeX package
 
 Just type 'make' on your command line, and the book should be built in
 build/book.pdf
