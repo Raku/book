@@ -7,6 +7,7 @@ print <<'HEADER';
 \usepackage{graphics,graphicx}
 \usepackage{colortbl}
 \usepackage{fancyvrb}
+\usepackage[T1]{fontenc}
 \usepackage{bera}
 \usepackage[utf8]{inputenc}
  
