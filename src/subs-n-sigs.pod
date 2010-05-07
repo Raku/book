@@ -561,10 +561,48 @@ C<return> has the additional effect of immediately exiting the subroutine:
 ... and you'd better not misplace your new C<$world> if it's temporary, as it's
 the only one you're going to get.
 
+
 =head1 Working With Types
 
+Many subroutines can not meaningfully work with arbitrary parameters,
+but require that the parameters support certain methods.
+
+If that is the case, it makes sense to restrict the parameters in a way that
+only supported values can be passed as arguments. That way an error is raised
+early on (at the time of calling the routine) when a "bad" value is passed.
 
 =head2 Basic Types
+
+X<constraint; type>
+X<parameter type constraint>
+
+You can restrict the possible values that a subroutine accepts by putting a
+type name in front of a parameter. For example a subroutine that does numeric
+calculation with its parameters could restrict the parameters to the type
+C<Numeric>:
+
+=begin programlisting
+
+    sub mean(Numeric $a, Numeric $b) {
+        return ($a + $b) / 2;
+    }
+
+    say mean 2.5, 1.5;
+    say mean 'some', 'strings';
+
+=end programlisting
+
+Which produces this output:
+
+=begin screen
+
+ 2
+ Nominal type check failed for parameter '$a'; expected Numeric but got Str instead
+
+=end screen
+
+If multiple parameters have a type constraint, each argument has to fulfill
+the type constraint of the parameter it is bound to.
 
 
 =head2 Adding Constraints
@@ -575,7 +613,7 @@ the only one you're going to get.
 X<captures>
 X<Capture>
 
-In one senes, a signature is a collection of parameters. Captures fill the same
+In one sense, a signature is a collection of parameters. Captures fill the same
 niche as arguments. Just as you rarely think of a signature as a whole--instead
 focusing on individual parameters--you rarely have to think about captures.
 When you do, Perl 6 allows you to manipulate captures directly. This can be
