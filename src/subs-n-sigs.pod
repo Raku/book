@@ -331,15 +331,34 @@ Argument names do not necessarily have to correspond exactly to parameter names 
 
 =end programlisting
 
-=for author
-
-Does this imply that the binder will bind either color => 'Blue' or colour =>
-'Bluue'?  An example is I<very> useful, if so.
-
-=end for
-
 Parameters can also have multiple names. If the users are both British and
-Americans, one might write C<:color(:colour($c))>  or C<:color(:$colour))>.
+Americans, one might write:
+
+=begin programlisting
+
+ sub paint-rectangle(
+         :$x = 0,
+         :$y = 0,
+         :$width = 100,
+         :$height = 50,
+         :color(:colour($c))) {
+ 
+    # print a piece of SVG that reprents a rectangle
+    say qq[<rect x="$x" y="$y" width="$width" height="$height"
+                 style="fill: $c" />]
+ }
+ 
+ # both calls work the same
+ paint-rectangle :color<Blue>;
+ paint-rectangle :colour<Blue>;
+
+ # and of course you can still fill the other options
+ paint-rectangle :width(30), :height(10), :colour<Blue>;
+
+
+=end programlisting
+
+C<:color(:colour($c))>  or C<:color(:$colour))>.
 
 =head3 Alternative Named Argument Syntaxes
 
@@ -376,7 +395,17 @@ A named argument of the form C<:name> with no value has an implicit value of
 C<Bool::True>.  The negated form of this, C<:!name>, has an implicit value of
 C<Bool::False>.
 
-The following table lists other possible C<Pair> forms and their meanings:
+If you use a variable to create a pair, you can reuse the variable name as the
+key of the pair.
+
+=begin programlisting
+
+ my $dinner = '9pm';
+ announce-dinner :$dinner;  # same as dinner => $dinner;
+
+=end programlisting
+
+The following table lists possible C<Pair> forms and their meanings:
 
     Shorthand           Long form                   Description
 
@@ -390,13 +419,16 @@ The following table lists other possible C<Pair> forms and their meanings:
     :%var               var => %var                 Hash variable
 
 You can use all of these forms in any context where you can use a C<Pair>
-object.
+object, for example when populating a hash:
 
-=for author
+=begin programlisting
 
-This also needs an example.
+ # TODO: better example
+ my $black = 12;
+ my %color-popularities = :$black, :blue(8),
+                          red => 18, :white<0>;
 
-=end for
+=end programlisting
 
 Finally, to pass an existing C<Pair> object to a subroutine by position, not
 name, either put it in parentheses (like C<(:$thing)>), or use the C<< => >>
