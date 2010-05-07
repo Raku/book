@@ -10,8 +10,15 @@ print <<'HEADER';
 \usepackage[T1]{fontenc}
 \usepackage{bera}
 \usepackage[utf8]{inputenc}
+
+\title{Using Perl~6}
+\author{Jonathan S. Duff, Moritz Lenz, Carl Mäsak, Patrick R. Michaud, Jonathan Worthington}
  
 \begin{document}
+
+\maketitle
+
+\tableofcontents
 HEADER
 
 for (@ARGV) {
