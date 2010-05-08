@@ -607,6 +607,33 @@ the type constraint of the parameter it is bound to.
 
 =head2 Adding Constraints
 
+X<constraint>
+
+Sometimes a type name is not enough to sufficiently describe the parameters of
+a subroutine. In this case an additional I<constraint> can be added to the
+parameter with a C<where> block:
+
+=begin programlisting
+
+ sub circle-radius-from-area(Numeric $area where { $area >= 0) {
+     ($area / pi).sqrt
+ }
+ say circle-radius-from-area(3);    # OK
+ say circle-radius-from-area(-3);   # Error
+
+=end programlisting
+
+Since the calculation can only be carried out for non-negative values of the
+area, the parameter name is followed by a C<where> block that returns C<True>
+for non-negative values. If such an additional constraint returns a false
+value, the type check at the time of the routine call fails.
+
+=for author
+
+TODO: explain C<where $value> smart matching constraints
+once we talk about smart matching somewhere
+
+=end for
 
 =head1 Captures
 
