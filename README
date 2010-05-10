@@ -19,6 +19,7 @@ To build the book, you need to have the following software installed:
     * inkscape (for svg -> pdf conversion)
     * pdflatex
     * the 'bera' font as a LaTeX package
+      In Ununtu 10.04 this can be found in texlive-fonts-extra
 
 Just type 'make' on your command line, and the book should be built in
 build/book.pdf
