@@ -281,5 +281,71 @@ possible precedence.
 
 =end for
 
+=head1 Comparisons and Smart Matching
+
+X<object identity>
+
+There are several ways to compare objects in Perl. You can ask if two
+variables contain the same object with the C<===> infix operator. If it
+returns C<True>, modifying one of its arguments also modifies the other,
+because they really point to the same object.
+
+=begin programlisting
+
+ my @a = 1, 2, 3;
+ my @b = 1, 2, 3;
+ 
+ say @a  === @a;    # 1
+ say @a  === @b;    # 0
+
+ # built-in, immutable types act as singletons:
+
+ say 3   === 3;     # 1
+ say 'a' === 'a';   # 1
+ 
+=end programlisting
+
+The C<eqv> operator returns C<True> only if two objects are of the same type,
+and of the same structure. With the variables defined above, C<@a eqv @b> is
+true because C<@a> and C<@b> contain the same values each. On the other hand
+C<'2' eqv 2> returns C<False>, because the left argument is a string, the
+right an integer and so they are not of the same type.
+
+=head2 Numeric Comparisons
+
+You can ask if two objects are the same number with the C<==> infix operator.
+If one of the objects is not number,  Perl will do its best to convert it to a
+number. If there is no good way to convert an object to a number, the default
+of C<0> is assumed.
+
+=begin programlisting
+
+ say 1 == 1.0;      # 1
+ say 1 == '1';      # 1
+ say 1 == '2';      # 0
+ say 3 == '3b'      # 1
+
+=end programlisting
+
+The operators C<< < >>, C<< <= >>, C<< >= >> and C<< > >> can be used to
+compare the relative size of numbers, C<!=> returns True if the two objects
+differ in their numerical value.
+
+When you use an array or list as a number, it evaluates to the number of items
+in that list.
+
+=begin programlisting
+
+ my @colors = <red blue green>;
+  
+ if @colors == 3 {
+     say "It's true, @colors contains 3 items";
+ }
+
+=end programlisting
+
+=head2 String Comparisons
+
+TODO
 
 =for vim: spell
