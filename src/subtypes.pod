@@ -1,0 +1,91 @@
+=head0 Subtypes
+
+=begin programlisting
+
+    enum Suit <spades hearts diamonds clubs>;
+    enum Rank (2, 3, 4, 5, 6, 7, 8, 9, 10,
+               'jack', 'queen', 'king', 'ace');
+
+    class Card {
+        has Suit $.suit;
+        has Rank $.rank;
+
+        method Str {
+            $.rank.name ~ ' of ' ~ $.suit.name;
+        }
+    }
+
+    subset PokerHand of List where { .elems == 5 && all(|$_) ~~ Card }
+
+    sub n-of-a-kind($n, @cards) {
+        for @cards>>.rank.uniq -> $rank {
+            return True if $n == grep $rank, @cards>>.rank;
+        }
+        return False;
+    }
+
+    subset Quad         of PokerHand where { n-of-a-kind(4, $_) }
+    subset ThreeOfAKind of PokerHand where { n-of-a-kind(3, $_) }
+    subset OnePair      of PokerHand where { n-of-a-kind(2, $_) }
+
+    subset FullHouse of PokerHand where OnePair & ThreeOfAKind;
+
+    subset Flush of PokerHand where -> @cards { [==] @cards>>.suit }
+
+    subset Straight of PokerHand where sub (@cards) {
+        my @sorted-cards = @cards.sort({ .rank });
+        my ($head, @tail) = @sorted-cards;
+        for @tail -> $card {
+            return False if $card.rank != $head.rank + 1;
+            $head = $card;
+        }
+        return True;
+    }
+
+    subset StraightFlush of Flush where Straight;
+
+    subset TwoPair of PokerHand where sub (@cards) {
+        my $pairs = 0;
+        for @cards>>.rank.uniq -> $rank {
+            ++$pairs if 2 == grep $rank, @cards>>.rank;
+        }
+        return $pairs == 2;
+    }
+
+    sub classify(PokerHand $_) {
+        when StraightFlush { 'straight flush',  8 }
+        when Quad          { 'four of a kind',  7 }
+        when FullHouse     { 'full house',      6 }
+        when Flush         { 'flush',           5 }
+        when Straight      { 'straight',        4 }
+        when ThreeOfAKind  { 'three of a kind', 3 }
+        when TwoPair       { 'two pair',        2 }
+        when OnePair       { 'one pair',        1 }
+        when *             { 'high cards',      0 }
+    }
+
+    my @deck = map -> $suit, $rank { Card.new(:$suit, :$rank) },
+                      (Suit.pick(*) X Rank.pick(*));
+
+    @deck .= pick(*);
+
+    my @hand1;
+    @hand1.push(@deck.shift()) for ^5;
+    my @hand2;
+    @hand2.push(@deck.shift()) for ^5;
+
+    say 'Hand 1: ', map { "\n  $_" }, @hand1>>.Str;
+    say 'Hand 2: ', map { "\n  $_" }, @hand2>>.Str;
+
+    my ($hand1-description, $hand1-value) = classify(@hand1);
+    my ($hand2-description, $hand2-value) = classify(@hand2);
+
+    say sprintf q[The first hand is a '%s' and the second one a '%s', so %s.],
+        $hand1-description, $hand2-description,
+        $hand1-value > $hand2-value
+            ?? 'the first hand wins'
+            !! $hand2-value > $hand1-value
+                ?? 'the second hand wins'
+                !! "the hands are of equal value"; # XXX: this is wrong
+
+=end programlisting
