@@ -711,9 +711,9 @@ Is this a little too cute?
 
 =begin programlisting
 
- sub create-world(%{:temporary, *%characteristics}) {
+ sub create-world(%(:$temporary, *%characteristics)) {
     my $world = World.new(%characteristics);
-    return $world if :temporary;
+    return $world if $temporary;
 
     save-world($world);
  }
