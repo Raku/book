@@ -726,5 +726,142 @@ Is this a little too cute?
 
 =head1 Introspection
 
+Subroutines and their signatures are objects like any other. You can not only
+call them, but also learn things about them, especially about the parameters.
+
+=begin programlisting
+
+ sub logarithm(Numeric $x, Numeric :$base = 2.7183) {
+     log($x) / log($base);
+ }
+ 
+ my @params = &logarithm.signature.params;
+ say @params.elems, ' parameters';
+ 
+ for @params {
+     say "Name:       ",    .name;
+     say "  Type:     ",  .type;
+     say "  named?    ", .named ?? 'yes' !! 'no';
+     say "  slurpy?   ", .slurpy ?? 'yes' !! 'no';
+     say "  optional? ", .optional ?? 'yes' !! 'no';
+ }
+
+=end programlisting
+
+=begin screen
+
+ 2 parameters
+ Name:       $x
+   Type:     Numeric()
+   named?    no
+   slurpy?   no
+   optional? no
+ Name:       $base
+   Type:     Numeric()
+   named?    yes
+   slurpy?   no
+   optional? yes
+
+=end screen
+
+The C<&> sigil allows access to a subroutine without actually calling it.
+C<&logarithm.signature> returns the signature associated with the subroutine,
+and calling C<.params> on the signature returns a list of C<Parameter>
+objects.
+
+Each of these objects describe one parameter in detail.
+
+=begin table Methods in the Parameter class
+
+# stolen straight from S06, adapted a bit
+
+=headrow
+
+=row
+
+=cell method
+
+=cell description
+
+=bodyrows
+
+=row
+
+=cell name
+
+=cell The name of the lexical variable to bind to, if any
+
+=row
+
+=cell type
+
+=cell The nomical type
+
+=row
+
+=cell constraints
+
+=cell Any further type constraints
+
+=row
+
+=cell readonly
+
+=cell True if the parameter has C<is readonly> trait
+
+=row
+
+=cell rw
+
+=cell True if the parameter has C<is rw> trait
+
+=row
+
+=cell copy
+
+=cell True if the parameter has C<is copy> trait
+
+=row
+
+=cell named
+
+=cell True if the parameter is to be passed by name
+
+=row
+
+=cell named_names
+
+=cell List of names a named parameter can be passed as
+
+=row
+
+=cell slurpy
+
+=cell True if the parameter is slurpy
+
+=row
+
+=cell optional
+
+=cell True if the parameter is optional
+
+=row
+
+=cell default
+
+=cell A closure returning the default value
+
+=row
+
+=cell signature
+
+=cell A nested signature to bind the argument against
+
+
+=end table
+
+# TODO: talk about &signature.cando once that's implemented
+
+# TODO: elaborate on when and why signature introspection is useful
 
 =for editor vim: se spell
