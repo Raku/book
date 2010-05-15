@@ -192,7 +192,8 @@ Now all the necessary informations are in place and the chart can be printed:
 =begin programlisting
 
     for @scores {
-        printf "%- {$label-area-width}s%s\n", .key, 'X' x ($unit * .value);
+        my $format = '%- ' ~ $label-area-width ~ "s%s\n";
+        printf $format, .key, 'X' x ($unit * .value);
     }
 
 =end programlisting
