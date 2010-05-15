@@ -79,8 +79,8 @@ X<Complex>
 X<types; Complex>
 
 C<Complex> is the complex number type. Complex numbers have two parts to them:
-a real part and in imaginary part. If either part is C<Nan>, then the entire
-number may possibly be C<Nan>.
+a real part and in imaginary part. If either part is C<NaN>, then the entire
+number may possibly be C<NaN>.
 
 Numbers in the form C<a + bi> are of type C<Complex>.
 
