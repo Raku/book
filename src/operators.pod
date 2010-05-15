@@ -65,7 +65,7 @@ X< operator; fat arrow>
 The C<< => >> operator (the C<fat arrow>) constructs C<Pair>
 objects. A Pair stores a key and a value; the key is on the left-hand side of
 the C<< => >> operator, the value on the right. It also has a specialty: if
-the value on the right is a bare identifier, it is taken to be a string. So one
+the key on the left is a bare identifier, it is taken to be a string. So one
 could also write the example above as
 
 =begin programlisting
