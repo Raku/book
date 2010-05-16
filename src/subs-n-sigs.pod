@@ -579,10 +579,10 @@ early on (at the time of calling the routine) when a "bad" value is passed.
 X<constraint; type>
 X<parameter type constraint>
 
-You can restrict the possible values that a subroutine accepts by putting a
-type name in front of a parameter. For example a subroutine that does numeric
-calculation with its parameters could restrict the parameters to the type
-C<Numeric>:
+The easiest way to restrict the possible values that a subroutine accepts is by
+only allowing certain types. To do this, write a type name in front of a parameter.
+For example, a subroutine that does numeric calculation with its parameters could
+restrict the parameters to the type C<Numeric>:
 
 =begin programlisting
 
@@ -604,7 +604,7 @@ Which produces this output:
 
 =end screen
 
-If multiple parameters have a type constraint, each argument has to fulfill
+If multiple parameters have type constraints, each argument has to fulfill
 the type constraint of the parameter it is bound to.
 
 
@@ -612,8 +612,8 @@ the type constraint of the parameter it is bound to.
 
 X<constraint>
 
-Sometimes a type name is not enough to sufficiently describe the parameters of
-a subroutine. In this case an additional I<constraint> can be added to the
+Sometimes a type name is not enough to sufficiently describe the requirements
+for an argument. In this case, an additional I<constraint> can be added to the
 parameter with a C<where> block:
 
 =begin programlisting
@@ -643,14 +643,13 @@ once we talk about smart matching somewhere
 X<captures>
 X<Capture>
 
-In one sense, a signature is a collection of parameters. Captures fill the same
-niche as arguments. Just as you rarely think of a signature as a whole--instead
+A signature can be thought of as a collection of parameters. Captures fill the same
+niche for arguments. Just as you rarely think of a signature as a whole--instead
 focusing on individual parameters--you rarely have to think about captures.
-When you do, Perl 6 allows you to manipulate captures directly. This can be
-useful.
+When you do need to do so, however, Perl 6 allows you to manipulate captures directly.
 
-Captures have both positional and named parts, which act like lists and a
-hashes respectively. The list-like part contains the positional parameters and
+Captures have both positional and named parts, which act like a list and a
+hash respectively. The list-like part contains the positional parameters and
 the hash-like part contains the named parameters.
 
 =head2 Creating And Using A Capture
@@ -675,7 +674,7 @@ that with ordinary slicing access, or you can use signature binding:
 
   # same thing:
   sub first-is-largest(@a) {
-      my :($first, *@rest) ::= \(|@a)
+      my :($first, *@rest) := \(|@a)
       return $first >= all(@rest);
   }
 
