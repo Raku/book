@@ -6,13 +6,13 @@ X<signature>
 X<return value>
 
 A I<subroutine> is a piece of code that performs a specific task. It may
-operate on provided data, also known as I<arguments>.  It may also produce some
+operate on some provided data, also known as I<arguments>.  It may also produce some
 result, which is known as a return value.  The I<signature> of a subroutine is
-a description of the arguments it takes and the return value it produces.
+a description of the arguments it takes and, optionally, the return value it produces.
 
 You have already seen some simple subroutines in the first chapter.  The second
 chapter described operators.  In a sense, these are also subroutines that Perl
-6 parses in interesting ways.  However, these just scratch the surface of
+6 parses in interesting ways.  However, they just scratch the surface of
 what's possible.
 
 =head1 Declaring A Subroutine
@@ -21,11 +21,10 @@ X<subroutines; declaration>
 
 A subroutine declaration consists of several parts, some of which are
 optional. First, there is the subroutine declarator, C<sub>, which
-signifies that you are starting a subroutine declaration. The declarator
-may be followed by a name and/or a signature, each optional. Finally, a
-block of code enclosed in curly braces that is the body of the
-subroutine. It is this block of code that will be executed each time the
-subroutine is called.
+indicates that you are starting a subroutine declaration. The declarator
+may be followed by a name and/or a signature, each optional. Finally, the
+body of the sub should be specified. This is a block of code enclosed in
+curly braces, and will be executed each time the subroutine is called.
 
 Below is a simple example subroutine declaration:
 
@@ -41,11 +40,10 @@ X<subroutines; scoping>
 X<scoping; subroutines>
 
 By default, subroutines are lexically scoped, just like any variable
-declared with C<my>. In the absence of any code indicating otherwise, a
-subroutine may only be called within the scope it was declared. To make
-the subroutine more widely available, the scoping declarator C<our> may
-be used to also place the subroutine within the symbol table of the
-current package.
+declared with C<my>. This means that - unless it is exported - a
+subroutine may only be called within the scope in which it was declared. To
+make the subroutine more widely available, the scope declarator C<our> may
+be used to place the subroutine within the symbol table of the current package.
 
 =begin programlisting
 
@@ -98,7 +96,7 @@ moves, and the values are anonymous subroutines:
 =end programlisting
 
 From the output of this program, you can observe that doing the YMCA dance in
-ASCII art looks as bad as in real life.
+ASCII art looks just as bad as in real life.
 
 =head1 Adding Signatures
 
@@ -109,9 +107,8 @@ X<signatures; subroutines>
 A subroutine signature performs two roles. First, it declares the arguments callers
 may or must pass to the subroutine. Second, it declares the variables in the
 subroutine to which the arguments are bound. These variables are called
-I<parameters>.  Perl 6 signatures go further; they
-allow you to constrain the values of arguments and to extract specific
-pieces of data structures.
+I<parameters>.  Perl 6 signatures go further; they allow you to constrain the values
+of arguments and to match against and extract parts of complex data structures.
 
 =head2 The Basics
 
@@ -134,10 +131,10 @@ variables in your signature are read-only references to the passed
 arguments. You cannot modify them within the subroutine. If this is too
 limiting, then you have two different ways to relax this restriction.
 
-Marking a parameter as C<is rw> means that you are allowed to modify the passed
+Marking a parameter C<is rw> means that you are allowed to modify the passed
 argument.  If you modify that value, you modify the original in place.  If you
 attempt to pass a literal or some other constant value for an C<rw> parameter,
-binding of that signature will fail and the subroutine call will not occur.
+binding of that signature will fail and an exception will be thrown.
 
 =begin programlisting
 
@@ -178,7 +175,7 @@ from a single subroutine, Perl allows you to return multiple values directly.
 
 Sigils on variables indicate their intended use.  In a signature, a variable's
 sigil acts as a constraint on the type of argument passed.  The C<@>
-sigil, for example, checks that the passed value is iterable.  Failing to pass
+sigil, for example, checks that the passed value is C<Positional>.  Failing to pass
 something that matches this constraint will cause the call to fail.
 
 =begin programlisting
@@ -196,10 +193,10 @@ something that matches this constraint will cause the call to fail.
 =end programlisting
 
 Similarly, the C<%> sigil implies that the caller must pass something that
-allows associative indexing through the C<< <...> >> or C<{...}> operations.
-The C<&> sigil requires that the caller pass something callable, such as an
-anonymous subroutine. In that case, you may call the callable parameter without
-having to use the C<&> sigil.
+is C<Associative> -- that is, it allows indexing through the C<< <...> >> or
+C<{...}> operations. The C<&> sigil requires that the caller pass something callable,
+such as an anonymous subroutine. In that case, you may also call the callable parameter
+without having to use the C<&> sigil.
 
 =begin programlisting
 
@@ -214,7 +211,7 @@ having to use the C<&> sigil.
 =end programlisting
 
 A scalar (the C<$> sigil) implies no constraints.  Anything may bind to it,
-even if that anything could bind to one of the other sigils.
+even if it could bind to one of the other sigils.
 
 =head2 Interpolating Arrays and Hashes
 
@@ -234,25 +231,15 @@ Likewise, you can interpolate hashes into named arguments:
 
 =head2 Optional Parameters
 
-=for author
+Sometimes parameters can have sensible defaults values.  Sometimes, passing an
+argument that will be bound to a particular parameter may be unnecessary.  In
+these cases, it is possible mark such parameters as optional, so those calling
+the subroutine can choose whether or not to pass an argument.
 
-Until now, the distinction between "arguments" and "parameters" has been clear.
-Here's where it gets confusing.  We should use one consistently, or define the
-distinction between the two clearly for readers (if they even need to know a
-distinction) and use them precisely.
-
-=end for
-
-Sometimes parameters have sensible defaults values.  Sometimes, certain
-arguments are unnecessary.  In these cases, it is nice to mark such parameters
-as optional, so those calling the subroutine can choose whether to pass values.
-
-Either assign a default value to the parameter in the signature or append a
-question mark to the parameter's name:
+To do this, either assign a default value to the parameter in the signaturee:
 
 =begin programlisting
 
- # with a default value
  sub order-steak($how = 'medium') {
      say "I'd like a steak, $how";
  }
@@ -260,15 +247,26 @@ question mark to the parameter's name:
  order-steak();
  order-steak('well done');
 
- # without a default value
- # TODO: come up with a good example
+=end programlisting
+
+Or append a question mark to the parameter's name, in which case the parameter
+will have an undefined value bound to it if no argument is passed:
+
+=begin programlisting
+
+ sub order-burger($type, $side?) {
+    say "I'd like a $type burger" ~
+        defined($side) ?? " with a side of $side" !! "";
+ }
+
+ order-burger("tripple bacon", "deep fried onion rings");
 
 =end programlisting
 
 =head2 Named Parameters
 
 When a subroutine has many parameters, it is sometimes hard to remember their
-respective order. When that happens, it is often easier to call them by name
+respective order. When that happens, it is often easier to pass them by name
 instead:
 
 =begin programlisting
@@ -287,9 +285,12 @@ instead:
 
 The names are those that appeared as parameter names in the signature.  When
 you pass arguments by name, the order in which they appear does not matter.
+Note that this means your parameter names are also part of your API, so choose
+them carefully if writing a module.
 
-You may also specify that an incoming argument may only fill a parameter by
-name, never by position; precede the name of the parameter with a colon:
+You may also specify that an incoming argument may only fill a parameter if
+it is passed by name, and that it may never be passed as a positional. To do
+this, precede the name of the parameter with a colon:
 
 =begin programlisting
 
@@ -303,8 +304,8 @@ name, never by position; precede the name of the parameter with a colon:
 
 =end programlisting
 
-Named parameters are optional by default.  Adding a C<!> at the end makes one
-mandatory.
+Unlike positional paramters, named parameters are optional by default.  Adding a
+C<!> at the end makes one mandatory.
 
 =begin programlisting
 
@@ -319,7 +320,8 @@ mandatory.
 
 =head3 Renaming Parameters
 
-Argument names do not necessarily have to correspond exactly to parameter names within the subroutine; you may remap them as you desire:
+Sometimes it may be convenient to expose a parameter as having one name, but bind the
+argument that is passed to a variable of a different name:
 
 =begin programlisting
 
@@ -355,10 +357,7 @@ Americans, one might write:
  # and of course you can still fill the other options
  paint-rectangle :width(30), :height(10), :colour<Blue>;
 
-
 =end programlisting
-
-C<:color(:colour($c))>  or C<:color(:$colour))>.
 
 =head3 Alternative Named Argument Syntaxes
 
@@ -437,7 +436,11 @@ operator with a quoted string on the left-hand side: C<< "thing" => $thing >>.
 =head2 Slurpy Parameters
 
 In an earlier example the function C<shout-it> accepted an array argument.
-There is no need to the user to build an array and pass that to the function:
+However, this prevented users from passing in just a single argument. We may
+like to enable both possibilities, or allow multiple positional arguments and
+even multiple array arguments to be passed, all of which will be flattened into
+a single array parameter in the subroutine. This can be done by putting a C<*>
+before the parameter name:
 
 =begin programlisting
 
@@ -458,8 +461,8 @@ There is no need to the user to build an array and pass that to the function:
 
 X<slurpy>
 
-An asterisk C<*> preceding an array parameter marks it as I<slurpy>. It stores
-all remaining unbound positional arguments in an array.  Likewise C<*%hash>
+A parameter preceded by an asterisk C<*> is known as a I<slurpy>. It stores
+all remaining unbound positional arguments in an array.  Likewise, C<*%hash>
 slurps all the remaining unbound named arguments into a hash.
 
 Slurpy arrays and hashes allow you to pass all positional and named arguments
@@ -470,7 +473,7 @@ to another routine, for example:
  sub debug-wrapper(&code, *@positional, *%named) {
      warn "Calling '&code.name()' with arguments "
           ~ "@positional.perl(), %named.perl()\n";
-     code(|@positional, %named);
+     code(|@positional, |%named);
      warn "... back from '&code.name()'\n";
  }
 
@@ -522,7 +525,7 @@ X<return>
 
 Even C<return> itself is not necessary.  If you exclude it, Perl will return
 the expression produced by the last statement run inside the subroutine.  This
-simplifies the example code:
+simplifies the previous example to just:
 
 =begin programlisting
 
@@ -540,10 +543,10 @@ simplifies the example code:
 
 X<return; implicit>
 
-Be wary of relying on this, however: sometimes the flow of control within a
-subroutine is sufficiently complex that adding explicit C<return> clarifies.
-As a general rule, only the simplest subroutines benefit from implicit
-C<return>.
+Be wary of relying on this, however: when the flow of control within a
+subroutine is sufficiently complex, adding an explicit C<return> will make
+the code much clearer. As a general rule, only the simplest subroutines
+benefit from implicit C<return>.
 
 C<return> has the additional effect of immediately exiting the subroutine:
 
@@ -567,8 +570,8 @@ the only one you're going to get.
 Many subroutines can not meaningfully work with arbitrary parameters,
 but require that the parameters support certain methods.
 
-If that is the case, it makes sense to restrict the parameters in a way that
-only supported values can be passed as arguments. That way an error is raised
+If that is the case, it makes sense to restrict the parameters so that only
+supported values can be passed as arguments. That way an error is raised
 early on (at the time of calling the routine) when a "bad" value is passed.
 
 =head2 Basic Types
