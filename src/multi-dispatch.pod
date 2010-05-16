@@ -436,6 +436,49 @@ of arguments are allowed are handled with slurpy parameters instead:
 
 =end programlisting
 
+=head1 Nested Signatures in Multi-dispatch
+
+An earlier chapter showed how to use nested signatures to look deeper into
+data structures and extract parts of them. In the context of multiple
+dispatch, nested signatures take on a second task: they act as constraints
+that can be used to distinguish between the candidates. This means that it
+is possible to dispatch based upon the shape of a data structure. This brings
+Perl 6 a lot of the expressive power provided by pattern matching in various
+functional languages.
+
+Some algorithms can be very neatly expressed this way, most often those that have
+some base case that will eventually be reached. For example, consider quicksort.
+The base case is that of the empty list, which trivially sorts to the empty list.
+This can be expressed in Perl 6 as:
+
+=begin programlisting
+
+ multi quicksort([]) { () }
+
+=end programlisting
+
+The C<[]> declares an empty nested signature for the first positional parameter.
+Additionally, it requires that the first positional parameter be something that
+can be indexed into - that is, anything that would match the @ sigil. In totality,
+it means that the signature will only match if it is passed on parameter that is an
+empty list.
+
+The other case is when the list to sort is not empty. In that case, there will be
+at least one value--which can be used as the pivot--and possibly many other values,
+which will then be partitioned according to the pivot. After that, it's just a couple
+of recursive calls to sort each of the partitions.
+
+=begin programlisting
+
+ multi quicksort([$pivot, *@rest]) {
+    my @before = @rest.grep({ $_ <= $pivot });
+    my @after = @rest.grep({ $_ > $pivot });
+    return quicksort(@before), $pivot, quicksort(@after);
+ }
+
+=end programlisting
+
+
 =head1 Protos
 
 X<protos>
