@@ -347,6 +347,100 @@ in that list.
 
 =head2 String Comparisons
 
-TODO
+Just like C<==> converts its arguments to numbers before comparing, C<eq> as
+an infix operator compares for string equality, and converts its arguments to
+strings if necessary.
+
+=begin programlisting
+
+ if $greeting eq 'hello' {
+     say 'welcome';
+ }
+
+=end programlisting
+
+Other operators compare strings lexicographically
+
+=begin table
+
+=headrow
+
+=row
+
+=cell Number Comparison
+
+=cell String Comparison
+
+=cell Stands for
+
+=bodyrows
+
+=row
+
+=cell ==
+
+=cell eq
+
+=cell equals
+
+=row
+
+=cell !=
+
+=cell ne
+
+=cell not equal
+
+=row
+
+=cell !==
+
+=cell !eq
+
+=cell not equal
+
+=row
+
+=cell <
+
+=cell lt
+
+=cell less than
+
+=row
+
+=cell <=
+
+=cell le
+
+=cell less or equal
+
+=row
+
+=cell >
+
+=cell gt
+
+=cell greater than
+
+=row
+
+=cell >=
+
+=cell ge
+
+=cell greater or equal
+
+=end table
+
+For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
+
+=head3 Three-way Comparison
+
+# TODO
+
+=head2 Smart Matching
+
+# TODO
 
 =for vim: spell
