@@ -441,6 +441,46 @@ For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
 =head2 Smart Matching
 
-# TODO
+The various comparrison operators that we have seen so far all coerce their
+arguments to certain types before comparing them. This is useful if you wish
+to be very specific about what kind of comparison you want and are unsure of
+the types of the things that are being compared. Perl 6 also provides another
+operator that allows you to perform comparsions that just Do The Right Thing.
+It's C<~~>, the smart match operator.
+
+=begin programlisting
+
+  if $pints-drunk ~~ 8 {
+      say "Go home, you've had enough!";
+  }
+
+  if $country ~~ 'Sweden' {
+      say "Meatballs with lingonberries and potato moose, please."
+  }
+
+  unless $group-size ~~ 2..4 {
+      say "You must have between 2 and 4 people to book this tour.";
+  }
+
+=end programlisting
+
+The smart match operator always decides what kind of comparrision to do based
+upon the type of the value on the right hand side. In the three examples above,
+it would do a numeric, a string and a range comparrision respectively. While
+we've already seen operators to do numeric and string comparrisons -- C<==> and
+C<eq> -- there is no operator for comparing ranges. This is part of the power
+of smart matching: more complex types can define interesting and useful ways to
+compare themselves to other things.
+
+=begin sidebar
+
+Smart match works by calling the C<ACCEPTS> method on the operand on the right
+hand side and passing it the operand on the left hand side as an argument. Thus
+C<$answer ~~ 42> actually desugars to a method call like C<42.ACCEPTS($answer)>.
+The upshot of this is that -- after reading the chapter on writing classes and
+methods -- you too will be able to write things that can be smart-match against
+just by implementing an C<ACCEPTS> method to do the right thing.
+
+=end sidebar
 
 =for vim: spell
