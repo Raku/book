@@ -568,7 +568,8 @@ the only one you're going to get.
 =head1 Working With Types
 
 Many subroutines can not meaningfully work with arbitrary parameters,
-but require that the parameters support certain methods.
+but require that the parameters support certain methods or have other
+properties.
 
 If that is the case, it makes sense to restrict the parameters so that only
 supported values can be passed as arguments. That way an error is raised
@@ -582,7 +583,7 @@ X<parameter type constraint>
 The easiest way to restrict the possible values that a subroutine accepts is by
 only allowing certain types. To do this, write a type name in front of a parameter.
 For example, a subroutine that does numeric calculation with its parameters could
-restrict the parameters to the type C<Numeric>:
+that the arguments passed to it are of the type C<Numeric>:
 
 =begin programlisting
 
@@ -595,7 +596,7 @@ restrict the parameters to the type C<Numeric>:
 
 =end programlisting
 
-Which produces this output:
+This produces this output:
 
 =begin screen
 
@@ -629,14 +630,37 @@ parameter with a C<where> block:
 Since the calculation can only be carried out for non-negative values of the
 area, the parameter name is followed by a C<where> block that returns C<True>
 for non-negative values. If such an additional constraint returns a false
-value, the type check at the time of the routine call fails.
+value, the type check will fail at the time the routine is called.
 
-=for author
+A block after the C<where> is not required; the check is performed by smart
+matching the argument against whatever follows the C<where>. Therefore, it is
+possible to accept arguments in a certain range by just writing:
 
-TODO: explain C<where $value> smart matching constraints
-once we talk about smart matching somewhere
+=begin programlisting
 
-=end for
+  sub set-volume(Numeric $volume where 0..11) {
+      say "Turning it up to $volume";
+  }
+
+=end programlisting
+
+Or to ensure that the only arguemtns that exist as the key of some hash is
+passed by doing:
+
+=begin programlisting
+
+  my %in-stock = 'Staropramen' => 8, 'Mori' => 5, 'La Trappe' => 9;
+
+  sub order-beer(Str $name where %in-stock) {
+      say "Here's your $name";
+      %in-stock{$name}--;
+      if %in-stock{$name} == 0 {
+          say "OH NO! That was the last $name, folks! :'(";
+          %in-stock.delete($name);
+      }
+  }
+
+=end programlisting
 
 =head1 Captures
 
