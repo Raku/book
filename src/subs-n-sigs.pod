@@ -678,9 +678,96 @@ the hash-like part contains the named parameters.
 
 =head2 Creating And Using A Capture
 
+Captures are constructed using the C<\(...)> syntax. Like arrays and hashes,
+they can be interpolated into an argument list using the C<|>.
+
+=begin programlisting
+
+  sub act($left, $right, :$action) {
+      $action($left, $right);
+  }
+  
+  my @tasks = \(39, 3, action => { say $^a + $^b }),
+              \(6, 7, action => { say $^a * $^b });
+
+  for @tasks -> $task-args {
+      act(|$task-args);
+  }
+
+=end programlisting
+
+This program creates an array of captures, each of which contains two positional
+arguments and one named argument. It then iterates over the array, making a call
+to C<act> with each argument set. The power here is that Perl 6 allows the
+specification of the arguments for a call and the call itself to be seperated
+out, so the same arguments can be applied for many calls, or the same call to
+many sets of arguments. Significantly, the code that performs the application
+need not know whether any of the arguments are named or positional.
+
+A deeper difference is that captures work like references. If a variable is
+mentioned in a capture, then the capture contains not just the value, as would
+happen in a list assignment, but instead a reference to the variable. Thus C<rw>
+parameters still work with captures involved.
+
+=begin programlisting
+
+  my $value = 7;
+  my $to-change = \($value);
+
+  sub double($x is rw) {
+      $x *= 2;
+  }
+  sub tripple($x is rw) {
+      $x *= 3;
+  }
+
+  tripple(|$to-change);
+  double(|$to-change);
+
+  say $value; # 42
+
+=end programlisting
+
+Things that have positional and named parts also show up in various other
+situations. For example, regex matches have both positional and named matches,
+and C<Match> objects themselves are indeed a type of capture. It's also possible
+to conceive of an XML node type that is a type of capture, the attributes held in
+the named parts and the children held in the positional part. This way, the node
+could be bound to various subs, which would be able to use regular positional
+and named parameter syntax to take the children and attributes that it wished to
+work with.
 
 =head2 Captures In Signatures
 
+All calls build a capture, which in turn is unpacked according to the signature.
+It is also possible to write a signature that just takes the capture and puts it
+into a variable. This is especially useful for writing routines that will simply
+delegate to another one with the same arguments.
+
+=begin sidebar
+
+An optimizing Perl 6 compiler may, of course, be able to optimize away building
+the capture data structure every call if it statically knows what is going to
+be called.
+
+=end sidebar
+
+=begin programlisting
+
+  sub visit-czechoslovakia(|$plan) {
+      warn "Sorry, this country has been deprecated.";
+      visit-slovakia(|$plan);
+      visit-czech-republic(|$plan);
+  }
+
+=end programlisting
+
+The benefit of using this over a signature like C<:(*@pos, *%named)> is that these
+both enforce some context on the arguments, which may be premature. For example,
+if two arrays are passed, they would end up being flattened into C<@pos>. This means
+that the two nested arrays could not be recovered at the point of delegation. With
+a capture, the two array arguments are preserved and it is up to the callee's signature
+how they are bound.
 
 =head1 Unpacking
 
