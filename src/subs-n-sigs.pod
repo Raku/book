@@ -840,7 +840,8 @@ Is this a little too cute?
 =head1 Introspection
 
 Subroutines and their signatures are objects like any other. You can not only
-call them, but also learn things about them, especially about the parameters.
+call them, but also learn things about them, including exaimining the details of
+the parameters.
 
 =begin programlisting
 
@@ -852,8 +853,8 @@ call them, but also learn things about them, especially about the parameters.
  say @params.elems, ' parameters';
  
  for @params {
-     say "Name:       ",    .name;
-     say "  Type:     ",  .type;
+     say "Name:       ", .name;
+     say "  Type:     ", .type;
      say "  named?    ", .named ?? 'yes' !! 'no';
      say "  slurpy?   ", .slurpy ?? 'yes' !! 'no';
      say "  optional? ", .optional ?? 'yes' !! 'no';
@@ -877,12 +878,10 @@ call them, but also learn things about them, especially about the parameters.
 
 =end screen
 
-The C<&> sigil allows access to a subroutine without actually calling it.
-C<&logarithm.signature> returns the signature associated with the subroutine,
-and calling C<.params> on the signature returns a list of C<Parameter>
-objects.
-
-Each of these objects describe one parameter in detail.
+The C<&> sigil followed by a subroutine name gets the object representing that
+subroutine rather than calling it. C<&logarithm.signature> returns the signature
+associated with the subroutine, and calling C<.params> on the signature returns a
+list of C<Parameter> objects. Each of these objects describe one parameter in detail.
 
 =begin table Methods in the Parameter class
 
@@ -975,6 +974,16 @@ Each of these objects describe one parameter in detail.
 
 # TODO: talk about &signature.cando once that's implemented
 
-# TODO: elaborate on when and why signature introspection is useful
+Being able to introspect signatures enables building interfaces that can obtain
+and then pass the right data to a subroutine. For example, one could build a web
+a web form generator that knew how to get input from a user, validate it and then
+call a routine with it based upon the information obtained through introspection.
+A similar thing can be done in order to automatically generate a command line
+interface along with some basic usage instructions.
+
+Beyond this, using traits -- a topic beyond the scope of this chapter -- it is
+possible to associate extra data with parameters that will also be available
+through introspection. This means signatures can be extended on a per-program
+basis to carry extra information beyond that which is normally included.
 
 =for editor vim: se spell
