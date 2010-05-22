@@ -976,7 +976,7 @@ list of C<Parameter> objects. Each of these objects describe one parameter in de
 
 Being able to introspect signatures enables building interfaces that can obtain
 and then pass the right data to a subroutine. For example, one could build a web
-a web form generator that knew how to get input from a user, validate it and then
+form generator that knew how to get input from a user, validate it and then
 call a routine with it based upon the information obtained through introspection.
 A similar thing can be done in order to automatically generate a command line
 interface along with some basic usage instructions.
