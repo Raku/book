@@ -99,7 +99,7 @@ C<++>, which increments the value it qualifies. No whitespace is allowed
 between a term and its postfix or postcircumfix operators.
 
 X<postfix>
-X<operator; prefix>
+X<operator; postfix>
 
 Yet another operator type is the I<prefix> operator, which stands in front of
 a term. An example is the C<-> operator, which negates the following numeric
@@ -128,7 +128,7 @@ side of the C<+> operator is more complicated.
 X<operator; max>
 
 In Perl 6 there is an infix C<max> operator which returns the greater of two
-values, so C<2 max 3> returns 3. Angle brackets around an infix
+values, so C<2 max 3> returns 3. Square brackets around an infix
 operator indicate that it is applied to a list piece by piece. So C<[max] 1, 5,
 3, 7> is the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
 
@@ -212,7 +212,7 @@ left-justified (C<'-'>), followed by another string and a newline.
 
 The first string is the name of the player, the second is the bar.
 
-X<operator; xx>
+X<operator; x>
 X<repetition operator>
 
 The bar is generated with the infix C<x> operator, the
@@ -441,7 +441,7 @@ For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
 =head2 Smart Matching
 
-The various comparrison operators that we have seen so far all coerce their
+The various comparison operators that we have seen so far all coerce their
 arguments to certain types before comparing them. This is useful if you wish
 to be very specific about what kind of comparison you want and are unsure of
 the types of the things that are being compared. Perl 6 also provides another
@@ -464,10 +464,10 @@ It's C<~~>, the smart match operator.
 
 =end programlisting
 
-The smart match operator always decides what kind of comparrision to do based
+The smart match operator always decides what kind of comparision to do based
 upon the type of the value on the right hand side. In the three examples above,
-it would do a numeric, a string and a range comparrision respectively. While
-we've already seen operators to do numeric and string comparrisons -- C<==> and
+it would do a numeric, a string and a range comparision respectively. While
+we've already seen operators to do numeric and string comparisons -- C<==> and
 C<eq> -- there is no operator for comparing ranges. This is part of the power
 of smart matching: more complex types can define interesting and useful ways to
 compare themselves to other things.

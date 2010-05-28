@@ -168,7 +168,7 @@ parameter C<is copy>.
 
 The extra verbosity of marking parameters as mutable may seem excessive, but
 it's likely you won't use these modifiers often.  While certain languages
-require you to mark parameters as C<rw> to emulate returning multiple result
+require you to mark parameters as C<rw> to emulate returning multiple results
 from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
@@ -236,7 +236,7 @@ argument that will be bound to a particular parameter may be unnecessary.  In
 these cases, it is possible mark such parameters as optional, so those calling
 the subroutine can choose whether or not to pass an argument.
 
-To do this, either assign a default value to the parameter in the signaturee:
+To do this, either assign a default value to the parameter in the signature:
 
 =begin programlisting
 
@@ -259,7 +259,7 @@ will have an undefined value bound to it if no argument is passed:
         defined($side) ?? " with a side of $side" !! "";
  }
 
- order-burger("tripple bacon", "deep fried onion rings");
+ order-burger("triple bacon", "deep fried onion rings");
 
 =end programlisting
 
@@ -513,7 +513,7 @@ A Perl subroutine can return multiple values:
      if rand < 0.5 {
          return ('fish', 'white wine')
      } else {
-         return ('steak', 'read wine');
+         return ('steak', 'red wine');
      }
  }
 
@@ -524,7 +524,7 @@ A Perl subroutine can return multiple values:
 X<return>
 
 Even C<return> itself is not necessary.  If you exclude it, Perl will return
-the expression produced by the last statement run inside the subroutine.  This
+the value produced by the last statement run inside the subroutine.  This
 simplifies the previous example to just:
 
 =begin programlisting
@@ -533,7 +533,7 @@ simplifies the previous example to just:
      if rand < 0.5 {
          'fish', 'white wine'
      } else {
-         'steak', 'read wine';
+         'steak', 'red wine';
      }
  }
 
@@ -567,7 +567,7 @@ the only one you're going to get.
 
 =head1 Working With Types
 
-Many subroutines can not meaningfully work with arbitrary parameters,
+Many subroutines cannot meaningfully work with arbitrary parameters,
 but require that the parameters support certain methods or have other
 properties.
 
@@ -644,7 +644,7 @@ possible to accept arguments in a certain range by just writing:
 
 =end programlisting
 
-Or to ensure that the only arguemtns that exist as the key of some hash is
+Or to ensure that only arguments that exist as the key of some hash are
 passed by doing:
 
 =begin programlisting
@@ -699,7 +699,7 @@ they can be interpolated into an argument list using the C<|>.
 This program creates an array of captures, each of which contains two positional
 arguments and one named argument. It then iterates over the array, making a call
 to C<act> with each argument set. The power here is that Perl 6 allows the
-specification of the arguments for a call and the call itself to be seperated
+specification of the arguments for a call and the call itself to be separated
 out, so the same arguments can be applied for many calls, or the same call to
 many sets of arguments. Significantly, the code that performs the application
 need not know whether any of the arguments are named or positional.
@@ -717,11 +717,11 @@ parameters still work with captures involved.
   sub double($x is rw) {
       $x *= 2;
   }
-  sub tripple($x is rw) {
+  sub triple($x is rw) {
       $x *= 3;
   }
 
-  tripple(|$to-change);
+  triple(|$to-change);
   double(|$to-change);
 
   say $value; # 42
@@ -907,7 +907,7 @@ list of C<Parameter> objects. Each of these objects describe one parameter in de
 
 =cell type
 
-=cell The nomical type
+=cell The nominal type
 
 =row
 
