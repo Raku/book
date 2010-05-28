@@ -717,11 +717,11 @@ parameters still work with captures involved.
   sub double($x is rw) {
       $x *= 2;
   }
-  sub tripple($x is rw) {
+  sub triple($x is rw) {
       $x *= 3;
   }
 
-  tripple(|$to-change);
+  triple(|$to-change);
   double(|$to-change);
 
   say $value; # 42
