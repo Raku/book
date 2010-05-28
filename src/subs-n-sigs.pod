@@ -259,7 +259,7 @@ will have an undefined value bound to it if no argument is passed:
         defined($side) ?? " with a side of $side" !! "";
  }
 
- order-burger("tripple bacon", "deep fried onion rings");
+ order-burger("triple bacon", "deep fried onion rings");
 
 =end programlisting
 
@@ -513,7 +513,7 @@ A Perl subroutine can return multiple values:
      if rand < 0.5 {
          return ('fish', 'white wine')
      } else {
-         return ('steak', 'read wine');
+         return ('steak', 'red wine');
      }
  }
 
@@ -533,7 +533,7 @@ simplifies the previous example to just:
      if rand < 0.5 {
          'fish', 'white wine'
      } else {
-         'steak', 'read wine';
+         'steak', 'red wine';
      }
  }
 
