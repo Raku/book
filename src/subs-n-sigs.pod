@@ -236,7 +236,7 @@ argument that will be bound to a particular parameter may be unnecessary.  In
 these cases, it is possible mark such parameters as optional, so those calling
 the subroutine can choose whether or not to pass an argument.
 
-To do this, either assign a default value to the parameter in the signaturee:
+To do this, either assign a default value to the parameter in the signature:
 
 =begin programlisting
 
