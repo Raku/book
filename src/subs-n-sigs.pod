@@ -168,7 +168,7 @@ parameter C<is copy>.
 
 The extra verbosity of marking parameters as mutable may seem excessive, but
 it's likely you won't use these modifiers often.  While certain languages
-require you to mark parameters as C<rw> to emulate returning multiple result
+require you to mark parameters as C<rw> to emulate returning multiple results
 from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
