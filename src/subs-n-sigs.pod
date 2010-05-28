@@ -567,7 +567,7 @@ the only one you're going to get.
 
 =head1 Working With Types
 
-Many subroutines can not meaningfully work with arbitrary parameters,
+Many subroutines cannot meaningfully work with arbitrary parameters,
 but require that the parameters support certain methods or have other
 properties.
 
