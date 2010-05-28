@@ -99,7 +99,7 @@ C<++>, which increments the value it qualifies. No whitespace is allowed
 between a term and its postfix or postcircumfix operators.
 
 X<postfix>
-X<operator; prefix>
+X<operator; postfix>
 
 Yet another operator type is the I<prefix> operator, which stands in front of
 a term. An example is the C<-> operator, which negates the following numeric
