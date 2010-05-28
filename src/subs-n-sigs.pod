@@ -524,7 +524,7 @@ A Perl subroutine can return multiple values:
 X<return>
 
 Even C<return> itself is not necessary.  If you exclude it, Perl will return
-the expression produced by the last statement run inside the subroutine.  This
+the value produced by the last statement run inside the subroutine.  This
 simplifies the previous example to just:
 
 =begin programlisting
