@@ -212,7 +212,7 @@ left-justified (C<'-'>), followed by another string and a newline.
 
 The first string is the name of the player, the second is the bar.
 
-X<operator; xx>
+X<operator; x>
 X<repetition operator>
 
 The bar is generated with the infix C<x> operator, the
