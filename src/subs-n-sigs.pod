@@ -907,7 +907,7 @@ list of C<Parameter> objects. Each of these objects describe one parameter in de
 
 =cell type
 
-=cell The nomical type
+=cell The nominal type
 
 =row
 
