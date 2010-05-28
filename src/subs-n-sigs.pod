@@ -644,7 +644,7 @@ possible to accept arguments in a certain range by just writing:
 
 =end programlisting
 
-Or to ensure that the only arguments that exist as the key of some hash is
+Or to ensure that only arguments that exist as the key of some hash are
 passed by doing:
 
 =begin programlisting
