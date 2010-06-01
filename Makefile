@@ -24,7 +24,7 @@ build/book.html: $(CHAPTERS) bin/book-to-html
 	perl bin/book-to-html $(CHAPTERS) > build/book.html
 
 build/book.pdf:	build/book.tex build/mmd-table.pdf
-	cd build && pdflatex book.tex && pdflatex book.tex
+	cd build && pdflatex book.tex && makeindex book && pdflatex book.tex
 
 build/book.tex: $(CHAPTERS) bin/book-to-latex
 	perl bin/book-to-latex $(CHAPTERS) > build/book.tex
