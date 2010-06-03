@@ -437,7 +437,44 @@ For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
 =head3 Three-way Comparison
 
-# TODO
+X<leg>
+X<cmp>
+X<< <=> >>
+
+The three-way comparison operators take two operands, and return C<-1> if the
+left is smaller, C<0> when both are equal, and C<+1> if the right operand is
+larger. For numbers that operator is spelled C<< <=> >>, and for strings
+C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
+type sensitive three-way comparison operator, and compares numbers like
+C<< <=> >>, string like C<leg>, and for example pairs first by key, and
+then by values of the keys are identical.
+
+=begin programlisting
+
+    say 10   <=> 5;       # +1
+    say 10   leg 5;       # because '1' lt '5'
+    say 'ab' leg 'a';     # +1, lexicographic comparison
+
+=end programlisting
+
+A typical use case for three-way comparison is sorting. The C<sort> method in
+lists can take a block or function that takes two values, compares them,
+returns -1, 0 or +1. The sort method then orders the values according to that
+return value.
+
+=begin programlisting
+
+    say ~<abstract Concrete>.sort;
+    # output: Concrete abstract
+
+    say ~<abstract Concrete>.sort:
+            -> $a, $b { uc($a) leg uc($b) };
+    # output: abstract Concrete
+
+=end programlisting
+
+The default comparison is case sensitive; by comparing not the values, but
+their upper case variant, the example above sorts case insensitively.
 
 =head2 Smart Matching
 
@@ -445,7 +482,7 @@ The various comparison operators that we have seen so far all coerce their
 arguments to certain types before comparing them. This is useful if you wish
 to be very specific about what kind of comparison you want and are unsure of
 the types of the things that are being compared. Perl 6 also provides another
-operator that allows you to perform comparsions that just Do The Right Thing.
+operator that allows you to perform comparisons that just Do The Right Thing.
 It's C<~~>, the smart match operator.
 
 =begin programlisting
