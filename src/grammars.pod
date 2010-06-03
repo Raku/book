@@ -10,67 +10,45 @@ reference).
     # file lib/JSON/Tiny/Grammar.pg
 
     grammar JSON::Tiny::Grammar {
-        rule TOP {
-            ^ [
-                | <object> {*}      #= object
-                | <array>  {*}      #= array
-            ] $
-        }
-        rule object     { '{' ~ '}' <pairlist>      {*}   }
-        rule pairlist   {
-            <pair> ** ','
-            {*}
-        }
+        rule TOP        { ^[ <object> | <array> ]$ }
+        rule object     { '{' ~ '}' <pairlist>     }
+        rule pairlist   { [ <pair> ** [ \, ]  ]?   }
+        rule pair       { <string> ':' <value>     }
+        rule array      { '[' ~ ']' [ <value> ** [ \, ] ]?  }
 
-        rule pair {
-            <string> ':' <value>        {*}
-        }
-
-        rule array {
-            '[' ~ ']'
-                [   
-                    [ <value> ** ',' ]?
-                    \s*
-                ]
-            {*}
-        }
-
-        # TODO: turn into a proto regex once they are implemented
-        rule value {
-            | <string>  {*}     #= string
-            | <number>  {*}     #= number
-            | <object>  {*}     #= object
-            | <array>   {*}     #= array
-            | 'true'    {*}     #= true
-            | 'false'   {*}     #= false
-            | 'null'    {*}     #= null
-        }
-
-        token string {
-            \" ~ \" ([
-                | <str>
-                | \\ <str_escape>
-            ]*) {*}
-        }
-
-        token str {
-            <-["\\\t\n]>+
-        }
-
-        token str_escape {
-            [
-                <["\\/bfnrt]>
-            | u <xdigit>**4
-            ] {*}
-        }
-
-        token number {
-            \- ?
+        proto token value { <...> };
+        token value:sym<number> {
+            '-'?
             [ 0 | <[1..9]> <[0..9]>* ]
             [ \. <[0..9]>+ ]?
             [ <[eE]> [\+|\-]? <[0..9]>+ ]?
-            {*}
         }
+        token value:sym<true>    { <sym>    };
+        token value:sym<false>   { <sym>    };
+        token value:sym<null>    { <sym>    };
+        token value:sym<object>  { <object> };
+        token value:sym<array>   { <array>  };
+        token value:sym<string>  { <string> }
+
+        token string {
+            \" ~ \" [ <str> | \\ <str_escape> ]*
+        }
+
+        token str {
+            [
+                <!before \t>
+                <!before \n>
+                <!before \\>
+                <!before \">
+                .
+            ]+
+        #    <-["\\\t\n]>+
+        }
+
+        token str_escape {
+            <["\\/bfnrt]> | u <xdigit>**4
+        }
+
     }
 
     # test it:
@@ -95,32 +73,68 @@ called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
 Rule C<TOP> anchors the match to the start and end of the string, so that the
 whole string has to be in valid JSON format for the match to succeed. It then
 either matches an C<< <array> >> or an C<< <object> >>, both of which are
-defined later on. The symbol C<{*}> provides a hook which makes it possible to
-plug in custom "actions" during the matching process. The C<#= object> and
-C<#= array> markers don't influence the match in any way; they just provide
-labels to make it easier for the action to determine which of the two
-alternatives matched. We discuss actions in the section "Extracting
-data", below.
+defined later on.
 
 The following calls are straightforward, and reflect the structure in which
 JSON components can appear. This includes some recursive calls: For example
-C<array> calls C<value>, and C<value> again calls C<array>. That won't
+an C<array> contains C<value>, an in turn a value can be an C<array>. That won't
 cause any infinite loops as long as at least one regex per recursive call
 consumes at least one character. If a set of regexes were to call each other
 recursively without ever progressing in the string, the recursion could
 go on infinitely, never progressing in the string, or to other parts of the
 grammar.
 
-The only new regex syntax used in the C<JSON::Tiny> grammar is the
+X<goal matching>
+X<~; regex meta character>
+
+A only new regex syntax used in the C<JSON::Tiny> grammar is the
 I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
 to C<'{' ... '}'>, but which gives a better error message upon failure.
+
+It sets the term to the right of the tilde character as the goal, and then
+matches the final term C<[ ... ]>. If the goal can't be found after it, an
+error message is issued.
+
+X<proto token>
+Another novelty is the declaration of a I<proto token>:
+
+=begin programlisting
+
+    proto token value { <...> };
+    token value:sym<number> {
+        '-'?
+        [ 0 | <[1..9]> <[0..9]>* ]
+        [ \. <[0..9]>+ ]?
+        [ <[eE]> [\+|\-]? <[0..9]>+ ]?
+    }
+    token value:sym<true>    { <sym>    };
+    token value:sym<false>   { <sym>    };
+
+=end programlisting
+
+The C<proto token> syntax means that C<value> is not a single
+regex, but rather by a set of alternatives. Each of these alternatives has a
+name of the form C<< token value:sym<thing> >>, which can be read as
+I<< alternative of C<value> with parameter C<sym> set to C<thing> >>.
+
+The body of such an alternative is a normal regex, where the call C<< <sym> >>
+matches the value of the parameter, in our example C<thing>.
+
+When calling the rule C<< <value> >>, all these alternatives are matched
+(notionally in parallel), and the longest match wins.
+
+The reasons for
+splitting the alternatives up into several rules are extensibility and ease of
+use for data extraction, and will be discussed later in detail.
 
 =head1 Grammar Inheritance
 
 As mentioned earlier, grammars manage regexes just like classes manage
 methods. This analogy goes deeper than just having a namespace into which we
 put routines or regexes -- you can inherit grammars just like classes, mix
-roles into them, and benefit from the usual method call polymorphism.
+roles into them, and benefit from the usual method call polymorphism. In fact
+a grammar is just class which by default inherits from C<Grammar> instead of
+C<Any>.
 
 Suppose you wanted to enhance the JSON grammar to allow single-line javascript
 comments. (Those are the ones starting with C<//> and going on for the rest of
@@ -156,7 +170,7 @@ the C<ws> token. So all you've got to do is to override that token:
 The first two lines introduce a grammar that inherits from
 C<JSON::Tiny::Grammar>. The inheritance is specified with the C<is> trait.
 This means that the grammar rules are now called from the derived grammar if
-it exists there, and from the base grammar otherwise -- just like with method
+they exists there, and from the base grammar otherwise -- just like with method
 call semantics.
 
 In (our relaxed) JSON, whitespace is never mandatory, so the C<ws> is allowed
@@ -164,106 +178,94 @@ to match nothing at all. After optional spaces, two slashes C<'//'> introduce a
 comment, which is followed by an arbitrary number of non-newline characters,
 and then a newline -- in prose: it extends to the rest of the line.
 
+In inherited grammars it is also possible to add variants to proto tokens:
+
+=begin programlisting
+
+    grammar JSON::ExtendedNumeric is JSON::Tiny::Grammar  {
+        token value:sym<nan> { <sym> }
+        token value:sym<inf> { <[+-]>? <sym> }
+    }
+
+=end programlisting
+
+In this grammar a call to C<< <value> >> matches either one of the newly added
+alternatives, or any of the old alternatives from parent grammar
+C<JSON::Tiny::Grammar>. Such extensibility would be hard to achieve with
+ordinary, C<|> delimited alternatives.
+
 =head1 Extracting data
+
+X<reduction methods>
+X<action methods>
 
 The C<parse> method of a grammar returns a C<Match> object, and through its
 captures you can access all the relevant information. However, in order to do
 that you have to write a function that traverses the match tree recursively,
 and search for bits and pieces you are interested in. Since this is a
-cumbersome task, an alternative solution exist: I<actions method>.
+cumbersome task, an alternative solution exist: I<reduction method>, also
+called I<action methods>.
 
 =begin programlisting
 
     class JSON::Tiny::Actions {
-        method TOP($/, $what) {
-            make $/{$what}.ast;
-        }
+        method TOP($/)      { make $/.hash.values.[0].ast }
+        method object($/)   { make $<pairlist>.ast.hash }
+        method pairlist($/) { make $<pair>>>.ast }
+        method pair($/)     { make $<string>.ast => $<value>.ast }
+        method array($/)    { make [$<value>>>.ast] }
+        method string($/)   { make join '', $/.caps>>.value>>.ast }
 
-        method object($/) {
-            make %($<pairlist>.ast)
-        }
+        # TODO: make that 
+        # make +$/
+        # once prefix:<+> is sufficiently polymorphic
+        method value:sym<number>($/) { make eval $/ }
+        method value:sym<string>($/) { make $<string>.ast }
+        method value:sym<true>  ($/) { make Bool::True  }
+        method value:sym<false> ($/) { make Bool::False }
+        method value:sym<null>  ($/) { make Any }
+        method value:sym<object>($/) { make $<object>.ast }
+        method value:sym<array> ($/) { make $<array>.ast }
 
-        method pairlist($/) {
-            # RAKUDO sets a $<pair> to undef instead of Nil
-            # if <pair>* matched 0 times, in which case
-            # this will fail
-            make = $<pair>».ast;
-        }
-
-        method pair($/) {
-            make ( $<string>.ast => $<value>.ast );
-        }
-
-        method array($/) {
-            # RAKUDO see comment in pairlist
-            make $<value>».ast;
-        }
-
-        method value($/, $what) {
-            given $what {
-                when 'true'     { make Bool::True  };
-                when 'false'    { make Bool::False };
-                when 'null'     { make Mu          };
-                when *          { make $/{$_}.ast  };
-            }
-        }
-
-        method string($/) {
-            my $s = '';
-            for $0.chunks {
-                if .key eq '~' {
-                    next if .value eq '\\';
-                    $s ~= .value;
-                } else {
-                    $s ~= .value.ast;
-                }
-            }
-            make $s;
-        }
+        method str($/)               { make ~$/ }
 
         method str_escape($/) {
             if $<xdigit> {
                 make chr(:16($<xdigit>.join));
             } else {
-                given ~$/ {
-                    when '\\' { make '\\'; }
-                    when 'n'  { make "\n"; }
-                    when 't'  { make "\t"; }
-                    when 'f'  { make "\f"; }
-                    when 'r'  { make "\r"; }
-                }
+                my %h = '\\' => "\\",
+                        'n'  => "\n",
+                        't'  => "\t",
+                        'f'  => "\f",
+                        'r'  => "\r";
+                make %h{$/};
             }
-        }
-
-        method number($/) {
-            make +$/;
         }
     }
 
     my $actions = JSON::Tiny::Actions.new();
     JSON::Tiny::Grammar.parse($str, :$actions);
 
-    # RAKUDO doesn't call action methods at the
-    # end of each each rule yet
-
 =end programlisting
 
 We pass an actions object to the grammar's C<parse> method. Whenever the
-grammar engine finishes parsing one rule, or encounters a C<{*}> token in the
-grammar, it calls an method of the match object, with the same name as
-the current rule. If no such method is found, it is silently ignored.
+grammar engine finishes parsing one rule, it calls a method of actions object,
+with the same name as
+the current rule. If no such method is found, the grammar engine just moves
+along and calls no method.
 
-It passes the current match object as the first positional argument, and
-optionally as a second argument the name of the current branch, which can be
-set with C<#= name> at the end of a line.
+If a method is found and called, the current match object is passed as a
+positional argument to the method.
+
+X<abstract syntax tree>
 
 Each match object has a slot C<ast> for a payload object, called
 I<abstract syntax tree>. It can hold a custom data structure that you create
-from the match object. Calling C<make $thing> in an action method sets the
+from the action methods. Calling C<make $thing> in an action method sets the
 C<ast> attribute of the current match object to C<$thing>.
 
 In the case of our JSON parser the payload can be directly the data structure
-which corresponds that the JSON string represents.
+that the JSON string represents.
 
 Although the rules and action methods live in different namespaces (and in a
 real-world project probably even in separate files), we show them side by
@@ -271,60 +273,45 @@ side to make the correspondence easier to see.
 
 =begin programlisting
 
-    rule TOP {
-        ^ [
-            | <object> {*}      #= object
-            | <array>  {*}      #= array
-        ]$
-    }
-    method TOP($/, $what) {
-        make $/{$what}.ast;
-    }
+    rule TOP        { ^ [ <object> | <array> ]$ }
+    method TOP($/)  { make $/.hash.values.[0].ast }
 
 =end programlisting
 
-The rule has an alternation with two branches, labeled by C<#= object>
-and C<#= array>. The first argument to the C<TOP> method is the current match
-object, the second is the label. The action method accesses the capture with
-the same name as branch, obtains the AST attached to it, and sets it to the
-AST of current match object by calling C<make>.
+# TODO: decide if $/.values could be sufficient
+
+The rule has an alternation with two branches, and either of them has a named
+capture, C<object> and C<array>. When the match object is viewed as hash
+through C<$/.hash>, its only value is another match object - that of the
+subrule that matched successfully. The action method takes the AST attached to
+that match object, and promotes it as its own AST by calling C<make>.
 
 =begin programlisting
 
-    rule object     { '{' ~ '}' <pairlist>      {*}   }
-    method object($/) {
-        make %($<pairlist>.ast)
-    }
+    rule object     { '{' ~ '}' <pairlist>  }
+    method object($/)   { make $<pairlist>.ast.hash }
 
 =end programlisting
 
-The action method for C<object> extracts the AST of the C<pairlist> submatch,
-and turns it into a hash by putting it inside C<%( ... )>.
+The reduction method for C<object> extracts the AST of the C<pairlist> submatch,
+and turns it into a hash by calling the C<hash> method on it.
 
 =begin programlisting
 
-    rule pairlist   {
-        <pair> ** ','
-        {*}
-    }
-    method pairlist($/) {
-        make = $<pair>».ast;
-    }
+    rule pairlist   { [ <pair> ** [ \, ] ]? }
+    # TODO: make that » once RT #75434 is resolved
+    method pairlist($/) { make = $<pair>>>.ast; }
 
 =end programlisting
 
-The C<pairlist> rule just matches multiple pairs, and the corresponding action
-method calls the C<.ast> method on each matched pair, and installs the result
+The C<pairlist> rule just matches multiple pairs, separated by comma, and the
+reduction method calls the C<.ast> method on each matched pair, and installs the result
 list in its own AST.
 
 =begin programlisting
 
-    rule pair {
-        <string> ':' <value>        {*}
-    }
-    method pair($/) {
-        make ( $<string>.ast => $<value>.ast );
-    }
+    rule pair       { <string> ':' <value> }
+    method pair($/) { make $<string>.ast => $<value>.ast }
 
 =end programlisting
 
@@ -334,5 +321,21 @@ Perl 6 pair with the C<< => >> operator.
 The other action methods work just the same: They transform the information
 they extract from the match object into "native" Perl 6 data structures, and
 call C<make> to set it as their own AST.
+
+The action methods that belong to a proto token are parameterized in the same
+way as the alternative:
+
+=begin programlisting
+
+    token value:sym<null>        { <sym>    };
+    method value:sym<null>($/)   { make Any }
+
+    token value:sym<object>      { <object> };
+    method value:sym<object>($/) { make $<object>.ast }
+
+=end programlisting
+
+When a C<< <value> >> call matches, the action method with the
+same parametrization as the matching alternative is executed.
 
 =for vim: spell spelllang=en tw=78
