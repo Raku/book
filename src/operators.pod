@@ -447,7 +447,7 @@ larger. For numbers that operator is spelled C<< <=> >>, and for strings
 C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
 type sensitive three-way comparison operator, and compares numbers like
 C<< <=> >>, string like C<leg>, and for example pairs first by key, and
-then by values of the keys are identical.
+then by values if the keys are identical.
 
 =begin programlisting
 
