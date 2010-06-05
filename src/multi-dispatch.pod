@@ -95,7 +95,7 @@ X<multidispatch; constraints>
 
 =begin programlisting
 
-    to-json($d where {!defined $d}) { 'null' }
+    multi to-json($d where {!defined $d}) { 'null' }
 
 =end programlisting
 
