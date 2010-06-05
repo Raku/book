@@ -168,7 +168,7 @@ If this were all that roles provided, they'd have few advantages over
 inheritance or mixins.  Roles get much more interesting in the case of a
 conflict.  Consider the class definition:
 
-=being programlisting
+=begin programlisting
 
     class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {
     }
@@ -191,7 +191,7 @@ and should choose to compose only one role to provide the desired behavior.  An
 alternative way to resolve a conflict is to write a method with the same name
 in the class body itself:
 
-=being programlisting
+=begin programlisting
 
     class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {
         method process($raw-in) {
