@@ -225,15 +225,9 @@ even if it could bind to one of the other sigils.
 
 =head2 Interpolating Arrays and Hashes
 
-=for author
-
-Is "interpolate" better than "flatten"?
-
-=end for
-
 Sometimes you want to fill positional arguments from an array. Instead of
 writing C<eat(@food[0], @food[1], @food[2], ...)> and so on, you can
-I<interpolate> them into the argument list by prepending a vertical bar:
+I<flatten> them into the argument list by prepending a vertical bar:
 C<eat(|@food)>.
 
 Likewise, you can interpolate hashes into named arguments:
@@ -520,17 +514,13 @@ operator with a quoted string on the left-hand side: C<< "thing" => $thing >>.
 
 =head2 Slurpy Parameters
 
-=for author
-
-Sigil?  Is there a better word?
-
-=end for
+X<slurpy>
 
 In an earlier example the function C<shout-it> accepted an array argument.
 However, this prevented users from passing in a single argument. You may like
 to enable both possibilities, or to allow multiple positional arguments and
 even multiple array arguments all of which will flatten into a single array
-parameter in the subroutine. The I<slurpy> sigil (C<*>) before the parameter
+parameter in the subroutine. The I<slurpy> prefix (C<*>) before the parameter
 name accomplishes this:
 
 =begin programlisting
@@ -549,8 +539,6 @@ name accomplishes this:
  shout-them(@words);         # still works
 
 =end programlisting
-
-X<slurpy>
 
 A parameter preceded by an asterisk C<*> is known as a I<slurpy>. It stores
 all remaining unbound positional arguments in an array.  Likewise, C<*%hash>
