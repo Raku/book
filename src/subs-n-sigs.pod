@@ -932,7 +932,7 @@ of their parameters:
 
 =begin programlisting
 
- sub logarithm(Numeric $x, Numeric :$base = 2.7183) {
+ sub logarithm(Numeric $x, Numeric :$base = exp(1)) {
      log($x) / log($base);
  }
 
