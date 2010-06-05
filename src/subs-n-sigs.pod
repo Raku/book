@@ -706,7 +706,7 @@ parameter with a C<where> block:
 
 =begin programlisting
 
- sub circle-radius-from-area(Numeric $area where { $area >= 0) {
+ sub circle-radius-from-area(Numeric $area where { $area >= 0 }) {
      ($area / pi).sqrt
  }
  say circle-radius-from-area(3);    # OK
