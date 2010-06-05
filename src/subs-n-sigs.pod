@@ -542,7 +542,7 @@ name accomplishes this:
  }
 
  # now you can pass items
- shout-them('go')            # GO
+ shout-them('go');           # GO
  shout-them('go', 'home');   # GO HOME
 
  my @words = ('go', 'home');
