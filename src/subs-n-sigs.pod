@@ -912,6 +912,70 @@ Is this a little too cute?
 
 # TODO: generic object unpacking
 
+=head1 Currying
+
+Consider a module that provided the example from the "Optional Parameters" section:
+
+=begin programlisting
+
+    sub order-burger( $type, $side? ) { ... };
+
+=end programlisting
+
+If you used order-burger repeatedly, but often with a side of french fries, you
+might wish that the author had also provided a "order-burger-and-fries" sub.
+
+You could easily write it yourself:
+
+=begin programlisting
+
+    sub order-burger-and-fries ( $type ) {
+        order-burger( $type, side => 'french fries' );
+    }
+
+=end programlisting
+
+If your personal order is always vegetarian, you might instead wish for a
+"order-the-usual" sub. This is less concise to write, due to the second
+parameter being optional:
+
+=begin programlisting
+
+    sub order-the-usual ( $side? ) {
+        if ( $side.defined ) {
+            order-burger( 'veggie', $side );
+        }
+        else {
+            order-burger( 'veggie' );
+        }
+    }
+
+=end programlisting
+
+Currying gives you a shortcut for these exact cases; it creates a new sub from
+an existing sub, with parameters already filled in. In Perl 6, we curry by
+using the .assuming method.
+
+=begin programlisting
+
+    &order-the-usual        := &order-burger.assuming( 'veggie' );
+    &order-burger-and-fries := &order-burger.assuming( side => 'french fries' );
+
+=end programlisting
+
+The new sub is like any other sub, and works with all the various
+parameter-passing schemes already described.
+
+=begin programlisting
+
+    order-the-usual( 'salsa' );
+    order-the-usual( side => 'broccoli' );
+
+    order-burger-and-fries( 'plain' );
+    order-burger-and-fries( :type<<double-beef>> );
+
+=end programlisting
+
 =head1 Introspection
 
 Subroutines and their signatures are objects like any other. You can not only
