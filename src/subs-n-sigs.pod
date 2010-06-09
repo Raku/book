@@ -266,7 +266,7 @@ parameter bind to an undefined value if no argument is passed:
 
  sub order-burger($type, $side?) {
     say "I'd like a $type burger" ~
-        defined($side) ?? " with a side of $side" !! "";
+        ( defined($side) ?? " with a side of $side" !! "" );
  }
 
  order-burger("triple bacon", "deep fried onion rings");
