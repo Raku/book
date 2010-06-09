@@ -109,8 +109,8 @@ X<scalar>
 The C<$> sigil indicates a I<scalar> variable, which indicates
 that the variable stores a single value N<However, this single value
 can still be a compound object like an array or a hash. When you iterate over
-a C<$>-sigiled variable, it is interpreted as a single value, even it does
-store an array>.
+a C<$>-sigiled variable, it is interpreted as a single value, even if it
+stores an array>.
 
 X<files; handle>
 X<file handle>
