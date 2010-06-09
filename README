@@ -19,11 +19,14 @@ To build the book, you need to have the following software installed:
     * inkscape (for svg -> pdf conversion)
     * pdflatex
     * the 'bera' font as a LaTeX package
-      In Ubuntu 10.04 this can be found in texlive-fonts-extra
+    * the 'fancyvrb' package for LaTex
+
+      In Ubuntu 10.04 the last three bullet items are available from 
+      the texlive-latex-base, texlive-fonts-extra, and 
+      texlive-latex-recommended packages.
 
 Just type 'make' on your command line, and the book should be built in
 build/book.pdf
-
 
 All material in this repository is licensed under a CC-by-nc-sa license:
 <http://creativecommons.org/licenses/by-nc-sa/2.5/> (attribution,
