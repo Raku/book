@@ -11,8 +11,8 @@ simple technique uses so-called I<regular expressions> or I<regexes>:
 
     my $s = 'the quick brown fox jumped over the the lazy dog';
 
-    token word { \w+ [ \' \w+]? }
-    regex dup { <word> \W+ $<word> }
+    my token word { \w+ [ \' \w+]? }
+    my regex dup { <word> \W+ $<word> }
     if $s ~~ m/ <dup> / {
         say "Found '{$<dup><word>}' twice in a row";
     }
@@ -508,8 +508,8 @@ or C<isn't>:
 
 =begin programlisting
 
-    regex word { \w+ [ \' \w+]? }
-    regex dup  { « <word> \W+ $<word> » }
+    my regex word { \w+ [ \' \w+]? }
+    my regex dup  { « <word> \W+ $<word> » }
 
     if $s ~~ m/ <dup> / {
         say "Found '{$<dup><word>}' twice in a row";
@@ -620,8 +620,8 @@ word:
 
 =begin programlisting
 
-    regex word { :ratchet \w+ [ \' \w+]? }
-    regex dup  { <word> \W+ $<word> }
+    my regex word { :ratchet \w+ [ \' \w+]? }
+    my regex dup  { <word> \W+ $<word> }
 
     # no match, doesn't match the 'and'
     # in 'strand' without backtracking
@@ -641,8 +641,8 @@ C<token { ... }>.  The duplicate word searcher is idiomatic when written:
 
 =begin programlisting
 
-    B<token> word { \w+ [ \' \w+]? }
-    regex dup  { <word> \W+ $<word> }
+    my B<token> word { \w+ [ \' \w+]? }
+    my regex dup  { <word> \W+ $<word> }
 
 =end programlisting
 
@@ -653,7 +653,7 @@ A token that also switches on the C<:sigspace> modifier is a C<rule>:
 
 =begin programlisting
 
-    rule wordlist { <word> ** \, 'and' <word> }
+    my rule wordlist { <word> ** \, 'and' <word> }
 
 =end programlisting
 
@@ -817,8 +817,8 @@ assertions, though usually not quite as efficient:
 
     my $s = "the quick\nbrown fox jumped\nover the the lazy dog";
 
-    token word { \w+ [ \' \w+]? }
-    regex dup { <word> \W+ $<word> }
+    my token word { \w+ [ \' \w+]? }
+    my regex dup { <word> \W+ $<word> }
     if $s ~~ m/ <dup> / {
         my ($line, $column) = line-and-column($/);
         say "Found '{$<dup><word>}' twice in a row";

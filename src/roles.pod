@@ -16,9 +16,9 @@ simple commands.
     # does provide opportunities to discuss runtime mixins, compile time
     # composition, requirements and a few other bits.
 
-    regex nick { \w+ }
-    regex join-line { ... <nick> ... }
-    regex message-line { $<sender>=[...] $<message>=[...] }
+    my regex nick { \w+ }
+    my regex join-line { ... <nick> ... }
+    my regex message-line { $<sender>=[...] $<message>=[...] }
 
     class IRCBot {
         has $.bot-nick;
