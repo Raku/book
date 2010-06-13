@@ -100,7 +100,7 @@ A variable name begins with a I<sigil>, which is a non-word character such as
 C<$>, C<@>, C<%>, or C<&>--or occasionally the double colon C<::>. The sigils
 usually restrict the variable to some particular type. After the sigil comes an
 I<identifier>, which may consist of letters, digits and the underscore. Between
-letters you can also use a dash C<-> or a hyphen C<'>, so C<isn't> and
+letters you can also use a dash C<-> or an apostrophe C<'>, so C<isn't> and
 C<double-click> are valid identifiers.
 
 X<variable; scalar>
