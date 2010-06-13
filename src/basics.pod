@@ -195,7 +195,7 @@ During the first iteration, C<$line> will contain the string C<Ana vs Dave |
 
 =begin programlisting
 
-        my ($pairing, $result) = $line.split(' | ');
+    my ($pairing, $result) = $line.split(' | ');
 
 =end programlisting
 
@@ -211,8 +211,8 @@ The next two lines follow the same pattern:
 
 =begin programlisting
 
-        my ($p1, $p2) = $pairing.split(' vs ');
-        my ($r1, $r2) = $result.split(':');
+    my ($p1, $p2) = $pairing.split(' vs ');
+    my ($r1, $r2) = $result.split(':');
 
 =end programlisting
 
@@ -282,8 +282,8 @@ The program then counts the number of sets each player has won:
 
 =begin programlisting
 
-        %sets{$p1} += $r1;
-        %sets{$p2} += $r2;
+    %sets{$p1} += $r1;
+    %sets{$p2} += $r2;
 
 =end programlisting
 
@@ -291,8 +291,8 @@ This is a shortcut for:
 
 =begin programlisting
 
-        %sets{$p1} = %sets{$p1} + $r1;
-        %sets{$p2} = %sets{$p2} + $r2;
+    %sets{$p1} = %sets{$p1} + $r1;
+    %sets{$p2} = %sets{$p2} + $r2;
 
 =end programlisting
 
@@ -318,11 +318,11 @@ lines have run for the first time, C<%sets> contains C<< 'Ana' => 3, 'Dave' =>
 
 =begin programlisting
 
-        if $r1 > $r2 {
-            %matches{$p1}++;
-        } else {
-            %matches{$p2}++;
-        }
+    if $r1 > $r2 {
+        %matches{$p1}++;
+    } else {
+        %matches{$p2}++;
+    }
 
 =end programlisting
 
