@@ -1,0 +1,117 @@
+\documentclass[DIV=15,11pt,a4paper,oneside,automark,toc=graduated,parskip=half,headsepline=on,footsepline=off,chapterprefix=on]{scrbook}
+
+% Encodings
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[english]{babel}
+
+% Fonts
+\usepackage{bera}
+
+\usepackage{graphics,graphicx}
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{fancyvrb}
+
+\usepackage{makeidx}
+\usepackage[colorlinks=false,pagebackref]{hyperref}
+\usepackage[stretch=15,shrink=15,step=3]{microtype}
+\usepackage{url}
+\usepackage{makeidx}
+\usepackage{titlesec}
+\usepackage[english]{varioref}
+
+\usepackage{tocstyle}
+\usetocstyle{allwithdot}
+
+% Listings package is currently not used, however, its configuration is there.
+\usepackage{listings}
+% This defines the carriage return arrow for long lines
+\def\nl{\space\raisebox{0pt}[0pt]{\ensuremath{\hookleftarrow}}}
+\definecolor{lightgray}{RGB}{250,250,250}
+\definecolor{darkgray}{RGB}{100,100,100}
+\definecolor{gray}{RGB}{150,150,150}
+\definecolor{darkblue}{RGB}{0,0,150}
+\lstset{
+  language=perl,
+  basicstyle=\ttfamily\small\mdseries,
+  columns=fullflexible,
+  keywordstyle=\bfseries\color{darkblue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  extendedchars=true,
+  numbers=left,
+  numberstyle=\scriptsize\color{darkgray},
+  stepnumber=1,
+  breaklines=true,
+  tabsize=4,
+  backgroundcolor=\color{lightgray},
+  captionpos=b,
+  float=htb,
+  xleftmargin=\bigskipamount,
+  xrightmargin=\bigskipamount,
+  aboveskip=\bigskipamount,
+  belowskip=\bigskipamount,
+  escapechar=\§,
+  showspaces=false,
+  showstringspaces=true,
+  frame=none,
+  numberbychapter=true,
+  prebreak=\nl,
+  inputencoding=utf8
+}
+
+\deffootnote{1.5em}{1.5em}{\makebox[1.5em][c]{\textsuperscript\thefootnotemark}}
+
+\renewcommand*{\partformat}{}
+%\renewcommand*{\chapterformat}{\thechapter\autodot}
+\renewcommand*{\othersectionlevelsformat}[3]{}
+\renewcommand*{\chaptermarkformat}{}
+\renewcommand*{\sectionmarkformat}{}
+
+
+\usepackage[headsepline,nouppercase,automark]{scrpage2}
+\clearscrheadfoot% das beinhaltet auch \clearscrplain
+\ofoot[\pagemark]{\pagemark}% optionales Argument --> plain
+\ohead{\headmark}
+\setheadsepline{0.3pt}
+\setkomafont{pagehead}{
+  \normalfont\sffamily\bfseries
+}
+\pagestyle{scrheadings}
+
+% shadowbox
+\newsavebox{\sidebarcontent}
+\newenvironment{sidebar}[1][]{\begin{lrbox}{\sidebarcontent}\begin{minipage}{3.5in}\sloppy
+\ifx\relax#1\else\centerline{\large\bfseries #1}\par\fi}
+{\end{minipage}\end{lrbox}\begin{center}\shadowbox{\usebox{\sidebarcontent}}\end{center}}
+
+\makeindex
+
+\newcommand*\mytitle{Using Perl~6}
+\title{\mytitle}
+\ihead{\mytitle}
+
+\author{
+Jonathan S. Duff\\
+Moritz Lenz\\
+Carl Mäsak\\
+Patrick R. Michaud\\
+Jonathan Worthington}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+[% content %]
+
+\printindex
+
+\end{document}

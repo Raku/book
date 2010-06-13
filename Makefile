@@ -1,11 +1,11 @@
 CHAPTERS =src/preface.pod \
           src/basics.pod \
           src/operators.pod \
-		  src/subs-n-sigs.pod \
-		  src/multi-dispatch.pod \
-		  src/classes-and-objects.pod \
-		  src/regexes.pod \
-		  src/grammars.pod
+	  src/subs-n-sigs.pod \
+	  src/multi-dispatch.pod \
+	  src/classes-and-objects.pod \
+	  src/regexes.pod \
+	  src/grammars.pod
 
 # If you're on a Mac, and installed Inkscape via MacPorts, you might want to
 # manually uncomment the next line, and remove the one after it.
@@ -26,7 +26,7 @@ build/book.html: $(CHAPTERS) bin/book-to-html
 build/book.pdf:	build/book.tex build/mmd-table.pdf
 	cd build && pdflatex book.tex && makeindex book && pdflatex book.tex
 
-build/book.tex: $(CHAPTERS) bin/book-to-latex
+build/book.tex: $(CHAPTERS) src/latex.style bin/book-to-latex
 	perl bin/book-to-latex $(CHAPTERS) > build/book.tex
 
 clean: 

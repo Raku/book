@@ -1,40 +1,23 @@
 #!perl -w
 use strict;
-use Pod::PseudoPod::LaTeX 1.101050;
+use warnings;
 
-print <<'HEADER';
-\documentclass[11pt,a4paper,oneside]{report}
-\usepackage{graphics,graphicx}
-\usepackage{colortbl}
-\usepackage{fancyvrb}
-\usepackage[T1]{fontenc}
-\usepackage{bera}
-\usepackage[utf8]{inputenc}
-\usepackage{makeidx}
-\usepackage[colorlinks=true,pagebackref]{hyperref}
+use lib 'lib';
 
-\makeindex
+use Pod::PseudoPod::LaTeX::Perl6book;
+use Template;
 
-\title{Using Perl~6}
-\author{Jonathan S. Duff, Moritz Lenz, Carl Mäsak, Patrick R. Michaud, Jonathan Worthington}
- 
-\begin{document}
-
-\maketitle
-
-\tableofcontents
-HEADER
+my $output;
 
 for (@ARGV) {
-    my $parser = Pod::PseudoPod::LaTeX->new();
+    my $parser = Pod::PseudoPod::LaTeX::Perl6book->new();
     $parser->codes_in_verbatim(1);
-    $parser->output_fh( *STDOUT );
-    $parser->parse_file( $_ );
+    $parser->output_string( \$output );
+    $parser->parse_file($_);
 }
 
-print <<'FOOTER';
+my $tt = Template->new({
+    INCLUDE_PATH => 'src',
+});
 
-\printindex
-
-\end{document}
-FOOTER
+$tt->process( 'latex.style', { content => $output } );
