@@ -10,6 +10,8 @@
     It would be nice to actually show the correct line number when going through a code block
     step-by-step like in the Basics section
 *** Styling the code blocks -- currently, no background color is possible.
+*** make quotes in \verb|...| and Verbatim environments plain ASCII quotes
+    (might be fixed already...)
 * Remove as much of \vspace statements from Pod::PseudoPod::LaTeX as possible
 * Move book generation to "rubber"
   Too much cruft stays behind after generation and besides, rubber can automatically decide to re-run pdflatex.
