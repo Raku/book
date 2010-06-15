@@ -31,6 +31,42 @@ BEGIN {
     } ## end for my $level ( 1 .. 5 )
 } ## end BEGIN
 
+sub start_B {
+    my $self = shift;    
+    my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
+    if ( $target eq 'programlisting' ) {
+        return;
+    }    
+    $self->{scratch} .= '\\textbf{';    
+}
+
+sub start_U {
+    my $self = shift;
+    $self->{scratch} .= '\\url{';    
+}
+
+sub end_U {
+    my $self = shift;
+    $self->{scratch} .= '}';
+}
+
+sub end_B {
+    my $self = shift;
+    my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
+    if ( $target eq 'programlisting' ) {
+        return;
+    }
+    $self->{scratch} .= '}';
+}
+
+sub encode_verbatim_text {
+    my ($self, $text) = @_;
+
+    # No encoding needed!    
+    return $text;
+}
+
+
 # Overload because of custom formatting for programlisting sections
 sub start_Verbatim {
     my $self  = shift;
@@ -38,17 +74,35 @@ sub start_Verbatim {
 
     my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
 
-    my $verb_options =
-        'commandchars=\\\\\{\},frame=lines,xleftmargin=1ex,fillcolor=\color{lightgray},showspaces=false,fontsize=\\small,gobble=4';
     if ( $target eq 'screen' ) {
-        $verb_options .= ',labelposition=topline,label=' . $self->{labels}{screen};
+        my $verb_options = 'label=' . $self->{labels}{screen};
+        $self->{scratch} .= "\\begin{Verbatim}[$verb_options]\n";
+    } elsif ( $target eq 'programlisting' ) {
+        $self->{scratch} .= "\\begin{perlcode}\n";
+    } else {
+        $self->{scratch} .= "\\begin{Verbatim}\n";        
     }
-    if ( $target eq 'programlisting' ) {
-        $verb_options .= ',numbers=left,tabsize=4,numberblanklines=false';
-    }
-    $self->{scratch} .= "\\begin{Verbatim}[$verb_options]\n";
+    
     $self->{flags}{in_verbatim}++;
 } ## end sub start_Verbatim
+
+sub end_Verbatim
+{
+    my $self = shift;
+
+    my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
+
+    if ( $target eq 'programlisting' ) {
+        $self->{scratch} .= "\n\\end{perlcode}\n";
+    } else {
+        $self->{scratch} .= "\n\\end{Verbatim}\n";
+    }
+   
+    $self->{flags}{in_verbatim}--;
+    $self->emit();
+}
+
+
 
 # This sub is overloaded because one line has been removed
 # We do want ligatures to look good, gotta find out why it got removed in the first place
@@ -68,24 +122,24 @@ sub encode_text {
 
     $text =~ s/(\\backslash)/\$$1\$/g;                               # add unescaped dollars
 
-    # use the right beginning quotes
-    $text =~ s/(^|\s)"/$1``/g;
-
-    # and the right ending quotes
-    $text =~ s/"(\W|$)/''$1/g;
-
+    # Quotes are gone now too -- csquotes is the right package for that
+    
     # fix the ellipses
     $text =~ s/\.{3}\s*/\\ldots /g;
 
-    # fix emdashes
-    $text =~ s/\s--\s/---/g;
+    # Better be fixed in text directly!
+    # $text =~ s/\s--\s/---/g;
 
-    # fix tildes
-    $text =~ s/~/\$\\sim\$/g;
+    # Probably not needed, since tildes should look nice when we've got the right font
+    # $text =~ s/~/\$\\sim\$/g;
 
     # suggest hyphenation points for module names
     $text =~ s/::/::\\-/g;
 
+    # Non-breakable spaces
+    $text =~ s/Perl 6/Perl~6/g;
+    $text =~ s/Perl 5/Perl~5/g;
+    
     return $text;
 } ## end sub encode_text
 

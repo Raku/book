@@ -1,68 +1,107 @@
-\documentclass[DIV=15,11pt,a4paper,oneside,automark,toc=graduated,parskip=half,headsepline=on,footsepline=off,chapterprefix=on]{scrbook}
+\documentclass[DIV=12,9pt,[% size %]paper,oneside,automark,toc=graduated,parskip=full,headsepline=on,footsepline=off,chapterprefix=on]{scrbook}
 
-% Encodings
-\usepackage{ucs}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-
+\usepackage{xunicode}
+\usepackage{xltxtra}
 \usepackage[english]{babel}
+\usepackage{fontspec}
 
 % Fonts
-\usepackage{bera}
+%\usepackage{fourier}
 
+
+\setromanfont[Mapping=tex-text]{DejaVu Serif}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+%% \setmonofont{Consolas}++
+\setmonofont{Inconsolata}
+
+\usepackage{csquotes}
 \usepackage{graphics,graphicx}
 \usepackage{colortbl}
-\usepackage{color}
+\usepackage[svgnames]{xcolor}
 \usepackage{fancybox}
 \usepackage{fancyvrb}
 
 \usepackage{makeidx}
-\usepackage[colorlinks=false,pagebackref]{hyperref}
+\usepackage{hyperref}
 \usepackage[stretch=15,shrink=15,step=3]{microtype}
 \usepackage{url}
 \usepackage{makeidx}
 \usepackage{titlesec}
 \usepackage[english]{varioref}
 
+\usepackage{minted}
+
 \usepackage{tocstyle}
 \usetocstyle{allwithdot}
 
-% Listings package is currently not used, however, its configuration is there.
-\usepackage{listings}
-% This defines the carriage return arrow for long lines
-\def\nl{\space\raisebox{0pt}[0pt]{\ensuremath{\hookleftarrow}}}
+\hypersetup{
+  pdftitle={Using Perl~6},
+  colorlinks,%
+  citecolor=black,%
+  filecolor=black,%
+  linkcolor=black,%
+  urlcolor=black,
+  unicode,
+  pagebackref,
+}
+
+%% \textheight 571pt
+%% \topmargin 18pt
+%% \oddsidemargin 49pt
+%% \marginparwidth 53pt
+
+\DeclareUrlCommand\email{\urlstyle{rm}\urlstyle{bf}}
+
+\MakeOuterQuote{"}
+\MakeInnerQuote{'}
+\MakeBlockQuote{<}{|}{>}
+
+\RecustomVerbatimEnvironment
+{Verbatim}{Verbatim}
+{commandchars=\\\{\},fontsize=\small,gobble=4,labelposition=topline}
+
 \definecolor{lightgray}{RGB}{250,250,250}
 \definecolor{darkgray}{RGB}{100,100,100}
 \definecolor{gray}{RGB}{150,150,150}
 \definecolor{darkblue}{RGB}{0,0,150}
-\lstset{
-  language=perl,
-  basicstyle=\ttfamily\small\mdseries,
-  columns=fullflexible,
-  keywordstyle=\bfseries\color{darkblue},
-  commentstyle=\color{gray},
-  stringstyle=\color{red},
-  extendedchars=true,
-  numbers=left,
-  numberstyle=\scriptsize\color{darkgray},
-  stepnumber=1,
-  breaklines=true,
-  tabsize=4,
-  backgroundcolor=\color{lightgray},
-  captionpos=b,
-  float=htb,
-  xleftmargin=\bigskipamount,
-  xrightmargin=\bigskipamount,
-  aboveskip=\bigskipamount,
-  belowskip=\bigskipamount,
-  escapechar=\§,
-  showspaces=false,
-  showstringspaces=true,
-  frame=none,
-  numberbychapter=true,
-  prebreak=\nl,
-  inputencoding=utf8
-}
+\usemintedstyle{perldoc}
+\newminted{perl}{escapeinside=||,linenos,bgcolor=lightgray,samepage=false,showspaces=false,tabsize=4,numberblanklines=false}
+
+%% \renewcommand{\FancyVerbFormatLine}[1]{%
+%% \colorbox{LemonChiffon}{\parbox{\columnwidth}{#1}}}
+
+% Listings package is currently not used, however, its configuration is there.
+% \usepackage{listings}
+% This defines the carriage return arrow for long lines
+%% \def\nl{\space\raisebox{0pt}[0pt]{\ensuremath{\hookleftarrow}}}
+%% \lstset{
+%%   language=perl,
+%%   basicstyle=\ttfamily\small\mdseries,
+%%   columns=fullflexible,
+%%   keywordstyle=\bfseries\color{darkblue},
+%%   commentstyle=\color{gray},
+%%   stringstyle=\color{red},
+%%   extendedchars=true,
+%%   numbers=left,
+%%   numberstyle=\scriptsize\color{darkgray},
+%%   stepnumber=1,
+%%   breaklines=true,
+%%   tabsize=4,
+%%   backgroundcolor=\color{lightgray},
+%%   captionpos=b,
+%%   float=htb,
+%%   xleftmargin=\bigskipamount,
+%%   xrightmargin=\bigskipamount,
+%%   aboveskip=\bigskipamount,
+%%   belowskip=\bigskipamount,
+%%   escapechar=\§,
+%%   showspaces=false,
+%%   showstringspaces=true,
+%%   frame=none,
+%%   numberbychapter=true,
+%%   prebreak=\nl,
+%%   inputencoding=utf8
+%% }
 
 \deffootnote{1.5em}{1.5em}{\makebox[1.5em][c]{\textsuperscript\thefootnotemark}}
 
@@ -98,7 +137,7 @@
 \author{
 Jonathan S. Duff\\
 Moritz Lenz\\
-Carl Mäsak\\
+Carl Maesak\\
 Patrick R. Michaud\\
 Jonathan Worthington}
 
