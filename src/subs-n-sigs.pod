@@ -28,9 +28,9 @@ For example, in:
 
 =begin programlisting
 
- sub panic() {
-     say "Oh no! Something has gone most terribly wrong!";
- }
+    sub panic() {
+        say "Oh no! Something has gone most terribly wrong!";
+    }
 
 =end programlisting
 
@@ -54,18 +54,18 @@ C<our> to make the subroutine available globally within the current package:
 
 =begin programlisting
 
- {
-     our sub eat() {
-         say "om nom nom";
-     }
+    {
+        our sub eat() {
+            say "om nom nom";
+        }
 
-     sub drink() {
-         say "glug glug";
-     }
- }
+        sub drink() {
+            say "glug glug";
+        }
+    }
 
- eat();    # om nom nom
- drink();  # fails, can't drink outside of the block
+    eat();    # om nom nom
+    drink();  # fails, can't drink outside of the block
 
 =end programlisting
 
@@ -86,21 +86,21 @@ subroutines:
 
 =begin programlisting
 
- my $dance = '';
- my %moves =
-     hands-over-head => sub { $dance ~= '/o\ '   },
-     bird-arms       => sub { $dance ~= '|/o\| ' },
-     left            => sub { $dance ~= '>o '    },
-     right           => sub { $dance ~= 'o< '    },
-     arms-up         => sub { $dance ~= '\o/ '   };
+    my $dance = '';
+    my %moves =
+        hands-over-head => sub { $dance ~= '/o\ '   },
+        bird-arms       => sub { $dance ~= '|/o\| ' },
+        left            => sub { $dance ~= '>o '    },
+        right           => sub { $dance ~= 'o< '    },
+        arms-up         => sub { $dance ~= '\o/ '   };
 
- my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+    my @awesome-dance = <arms-up bird-arms right hands-over-head>;
 
- for @awesome-dance -> $move {
-     %moves{$move}.();
- }
+    for @awesome-dance -> $move {
+        %moves{$move}.();
+    }
 
- say $dance;
+    say $dance;
 
 =end programlisting
 
@@ -127,12 +127,12 @@ to which incoming arguments are bound.
 
 =begin programlisting
 
- sub order-beer($type, $pints) {
-     say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
- }
+    sub order-beer($type, $pints) {
+        say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+    }
 
- order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
- order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
+    order-beer('Hobgoblin', 1);    # A pint of Hobgoblin, please.
+    order-beer('Zlatý Bažant', 3); # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
 
@@ -149,14 +149,14 @@ exception thrown:
 
 =begin programlisting
 
- sub make-it-more-so($it is rw) {
-     $it ~= substr($it, $it.chars - 1) x 5;
- }
+    sub make-it-more-so($it is rw) {
+        $it ~= substr($it, $it.chars - 1) x 5;
+    }
 
- my $happy = "yay!";
- make-it-more-so($happy);
- say $happy;                # yay!!!!!!
- make-it-more-so("uh-oh");  # Fails; can't modify a constant
+    my $happy = "yay!";
+    make-it-more-so($happy);
+    say $happy;                # yay!!!!!!
+    make-it-more-so("uh-oh");  # Fails; can't modify a constant
 
 =end programlisting
 
@@ -165,14 +165,14 @@ subroutine--to leave the original untouched--mark the parameter C<is copy>:
 
 =begin programlisting
 
- sub say-it-one-higher($it is copy) {
-     $it++;
-     say $it;
- }
+    sub say-it-one-higher($it is copy) {
+        $it++;
+        say $it;
+    }
 
- my $unanswer = 41;
- say-it-one-higher($unanswer);  # 42
- say-it-one-higher(41);         # 42
+    my $unanswer = 41;
+    say-it-one-higher($unanswer);  # 42
+    say-it-one-higher(41);         # 42
 
 =end programlisting
 
@@ -190,15 +190,15 @@ something that matches this constraint will cause the call to fail.
 
 =begin programlisting
 
- sub shout-them(@words) {
-     for @words -> $w {
-         print uc("$w ");
-     }
- }
+    sub shout-them(@words) {
+        for @words -> $w {
+            print uc("$w ");
+        }
+    }
 
- my @last_words = <do not want>;
- shout-them(@last_words);  # DO NOT WANT
- shout-them('help');       # Fails; a string is not iterable
+    my @last_words = <do not want>;
+    shout-them(@last_words);  # DO NOT WANT
+    shout-them('help');       # Fails; a string is not iterable
 
 =end programlisting
 
@@ -210,13 +210,13 @@ callable parameter without using the C<&> sigil:
 
 =begin programlisting
 
- sub do-it-lots(&it, $how-many-times) {
-     for 1..$how-many-times {
-         it();
-     }
- }
+    sub do-it-lots(&it, $how-many-times) {
+        for 1..$how-many-times {
+            it();
+        }
+    }
 
- do-it-lots(sub { say "Eating a stroopwafel" }, 10);
+    do-it-lots(sub { say "Eating a stroopwafel" }, 10);
 
 =end programlisting
 
@@ -234,8 +234,8 @@ Likewise, you can interpolate hashes into named arguments:
 
 =begin programlisting
 
- my %user-preferences = ( from => 'Northern Sea' );
- order-shrimps(3, |%user-preferences)
+    my %user-preferences = ( from => 'Northern Sea' );
+    order-shrimps(3, |%user-preferences)
 
 =end programlisting
 
@@ -250,12 +250,12 @@ Either assign a default value to the parameter in the signature:
 
 =begin programlisting
 
- sub order-steak($how = 'medium') {
-     say "I'd like a steak, $how";
- }
+    sub order-steak($how = 'medium') {
+        say "I'd like a steak, $how";
+    }
 
- order-steak();
- order-steak('well done');
+    order-steak();
+    order-steak('well done');
 
 =end programlisting
 
@@ -264,12 +264,12 @@ parameter bind to an undefined value if no argument is passed:
 
 =begin programlisting
 
- sub order-burger($type, $side?) {
-    say "I'd like a $type burger" ~
-        defined($side) ?? " with a side of $side" !! "";
- }
+    sub order-burger($type, $side?) {
+       say "I'd like a $type burger" ~
+           ( defined($side) ?? " with a side of $side" !! "" );
+    }
 
- order-burger("triple bacon", "deep fried onion rings");
+    order-burger("triple bacon", "deep fried onion rings");
 
 =end programlisting
 
@@ -282,14 +282,14 @@ matter:
 
 =begin programlisting
 
- sub order-beer($type, $pints) {
-     say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
- }
+    sub order-beer($type, $pints) {
+        say ($pints == 1 ?? 'A pint' !! "$pints pints") ~ " of $type, please."
+    }
 
- order-beer(type => 'Hobgoblin', pints => 1);
+    order-beer(type => 'Hobgoblin', pints => 1);
     # A pint of Hobgoblin, please.
 
- order-beer(pints => 3, type => 'Zlatý Bažant');
+    order-beer(pints => 3, type => 'Zlatý Bažant');
     # 3 pints of Zlatý Bažant, please.
 
 =end programlisting
@@ -300,13 +300,13 @@ To do this, precede the name of the parameter with a colon:
 
 =begin programlisting
 
- sub order-shrimps($count, :$from = 'North Sea') {
-     say "I'd like $count pieces of shrimp from the $from, please";
- }
+    sub order-shrimps($count, :$from = 'North Sea') {
+        say "I'd like $count pieces of shrimp from the $from, please";
+    }
 
- order-shrimps(6);                       # takes the default value 'North Sea'
- order-shrimps(4, from => 'Atlantic Ocean');
- order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
+    order-shrimps(6);                       # takes the default value 'North Sea'
+    order-shrimps(4, from => 'Atlantic Ocean');
+    order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
 
 =end programlisting
 
@@ -315,12 +315,12 @@ a C<!> at the end makes one mandatory.
 
 =begin programlisting
 
- sub design-ice-cream-mixture(:$name!, $base = 'Vanilla', @mixins) {
-    say "Creating a new recipe named $name!"
- }
+    sub design-ice-cream-mixture(:$name!, $base = 'Vanilla', @mixins) {
+        say "Creating a new recipe named $name!"
+    }
 
- design-ice-cream-mixture(name => 'Plain');
- design-ice-cream-mixture(base => 'Strawberry chip'); # missing $name
+    design-ice-cream-mixture(name => 'Plain');
+    design-ice-cream-mixture(base => 'Strawberry chip'); # missing $name
 
 =end programlisting
 
@@ -333,11 +333,11 @@ argument that is passed to a variable of a different name:
 
 =begin programlisting
 
- sub announce-time(:dinner($supper) = '8pm') {
-     say "We eat dinner at $supper";
- }
+    sub announce-time(:dinner($supper) = '8pm') {
+        say "We eat dinner at $supper";
+    }
 
- announce-time(dinner => '9pm');      # We eat dinner at 9pm
+    announce-time(dinner => '9pm');      # We eat dinner at 9pm
 
 =end programlisting
 
@@ -346,24 +346,24 @@ others are Americans, you might write:
 
 =begin programlisting
 
- sub paint-rectangle(
-         :$x = 0,
-         :$y = 0,
-         :$width = 100,
-         :$height = 50,
-         :color(:colour($c))) {
+    sub paint-rectangle(
+            :$x = 0,
+            :$y = 0,
+            :$width = 100,
+            :$height = 50,
+            :color(:colour($c))) {
 
-    # print a piece of SVG that reprents a rectangle
-    say qq[<rect x="$x" y="$y" width="$width" height="$height"
-                 style="fill: $c" />]
- }
+       # print a piece of SVG that reprents a rectangle
+       say qq[<rect x="$x" y="$y" width="$width" height="$height"
+                     style="fill: $c" />]
+    }
 
- # both calls work the same
- paint-rectangle :color<Blue>;
- paint-rectangle :colour<Blue>;
+    # both calls work the same
+    paint-rectangle :color<Blue>;
+    paint-rectangle :colour<Blue>;
 
- # of course you can still fill the other options
- paint-rectangle :width(30), :height(10), :colour<Blue>;
+    # of course you can still fill the other options
+    paint-rectangle :width(30), :height(10), :colour<Blue>;
 
 =end programlisting
 
@@ -382,9 +382,9 @@ three calls all mean the same thing:
 
 =begin programlisting
 
- announce-time(dinner => '9pm');
- announce-time(:dinner('9pm'));
- announce-time(:dinner<9pm>);
+    announce-time(dinner => '9pm');
+    announce-time(:dinner('9pm'));
+    announce-time(:dinner<9pm>);
 
 =end programlisting
 
@@ -393,8 +393,8 @@ of the pair:
 
 =begin programlisting
 
- toggle-blender( :enabled); # enables  the blender
- toggle-blender(:!enabled); # disables the blender
+    toggle-blender( :enabled); # enables  the blender
+    toggle-blender(:!enabled); # disables the blender
 
 =end programlisting
 
@@ -407,8 +407,8 @@ key of the pair.
 
 =begin programlisting
 
- my $dinner = '9pm';
- announce-dinner :$dinner;  # same as dinner => $dinner;
+    my $dinner = '9pm';
+    announce-dinner :$dinner;  # same as dinner => $dinner;
 
 =end programlisting
 
@@ -501,10 +501,10 @@ object. For example, when populating a hash:
 
 =begin programlisting
 
- # TODO: better example
- my $black = 12;
- my %color-popularities = :$black, :blue(8),
-                          red => 18, :white<0>;
+    # TODO: better example
+    my $black = 12;
+    my %color-popularities = :$black, :blue(8),
+                             red => 18, :white<0>;
 
 =end programlisting
 
@@ -525,18 +525,18 @@ name accomplishes this:
 
 =begin programlisting
 
- sub shout-them(*@words) {
-     for @words -> $w {
-         print uc("$w ");
-     }
- }
+    sub shout-them(*@words) {
+        for @words -> $w {
+            print uc("$w ");
+        }
+    }
 
- # now you can pass items
- shout-them('go');           # GO
- shout-them('go', 'home');   # GO HOME
+    # now you can pass items
+    shout-them('go');           # GO
+    shout-them('go', 'home');   # GO HOME
 
- my @words = ('go', 'home');
- shout-them(@words);         # still works
+    my @words = ('go', 'home');
+    shout-them(@words);         # still works
 
 =end programlisting
 
@@ -549,14 +549,14 @@ to another routine, for example:
 
 =begin programlisting
 
- sub debug-wrapper(&code, *@positional, *%named) {
-     warn "Calling '&code.name()' with arguments "
-          ~ "@positional.perl(), %named.perl()\n";
-     code(|@positional, |%named);
-     warn "... back from '&code.name()'\n";
- }
+    sub debug-wrapper(&code, *@positional, *%named) {
+        warn "Calling '&code.name()' with arguments "
+             ~ "@positional.perl(), %named.perl()\n";
+        code(|@positional, |%named);
+        warn "... back from '&code.name()'\n";
+    }
 
- debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
+    debug-wrapper(&order-shrimps, 4, from => 'Atlantic Ocean');
 
 =end programlisting
 
@@ -568,18 +568,18 @@ new string for their callers to use:
 
 =begin programlisting
 
- my %moves =
-     hands-over-head => sub { return '/o\ '   },
-     bird-arms       => sub { return '|/o\| ' },
-     left            => sub { return '>o '    },
-     right           => sub { return 'o< '    },
-     arms-up         => sub { return '\o/ '   };
+    my %moves =
+       hands-over-head => sub { return '/o\ '   },
+       bird-arms       => sub { return '|/o\| ' },
+       left            => sub { return '>o '    },
+       right           => sub { return 'o< '    },
+       arms-up         => sub { return '\o/ '   };
 
- my @awesome-dance = <arms-up bird-arms right hands-over-head>;
- for @awesome-dance -> $move {
-     print %moves{$move}.();
- }
- print "\n";
+    my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+    for @awesome-dance -> $move {
+        print %moves{$move}.();
+    }
+    print "\n";
 
 =end programlisting
 
@@ -587,15 +587,15 @@ A Perl subroutine can return multiple values:
 
 =begin programlisting
 
- sub menu {
-     if rand < 0.5 {
-         return ('fish', 'white wine')
-     } else {
-         return ('steak', 'red wine');
-     }
- }
+    sub menu {
+        if rand < 0.5 {
+            return ('fish', 'white wine')
+        } else {
+            return ('steak', 'red wine');
+        }
+    }
 
- my ($food, $beverage) = menu();
+    my ($food, $beverage) = menu();
 
 =end programlisting
 
@@ -607,15 +607,15 @@ simplifies the previous example:
 
 =begin programlisting
 
- sub menu {
-     if rand < 0.5 {
-         'fish', 'white wine'
-     } else {
-         'steak', 'red wine';
-     }
- }
+    sub menu {
+        if rand < 0.5 {
+            'fish', 'white wine'
+        } else {
+            'steak', 'red wine';
+        }
+    }
 
- my ($food, $beverage) = menu();
+    my ($food, $beverage) = menu();
 
 =end programlisting
 
@@ -630,12 +630,12 @@ C<return> has the additional effect of immediately exiting the subroutine:
 
 =begin programlisting
 
- sub create-world(*%characteristics) {
-    my $world = World.new(%characteristics);
-    return $world if %characteristics<temporary>;
+    sub create-world(*%characteristics) {
+        my $world = World.new(%characteristics);
+        return $world if %characteristics<temporary>;
 
-    save-world($world);
- }
+        save-world($world);
+    }
 
 =end programlisting
 
@@ -676,8 +676,8 @@ This produces this output:
 
 =begin screen
 
- 2
- Nominal type check failed for parameter '$a'; expected Numeric but got Str instead
+    2
+    Nominal type check failed for parameter '$a'; expected Numeric but got Str instead
 
 =end screen
 
@@ -694,11 +694,11 @@ parameter with a C<where> block:
 
 =begin programlisting
 
- sub circle-radius-from-area(Numeric $area where { $area >= 0 }) {
-     ($area / pi).sqrt
- }
- say circle-radius-from-area(3);    # OK
- say circle-radius-from-area(-3);   # Error
+    sub circle-radius-from-area(Numeric $area where { $area >= 0 }) {
+        ($area / pi).sqrt
+    }
+    say circle-radius-from-area(3);    # OK
+    say circle-radius-from-area(-3);   # Error
 
 =end programlisting
 
@@ -713,9 +713,9 @@ possible to accept arguments in a certain range by just writing:
 
 =begin programlisting
 
-  sub set-volume(Numeric $volume where 0..11) {
-      say "Turning it up to $volume";
-  }
+    sub set-volume(Numeric $volume where 0..11) {
+        say "Turning it up to $volume";
+    }
 
 =end programlisting
 
@@ -723,16 +723,16 @@ To constrain arguments to those existing as keys of a hash:
 
 =begin programlisting
 
-  my %in-stock = 'Staropramen' => 8, 'Mori' => 5, 'La Trappe' => 9;
+    my %in-stock = 'Staropramen' => 8, 'Mori' => 5, 'La Trappe' => 9;
 
-  sub order-beer(Str $name where %in-stock) {
-      say "Here's your $name";
-      %in-stock{$name}--;
-      if %in-stock{$name} == 0 {
-          say "OH NO! That was the last $name, folks! :'(";
-          %in-stock.delete($name);
-      }
-  }
+    sub order-beer(Str $name where %in-stock) {
+        say "Here's your $name";
+        %in-stock{$name}--;
+        if %in-stock{$name} == 0 {
+            say "OH NO! That was the last $name, folks! :'(";
+            %in-stock.delete($name);
+        }
+    }
 
 =end programlisting
 
@@ -758,16 +758,16 @@ interpolate a capture into an argument by using C<|>:
 
 =begin programlisting
 
-  sub act($left, $right, :$action) {
-      $action($left, $right);
-  }
+    sub act($left, $right, :$action) {
+        $action($left, $right);
+    }
 
-  my @tasks = \(39, 3, action => { say $^a + $^b }),
-              \(6, 7, action => { say $^a * $^b });
+    my @tasks = \(39, 3, action => { say $^a + $^b }),
+                \(6, 7, action => { say $^a * $^b });
 
-  for @tasks -> $task-args {
-      act(|$task-args);
-  }
+    for @tasks -> $task-args {
+        act(|$task-args);
+    }
 
 =end programlisting
 
@@ -786,21 +786,21 @@ C<rw> parameters still work with captures involved.
 
 =begin programlisting
 
-  my $value     = 7;
-  my $to-change = \($value);
+    my $value     = 7;
+    my $to-change = \($value);
 
-  sub double($x is rw) {
-      $x *= 2;
-  }
+    sub double($x is rw) {
+        $x *= 2;
+    }
 
-  sub triple($x is rw) {
-      $x *= 3;
-  }
+    sub triple($x is rw) {
+        $x *= 3;
+    }
 
-  triple(|$to-change);
-  double(|$to-change);
+    triple(|$to-change);
+    double(|$to-change);
 
-  say $value; # 42
+    say $value; # 42
 
 =end programlisting
 
@@ -829,11 +829,11 @@ be called.
 
 =begin programlisting
 
-  sub visit-czechoslovakia(|$plan) {
-      warn "Sorry, this country has been deprecated.";
-      visit-slovakia(|$plan);
-      visit-czech-republic(|$plan);
-  }
+    sub visit-czechoslovakia(|$plan) {
+        warn "Sorry, this country has been deprecated.";
+        visit-slovakia(|$plan);
+        visit-czech-republic(|$plan);
+    }
 
 =end programlisting
 
@@ -851,18 +851,18 @@ that with ordinary slicing access, or you can use signature binding:
 
 =begin programlisting
 
-  sub first-is-largest(@a) {
-      my $first = @a.shift;
-      # TODO: either explain junctions, or find a
-      # concise way to write without them
-      return $first >= all(@a);
-  }
+    sub first-is-largest(@a) {
+        my $first = @a.shift;
+        # TODO: either explain junctions, or find a
+        # concise way to write without them
+        return $first >= all(@a);
+    }
 
-  # same thing:
-  sub first-is-largest(@a) {
-      my :($first, *@rest) := \(|@a)
-      return $first >= all(@rest);
-  }
+    # same thing:
+    sub first-is-largest(@a) {
+        my :($first, *@rest) := \(|@a)
+        return $first >= all(@rest);
+    }
 
 =end programlisting
 
@@ -871,9 +871,9 @@ main signature of a subroutine, you get tremendous power:
 
 =begin programlisting
 
-  sub first-is-largest([$first, *@rest]) {
-      return $first >= all(@rest);
-  }
+    sub first-is-largest([$first, *@rest]) {
+        return $first >= all(@rest);
+    }
 
 =end programlisting
 
@@ -899,18 +899,82 @@ Is this a little too cute?
 
 =begin programlisting
 
- sub create-world(%(:$temporary, *%characteristics)) {
-    my $world = World.new(%characteristics);
-    return $world if $temporary;
+    sub create-world(%(:$temporary, *%characteristics)) {
+        my $world = World.new(%characteristics);
+        return $world if $temporary;
 
-    save-world($world);
- }
+        save-world($world);
+    }
 
 =end programlisting
 
 # TODO: come up with a good example
 
 # TODO: generic object unpacking
+
+=head1 Currying
+
+Consider a module that provided the example from the "Optional Parameters" section:
+
+=begin programlisting
+
+    sub order-burger( $type, $side? ) { ... };
+
+=end programlisting
+
+If you used order-burger repeatedly, but often with a side of french fries, you
+might wish that the author had also provided a "order-burger-and-fries" sub.
+
+You could easily write it yourself:
+
+=begin programlisting
+
+    sub order-burger-and-fries ( $type ) {
+        order-burger( $type, side => 'french fries' );
+    }
+
+=end programlisting
+
+If your personal order is always vegetarian, you might instead wish for a
+"order-the-usual" sub. This is less concise to write, due to the second
+parameter being optional:
+
+=begin programlisting
+
+    sub order-the-usual ( $side? ) {
+        if ( $side.defined ) {
+            order-burger( 'veggie', $side );
+        }
+        else {
+            order-burger( 'veggie' );
+        }
+    }
+
+=end programlisting
+
+Currying gives you a shortcut for these exact cases; it creates a new sub from
+an existing sub, with parameters already filled in. In Perl 6, we curry by
+using the .assuming method.
+
+=begin programlisting
+
+    &order-the-usual        := &order-burger.assuming( 'veggie' );
+    &order-burger-and-fries := &order-burger.assuming( side => 'french fries' );
+
+=end programlisting
+
+The new sub is like any other sub, and works with all the various
+parameter-passing schemes already described.
+
+=begin programlisting
+
+    order-the-usual( 'salsa' );
+    order-the-usual( side => 'broccoli' );
+
+    order-burger-and-fries( 'plain' );
+    order-burger-and-fries( :type<<double-beef>> );
+
+=end programlisting
 
 =head1 Introspection
 
@@ -920,36 +984,36 @@ of their parameters:
 
 =begin programlisting
 
- sub logarithm(Numeric $x, Numeric :$base = exp(1)) {
-     log($x) / log($base);
- }
+    sub logarithm(Numeric $x, Numeric :$base = exp(1)) {
+        log($x) / log($base);
+    }
 
- my @params = &logarithm.signature.params;
- say @params.elems, ' parameters';
+    my @params = &logarithm.signature.params;
+    say @params.elems, ' parameters';
 
- for @params {
-     say "Name:       ", .name;
-     say "  Type:     ", .type;
-     say "  named?    ", .named    ?? 'yes' !! 'no';
-     say "  slurpy?   ", .slurpy   ?? 'yes' !! 'no';
-     say "  optional? ", .optional ?? 'yes' !! 'no';
- }
+    for @params {
+        say "Name:       ", .name;
+        say "  Type:     ", .type;
+        say "  named?    ", .named    ?? 'yes' !! 'no';
+        say "  slurpy?   ", .slurpy   ?? 'yes' !! 'no';
+        say "  optional? ", .optional ?? 'yes' !! 'no';
+    }
 
 =end programlisting
 
 =begin screen
 
- 2 parameters
- Name:       $x
-   Type:     Numeric()
-   named?    no
-   slurpy?   no
-   optional? no
- Name:       $base
-   Type:     Numeric()
-   named?    yes
-   slurpy?   no
-   optional? yes
+    2 parameters
+    Name:       $x
+      Type:     Numeric()
+      named?    no
+      slurpy?   no
+      optional? no
+    Name:       $base
+      Type:     Numeric()
+      named?    yes
+      slurpy?   no
+      optional? yes
 
 =end screen
 

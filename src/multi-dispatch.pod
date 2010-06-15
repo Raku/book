@@ -453,7 +453,7 @@ This can be expressed in Perl 6 as:
 
 =begin programlisting
 
- multi quicksort([]) { () }
+    multi quicksort([]) { () }
 
 =end programlisting
 
@@ -470,11 +470,11 @@ of recursive calls to sort each of the partitions.
 
 =begin programlisting
 
- multi quicksort([$pivot, *@rest]) {
-    my @before = @rest.grep({ $_ <= $pivot });
-    my @after = @rest.grep({ $_ > $pivot });
-    return quicksort(@before), $pivot, quicksort(@after);
- }
+    multi quicksort([$pivot, *@rest]) {
+        my @before = @rest.grep({ $_ <= $pivot });
+        my @after = @rest.grep({ $_ > $pivot });
+        return quicksort(@before), $pivot, quicksort(@after);
+    }
 
 =end programlisting
 

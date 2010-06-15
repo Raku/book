@@ -33,10 +33,10 @@ Output:
 
 =begin screen
 
- Ana     XXXXXXXXXXXXXXXXXXXXXX
- Dave    XXXXXXXXXXXXXXXX
- Charlie XXXXXXXXXXX
- Beth    XXXXXXXXXXX
+    Ana     XXXXXXXXXXXXXXXXXXXXXX
+    Dave    XXXXXXXXXXXXXXXX
+    Charlie XXXXXXXXXXX
+    Beth    XXXXXXXXXXX
 
 =end screen
 
@@ -293,16 +293,16 @@ because they really point to the same object.
 
 =begin programlisting
 
- my @a = 1, 2, 3;
- my @b = 1, 2, 3;
- 
- say @a  === @a;    # 1
- say @a  === @b;    # 0
+    my @a = 1, 2, 3;
+    my @b = 1, 2, 3;
 
- # built-in, immutable types act as singletons:
+    say @a  === @a;    # 1
+    say @a  === @b;    # 0
 
- say 3   === 3;     # 1
- say 'a' === 'a';   # 1
+    # built-in, immutable types act as singletons:
+
+    say 3   === 3;     # 1
+    say 'a' === 'a';   # 1
  
 =end programlisting
 
@@ -321,10 +321,10 @@ of C<0> is assumed.
 
 =begin programlisting
 
- say 1 == 1.0;      # 1
- say 1 == '1';      # 1
- say 1 == '2';      # 0
- say 3 == '3b'      # 1
+    say 1 == 1.0;      # 1
+    say 1 == '1';      # 1
+    say 1 == '2';      # 0
+    say 3 == '3b'      # 1
 
 =end programlisting
 
@@ -337,11 +337,11 @@ in that list.
 
 =begin programlisting
 
- my @colors = <red blue green>;
-  
- if @colors == 3 {
-     say "It's true, @colors contains 3 items";
- }
+    my @colors = <red blue green>;
+
+    if @colors == 3 {
+        say "It's true, @colors contains 3 items";
+    }
 
 =end programlisting
 
@@ -353,9 +353,9 @@ strings if necessary.
 
 =begin programlisting
 
- if $greeting eq 'hello' {
-     say 'welcome';
- }
+    if $greeting eq 'hello' {
+        say 'welcome';
+    }
 
 =end programlisting
 
@@ -487,17 +487,17 @@ It's C<~~>, the smart match operator.
 
 =begin programlisting
 
-  if $pints-drunk ~~ 8 {
-      say "Go home, you've had enough!";
-  }
+    if $pints-drunk ~~ 8 {
+        say "Go home, you've had enough!";
+    }
 
-  if $country ~~ 'Sweden' {
-      say "Meatballs with lingonberries and potato moose, please."
-  }
+    if $country ~~ 'Sweden' {
+        say "Meatballs with lingonberries and potato moose, please."
+    }
 
-  unless $group-size ~~ 2..4 {
-      say "You must have between 2 and 4 people to book this tour.";
-  }
+    unless $group-size ~~ 2..4 {
+        say "You must have between 2 and 4 people to book this tour.";
+    }
 
 =end programlisting
 
