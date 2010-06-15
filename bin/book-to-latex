@@ -1,23 +1,40 @@
-#!perl -w
+#!perl
 use strict;
 use warnings;
+
+use feature ':5.10';
+use Getopt::Long;
 
 use lib 'lib';
 
 use Pod::PseudoPod::LaTeX::Perl6book;
 use Template;
 
-my $output;
+my $size;
 
-for (@ARGV) {
-    my $parser = Pod::PseudoPod::LaTeX::Perl6book->new();
-    $parser->codes_in_verbatim(1);
-    $parser->output_string( \$output );
-    $parser->parse_file($_);
+main();
+
+sub main {
+    GetOptions(
+
+        # Should be one of: a4, letter.
+        'size:s' => \$size,
+    ) or die;
+    build_latex_book();
 }
 
-my $tt = Template->new({
-    INCLUDE_PATH => 'src',
-});
+sub build_latex_book {
+    my $output;
 
-$tt->process( 'latex.style', { content => $output } );
+    for (@ARGV) {
+        my $parser = Pod::PseudoPod::LaTeX::Perl6book->new();
+        $parser->codes_in_verbatim(1);
+        $parser->output_string( \$output );
+        $parser->parse_file($_);
+    }
+
+    my $tt = Template->new( { INCLUDE_PATH => 'src', } );
+
+    $tt->process( 'latex.style', { content => $output, size => $size } );
+
+} ## end sub build_latex_book
