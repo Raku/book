@@ -1,19 +1,24 @@
 * Code blocks
-*** Introduce syntax highlighting into code blocks
+*** Line numbering in code blocks could be better
+    It would be nice to actually show the correct line number when going through a code block
+    step-by-step like in the Basics section
+*** Need to write a lexer for perl6 for Pygments
+    Currently, lexing errors are marked as such
+*** DONE Introduce syntax highlighting into code blocks
     This one is difficult: the proper way to do this is using
     listings.sty, however, it doesn't properly support Unicode (see the
     beer example) and doesn't allow additional highlighting either --
     which is needed for before/after code blocks.
-*** Introduce line wrap into code blocks
+*** DONE Introduce line wrap into code blocks
     Like above: listings.sty is the solution, current verbatim block doesn't support it
-*** Line numbering in code blocks could be better
-    It would be nice to actually show the correct line number when going through a code block
-    step-by-step like in the Basics section
-*** Styling the code blocks -- currently, no background color is possible.
-*** make quotes in \verb|...| and Verbatim environments plain ASCII quotes
-    (might be fixed already...)
-* Remove as much of \vspace statements from Pod::PseudoPod::LaTeX as possible
+*** DONE Styling the code blocks -- currently, no background color is possible.
+    Background color and syntax highlighting is there
+* Remove as many of \vspace statements from Pod::PseudoPod::LaTeX as possible
 * Move book generation to "rubber"
   Too much cruft stays behind after generation and besides, rubber can automatically decide to re-run pdflatex.
-* Get U<> to render as \url{}, not as \emph{}
-* Find some solution for e-mail address formatting, ditto for IRC channel names
+* Make some thoughts about fonts
+  Free fonts seem to suck, sad but true. Alternatives could be the freely available
+  Adobe's MyriadPro and MinionPro. Any alternatives?
+* DONE Find some solution for e-mail address formatting, ditto for IRC channel names
+  Seems U<> is enough for e-mail, channel names could stay C<>'ed
+* DONE Get U<> to render as \url{}, not as \emph{}
