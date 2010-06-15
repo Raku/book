@@ -6,12 +6,8 @@
 \usepackage{fontspec}
 
 % Fonts
-%\usepackage{fourier}
-
-
 \setromanfont[Mapping=tex-text]{DejaVu Serif}
 \setsansfont[Mapping=tex-text]{DejaVu Sans}
-%% \setmonofont{Consolas}++
 \setmonofont{Inconsolata}
 
 \usepackage{csquotes}
@@ -23,7 +19,8 @@
 
 \usepackage{makeidx}
 \usepackage{hyperref}
-\usepackage[stretch=15,shrink=15,step=3]{microtype}
+% Can't use microtype with xelatex yet
+%\usepackage[stretch=15,shrink=15,step=3]{microtype}
 \usepackage{url}
 \usepackage{makeidx}
 \usepackage{titlesec}
@@ -53,7 +50,6 @@
 \DeclareUrlCommand\email{\urlstyle{rm}\urlstyle{bf}}
 
 \MakeOuterQuote{"}
-\MakeInnerQuote{'}
 \MakeBlockQuote{<}{|}{>}
 
 \RecustomVerbatimEnvironment
@@ -67,50 +63,12 @@
 \usemintedstyle{perldoc}
 \newminted{perl}{escapeinside=||,linenos,bgcolor=lightgray,samepage=false,showspaces=false,tabsize=4,numberblanklines=false}
 
-%% \renewcommand{\FancyVerbFormatLine}[1]{%
-%% \colorbox{LemonChiffon}{\parbox{\columnwidth}{#1}}}
-
-% Listings package is currently not used, however, its configuration is there.
-% \usepackage{listings}
-% This defines the carriage return arrow for long lines
-%% \def\nl{\space\raisebox{0pt}[0pt]{\ensuremath{\hookleftarrow}}}
-%% \lstset{
-%%   language=perl,
-%%   basicstyle=\ttfamily\small\mdseries,
-%%   columns=fullflexible,
-%%   keywordstyle=\bfseries\color{darkblue},
-%%   commentstyle=\color{gray},
-%%   stringstyle=\color{red},
-%%   extendedchars=true,
-%%   numbers=left,
-%%   numberstyle=\scriptsize\color{darkgray},
-%%   stepnumber=1,
-%%   breaklines=true,
-%%   tabsize=4,
-%%   backgroundcolor=\color{lightgray},
-%%   captionpos=b,
-%%   float=htb,
-%%   xleftmargin=\bigskipamount,
-%%   xrightmargin=\bigskipamount,
-%%   aboveskip=\bigskipamount,
-%%   belowskip=\bigskipamount,
-%%   escapechar=\§,
-%%   showspaces=false,
-%%   showstringspaces=true,
-%%   frame=none,
-%%   numberbychapter=true,
-%%   prebreak=\nl,
-%%   inputencoding=utf8
-%% }
-
 \deffootnote{1.5em}{1.5em}{\makebox[1.5em][c]{\textsuperscript\thefootnotemark}}
 
 \renewcommand*{\partformat}{}
-%\renewcommand*{\chapterformat}{\thechapter\autodot}
 \renewcommand*{\othersectionlevelsformat}[3]{}
 \renewcommand*{\chaptermarkformat}{}
 \renewcommand*{\sectionmarkformat}{}
-
 
 \usepackage[headsepline,nouppercase,automark]{scrpage2}
 \clearscrheadfoot% das beinhaltet auch \clearscrplain
