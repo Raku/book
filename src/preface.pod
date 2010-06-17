@@ -1,32 +1,32 @@
 =head0 Preface
 
-Perl 6 is a versatile, intuitive and flexible programming language in
-active development. It embraces several paradigms like procedural,
-object oriented and functional programming, as well as offering very
-powerful tools for parsing text.
+Perl 6 is a versatile, intuitive, and flexible programming language in active
+development. It embraces several paradigms like procedural, object oriented,
+and functional programming, and offers powerful tools for parsing text.
 
-Perl 6 is a language specification, and multiple compilers and interpreters
-exist in various stages of completeness. These implementations have in turn
-influenced the design of the Perl 6 programming language by highlighting
-misfeatures, or features that are unnecessarily hard to implement with little
-benefit. So after a gestation period, we have a more cohesive and consistent
-language specification and a compiler that implements a good bit of it.
+Perl 6 is a language specification for which multiple compilers and
+interpreters exist in various stages of completeness. These implementations
+have in turn influenced the design of the Perl 6 programming language by
+highlighting misfeatures, or features that are unnecessarily hard to implement
+with little benefit. From this process we have a more cohesive and consistent
+language specification as well as multiple compilers which implement the
+language.
 
-In the pages that follow, you will be introduced to the Perl 6 language.
-The examples can be run with the I<Rakudo Perl 6> Compiler, but they are in no
-way specific to Rakudo -- any sufficiently advanced Perl 6 implementation can
-run them.  Good luck and -- as the Perl 6 community often says -- have fun!
+This book introduces the Perl 6 language. These examples will all run run with
+the I<Rakudo Perl 6> Compiler, but they are in no way specific to Rakudo--any
+sufficiently advanced Perl 6 implementation can run them.  Good luck and--as
+the Perl 6 community often says--have fun!
 
-This book is a work-in-progress, and it is expected that even releases
-will contain some amount of C<TODO> comments prior to the printing of the
-book.  We've left them in because they might serve as useful cues for the
-reader as well as for us authors about what remains to be done. Even so,
-we pray the reader's indulgence and understanding.
+This book is a work-in-progress. Even releases will contain some amount of
+C<TODO> comments prior to the printing of the book.  We've left them in because
+they might serve as useful cues for the reader as well as for us authors about
+what remains to be done. Even so, we pray the reader's indulgence and
+understanding.
 
 =head1 Audience
 
-This book is primarily for people who want to learn Perl 6 and have some
-experience programming in another programming language. However, no
+This book is primarily for people who want to learn Perl 6. We expect some
+experience programming in another programming language, though no
 prior knowledge of Perl is necessary. After working through this book, a
 programmer should have a solid grasp of the basics of Perl 6. That means
 that they should be able to solve their own problems with Perl 6. This
@@ -35,54 +35,51 @@ book is not a comprehensive reference; it is a series of tutorials.
 =head1 Relationship between Perl 6 and Perl 5
 
 Perl 6 is the newest member of the family of languages known as Perl. It
-represents a major break in syntactic and semantic compatibility from
-Perl 5, thus a major version number increase. However, this does not
-mean that Perl 5 is going away. In fact, quite the opposite. Both Perl 5
-and Perl 6 have an active developer community that each mould the
-language in their own way. Perl 5 developers try to extend the language
-in various ways while keeping backwards compatibility with past versions
-of Perl. Perl 6 developers extend the language by adding new syntactic
-and semantic features that enable more power and expressiveness without
-the restriction of backward compatibility with Perl 5.
+represents a major break in syntactic and semantic compatibility from Perl 5,
+and thus has a major version number increase. However, this does not mean that
+Perl 5 is going away. In fact, quite the opposite. Both Perl 5 and Perl 6 have
+active developer communities which mold the languages. Perl 5 developers try to
+extend the language in various ways while keeping backwards compatibility with
+past versions of Perl. Perl 6 developers extend the language by adding new
+syntactic and semantic features that enable more power and expressiveness
+without the restriction of backward compatibility with Perl 5 or earlier
+versions.
 
-Some might ask, "Why call it Perl if it's a different language?" Perl is
-more than just the vagaries of syntax. Perl is philosophy (there's more
-than one way to do it; easy things easy, hard things possible); Perl is
-custom (unit testing); Perl is architectural edifice (Comprehensive Perl
-Archive Network); Perl is community (perl5porters, perl6-language).
-These are things that both Perl 5 and Perl 6 will share to varying
-degrees. Also, due to Perl's habit of stealing good ideas, Perl 5 and
-Perl 6 will converge in some areas as Perl 5 borrows ideas from Perl 6
-and vice-versa.
+Some might ask, "Why call it Perl if it's a different language?" Perl is more
+than just the vagaries of syntax. Perl is philosophy (there's more than one way
+to do it; easy things easy, hard things possible); Perl is customs
+(comprehensive testing); Perl is architectural edifice (the Comprehensive Perl
+Archive Network); Perl is community (perl5porters, perl6-language).  Both Perl
+5 and Perl 6 share these attributes to varying degrees. Also, due to Perl's
+habit of stealing good ideas, Perl 5 and Perl 6 have converged and will
+continue to do so as Perl 5 borrows ideas from Perl 6 and vice-versa.
 
 =head1 Perl 6 implementations
 
-Perl 6 is a specification. Any implementation that passes the official
-test suite can call itself "Perl 6". There are currently several
-implementations at various levels of maturity. All of the code in this
-book is tested using the Rakudo Perl 6 compiler.
-
-=head1 Organization of the book
-
-Each chapter is a mini-tutorial covering some aspect of Perl 6.
-Later chapters build on concepts introduced in earlier chapters.
-Most chapters contain a sample program in its entirety followed by
-prose that explains the code in detail.
+Perl 6 is a specification. Any implementation that passes the official test
+suite can call itself "Perl 6". Several implementations exist at various levels
+of maturity. All of the code in this book is tested using the Rakudo Perl 6
+compiler.
 
 =head1 Installing Rakudo
 
-Complete instructions for downloading and installing Rakudo can be found
-at U<http://www.rakudo.org/how-to-get-rakudo>. Source code releases are
-available from U<http://github.com/rakudo/rakudo/downloads>. A binary
-release for windows is available from
-U<http://sourceforge.net/projects/parrotwin32/files/>.
+For complete instructions for downloading and installing Rakudo, see
+U<http://www.rakudo.org/how-to-get-rakudo>. Source code releases are available
+from U<http://github.com/rakudo/rakudo/downloads>. A binary release for windows
+is available from U<http://sourceforge.net/projects/parrotwin32/files/>.
 
 =head1 Executing programs
 
-To run a Perl 6 program with Rakudo, include the install directory in
-your system PATH variable and issue a command like:
+To run a Perl 6 program with Rakudo, include the install directory in your
+system C<PATH> variable and issue a command like:
 
     $ perl6 hello.pl
+
+=for author
+
+Did the lexical fix get merged?
+
+=end for
 
 If the Rakudo compiler is invoked without an explicit script to run, it
 enters a small interactive mode that allows Perl 6 statements to be
@@ -99,21 +96,21 @@ to the Perl 6 community, there are more resources available to you:
 
 =item World Wide Web
 
-The Perl 6 homepage can be found at C<http://perl6.org> -- it contains pointers
-to many useful resources.
+The Perl 6 homepage is C<http://perl6.org/>--it contains pointers to many
+useful resources.
 
 =item IRC
 
-There is a channel C<#perl6> on C<irc.freenode.net> dedicated to all things Perl 6.
+The channel C<#perl6> on C<irc.freenode.net> discusses all things Perl 6.
 
 =item Mailing lists
 
 If you need some programming help with Perl 6, send an email to
 C<perl6-users@perl.org>.
 
-For issues regarding the Perl 6 language specification you can contact
-C<perl6-language@perl.org>, for issues regarding Perl 6 compilers, send email
-to C<perl6-compiler@perl.org>
+For issues regarding the Perl 6 language specification contact
+C<perl6-language@perl.org>. For issues regarding Perl 6 compilers, send email
+to C<perl6-compiler@perl.org>.
 
 =back
 
@@ -124,4 +121,3 @@ to C<perl6-compiler@perl.org>
 Surely we'll want to thank some people!  :-)
 
 =end for
-
