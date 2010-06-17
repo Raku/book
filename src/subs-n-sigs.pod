@@ -814,18 +814,14 @@ attributes.
 
 =head2 Captures In Signatures
 
-All calls build a capture on the caller side and unpack it according to the
-signature on the callee side.  It is also possible to write a signature that
-binds the capture itself into a variable. This is especially useful for writing
-routines that delegate to other routines with the same arguments.
+All calls build a capture on the caller side and unpack it according to
+the signature on the callee sideN<An optimizing Perl 6 compiler may, of
+course, be able to optimize away building the capture data structure
+every call if it statically knows what is going to be called.>. It is
+also possible to write a signature that binds the capture itself into a
+variable. This is especially useful for writing routines that delegate
+to other routines with the same arguments.
 
-=begin sidebar
-
-An optimizing Perl 6 compiler may, of course, be able to optimize away building
-the capture data structure every call if it statically knows what is going to
-be called.
-
-=end sidebar
 
 =begin programlisting
 
