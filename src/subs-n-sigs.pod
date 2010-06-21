@@ -141,7 +141,7 @@ variables in your signature are read-only references to the passed arguments.
 You cannot modify them passed-in values within the subroutine.
 
 If read-only binding is too limiting, you have two different ways to relax this
-restriction.  A parameter marked C<is rw> means that you are can modify the
+restriction.  A parameter marked C<is rw> means that you can modify the
 passed argument within the subroutine.  Any modification modifies the original
 in place.  If you attempt to pass a literal or some other constant value for an
 C<rw> parameter, the binding will fail at the point of the call, with an
