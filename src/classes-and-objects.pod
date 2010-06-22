@@ -455,7 +455,7 @@ parallelism rather than cycles:
 
         method perform() {
             unless $!started++ {
-		@!dependencies».perform();
+                @!dependencies».perform();
                 &!callback();
                 $!done = True;
             }
