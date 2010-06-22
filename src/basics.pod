@@ -98,7 +98,8 @@ braces { }.
 X<sigil>
 X<identifier>
 
-A variable name begins with a I<sigil>, which is a non-word character such as
+A variable name begins with a I<sigil>, which is non-alpha-numeric symbol
+such as
 C<$>, C<@>, C<%>, or C<&>--or occasionally the double colon C<::>. The sigils
 usually restrict the variable to a particular type, such as a single value or a
 compound value.  After the sigil comes an I<identifier>, which may consist of
