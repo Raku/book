@@ -51,6 +51,7 @@ reference).
 
     }
 
+
     # test it:
     my $tester = '{
         "country":  "Austria",
@@ -300,7 +301,7 @@ and turns it into a hash by calling the C<hash> method on it.
 
     rule pairlist   { [ <pair> ** [ \, ] ]? }
     # TODO: make that » once RT #75434 is resolved
-    method pairlist($/) { make = $<pair>>>.ast; }
+    method pairlist($/) { make $<pair>>>.ast; }
 
 =end programlisting
 
