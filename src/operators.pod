@@ -113,7 +113,7 @@ actually write C<say 4 + -5>. After the C<+> (an infix operator), the compiler
 expects a term, thus the C<-> is interpreted as a prefix operator to the term
 C<5>.
 
-The next new line containing new features is
+The next line containing new features is
 
 =begin programlisting
 
