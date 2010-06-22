@@ -105,7 +105,7 @@ This prints
 The dot matched an C<l>, C<r>, and C<n>, but it would also match a space in
 the sentence I<< the spectroscoB<pe l>acks resolution >>--regexes don't care
 about word boundaries at all. The special variable C<$/> stores (among other
-things) only the part of the string the matched the regular expression. C<$/>
+things) only the part of the string that matched the regular expression. C<$/>
 holds the so-called I<match object>.
 
 X<regex; \w>
