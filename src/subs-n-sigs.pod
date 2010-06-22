@@ -719,7 +719,7 @@ possible to accept arguments in a certain range by just writing:
 
 =end programlisting
 
-To constrain arguments to those existing as keys of a hash:
+To constrain arguments to those existing keys of a hash:
 
 =begin programlisting
 
