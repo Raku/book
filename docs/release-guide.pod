@@ -17,7 +17,7 @@ should finalize in mid March 2010.
     2009-11-20      PerlJam
     2009-12-18      masak
     2010-04-06      moritz
-    2010-04-23                              Rakudo * Release (?)
+    2010-06-10      moritz
 
 =head1 RELEASE PROCEDURE
 

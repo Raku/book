@@ -1,0 +1,26 @@
+We want a Perl 6 book. We want it badly enough to write it ourselves. So that's
+what we're doing: writing one.
+
+Changes/additions to the Perl 6 book since the previous release:
+
+* Operators
+    - comparison operators, smart matching
+* Subroutines and Signatures
+    - type constraints
+    - captures
+    - introspection
+* Grammar chapter
+    - fixed to work with newest Rakudo
+    - use and explain proto tokens.
+
+* Lots of rendering fixes
+   (Some of these fixes require a new version of Pod::PseudoPod::LaTeX, which
+    isn't released yet. You can get it from http://github.com/moritz/Pod-PseudoPod-LaTeX
+    Until these changes are released to CPAN, the adaptions in the book stay in
+    the branch called 'ng'.)
+
+You can download the preliminary PDF version of the book at
+http://cloud.github.com/downloads/perl6/book/book-2010-06.pdf
+
+Interested? Check out the git repository at <http://github.com/perl6/book>,
+and join us in irc://freenode.net#perl6book.
