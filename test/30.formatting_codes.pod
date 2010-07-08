@@ -1,0 +1,73 @@
+=head0 Formatting codes
+
+Italic, bold, and code:
+
+C<IZ<>E<lt>The quick brown ... lazy dog.E<gt>>: I<The quick brown ... lazy dog.>
+
+C<BZ<>E<lt>The quick brown ... lazy dog.E<gt>>: B<The quick brown ... lazy dog.>
+
+C<CZ<>E<lt>The quick brown ... lazy dog.E<gt>>: C<The quick brown ... lazy dog.>
+
+Links:
+
+C<LZ<>E<lt>nameE<gt>                   >: L<name>
+
+C<LZ<>E<lt>Net::PingE<gt>              >: L<Net::Ping>
+
+C<LZ<>E<lt>crontab(5)E<gt>             >: L<crontab(5)>
+
+C<LZ<>E<lt>name/secE<gt>               >: L<name/sec>
+
+C<LZ<>E<lt>perlsyn/"For Loops"E<gt>    >: L<perlsyn/"For Loops">
+
+C<LZ<>E<lt>/"Object Methods"E<gt>      >: L</"Object Methods">
+
+C<LZ<>E<lt>text|nameE<gt>              >: L<text|name>
+
+C<LZ<>E<lt>Error Messages|perldiagE<gt>>: L<Error Messages|perldiag>
+
+C<LZ<>E<lt>text|name/secE<gt>          >: L<text|name/sec>
+
+C<LZ<>E<lt>http://www.perl.org/E<gt>   >: L<http://www.perl.org/>
+
+Miscellaneous:
+
+C<EZ<>E<lt>ltE<gt>>: E<lt>
+
+C<EZ<>E<lt>gtE<gt>>: E<gt>
+
+C<EZ<>E<lt>verbarE<gt>>: E<verbar>
+
+C<EZ<>E<lt>solE<gt>>: E<sol>
+
+C<EZ<>E<lt>eacuteE<gt>>: E<eacute>
+
+C<EZ<>E<lt>075E<gt>> (equals sign): E<075>
+                           
+C<EZ<>E<lt>181E<gt>> (micro sign): E<181>
+
+BROKEN: C<EZ<>E<lt>0x2260E<gt>> method of Unicode entry appears to break files.
+
+C<EZ<>E<lt>filenameE<gt>>: F<filename>
+
+BROKEN: C<SZ<>E<lt>$blabla ? $blublublu : $bleE<gt>>: S<$blabla ? $blublublu : $ble>
+
+There is an index entry for the topic "index entries" right here.
+X<index entries>
+
+C<$a E<lt>=E<gt> $b>
+
+C<< $a <=> $b >>
+
+C<<< $a <=> $b >>>
+
+And here are different ways of producing in code style "open(X,
+">>thing.dat") || die $! $foo->bar();" (some things appear not to be
+working correctly):
+
+C<<< open(X, ">>thing.dat") || die $! >>> C<< $foo->bar(); >>
+
+C<open(X, "E<gt>E<gt>thing.dat") || die $!> C<$foo-E<gt>bar();>
+
+=for vim: tw=70
+

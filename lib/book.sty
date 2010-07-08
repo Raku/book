@@ -1,0 +1,86 @@
+\documentclass[
+    [% paper %]paper,
+    DIV=12,
+    parskip=full,
+    headsepline=on,
+    footsepline=off,
+    chapterprefix=on,
+    oneside,
+]{scrbook}
+
+    % For the sidebars.
+\usepackage{fancybox}
+
+    % For index generation. Supplies \printindex.
+\usepackage{index}
+
+    % Fonts.
+\usepackage{fontspec}
+\setromanfont[Mapping=tex-text]{DejaVu Serif}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+\setmonofont{Inconsolata}
+
+    % Supplies 'tabular' environment and \rowcolor.
+\usepackage{colortbl}
+
+    % Optimize for this language.
+\usepackage[english]{babel}
+
+    % For code blocks.
+\usepackage{fancyvrb}
+\RecustomVerbatimEnvironment
+{Verbatim}{Verbatim}
+{xleftmargin=0.35in,fontsize=\small,gobble=4,labelposition=topline}
+
+    % Allows among other things the \documentclass '...paper' option
+    % to be passed on to the DVI processor.
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Using Perl~6},
+    colorlinks,
+    linkcolor=black,
+    urlcolor=black,
+}
+
+    % Needed for \includegraphics from '=for figure' in some src/*.pod.
+\usepackage{graphics,graphicx}
+
+    % Shadow box, for sidebars.
+\newsavebox{\sidebarcontent}
+\newenvironment{sidebar}[1][]{\begin{lrbox}{\sidebarcontent}\begin{minipage}{3.5in}\sloppy
+\ifx\relax#1\else\centerline{\large\bfseries #1}\par\fi}
+{\end{minipage}\end{lrbox}
+\begin{center}
+\shadowbox{\usebox{\sidebarcontent}}
+\end{center}}
+
+\makeindex
+
+[% page_dim %]
+
+\newcommand*\mytitle{Using Perl~6}
+\title{\mytitle}
+
+\author{
+    Jonathan S. Duff \\
+    Moritz Lenz \\
+    Carl Mäsak \\
+    Patrick R. Michaud \\
+    Jonathan Worthington \\
+}
+
+    % Clear title page date.
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+[% content %]
+
+\printindex
+
+\end{document}
+
