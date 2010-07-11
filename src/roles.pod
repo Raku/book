@@ -238,11 +238,10 @@ alternative syntax that allows you to list the roles in the class body:
 
 =head2 Calling all candidates
 
-=for author
-
-This needs an index tag or two, but I'm not sure which.
-
-=end for
+X<.* method calls>
+X<.+ method calls>
+X<.? method calls>
+X<calling sets>
 
 The C<process> methods of the roles C<AnswerToAll> and C<AnswerIfTalkedTo> use
 a modified syntax for calling methods:
