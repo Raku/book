@@ -1,4 +1,4 @@
-# --------------------------------------------------------------------
+#!/usr/bin/perl
 use strict;
 use warnings;
 use feature ':5.10';
@@ -6,37 +6,15 @@ use Getopt::Long;
 use Perl6BookLatex;
 use Template;
 
-# --------------------------------------------------------------------
 main();
+
 sub main {
     my $paper;
     GetOptions(
-            # Should be one of: a4, letter.
+
+        # Should be one of: a4, letter.
         'paper:s' => \$paper,
     ) or die;
-        # We set these two dimensions the same for both A4 and letter
-        # paper sizes, so that the page breaks occur at the same place
-        # in both versions.
-    my $textheight = 611;
-    my $textwidth = 360;
-        # This value is based on knowing the paper widths (A4: 595,
-        # paper: 612) and the LaTeX \oddsidemargin for those paper
-        # sizes.
-    my $hoffset;
-    if ($paper eq 'a4') {
-        $hoffset = ((595 - $textwidth) / 2) - 72 - 2;
-    }
-    elsif ($paper eq 'letter') {
-        $hoffset = ((612 - $textwidth) / 2) - 72 - 4;
-    }
-    else {
-        die "Invalid 'paper' option: '$paper'. Should be 'a4' or 'letter'.";
-    }
-    my $page_dim = << "EOT";
-\\textheight ${textheight}pt
-\\textwidth ${textwidth}pt
-\\hoffset ${hoffset}pt
-EOT
 
     my $output;
     for (@ARGV) {
@@ -47,15 +25,13 @@ EOT
         $parser->parse_file($_);
     }
 
-    my $tt = Template->new( {
-        INCLUDE_PATH => 'lib',
-    } );
+    my $tt = Template->new( { INCLUDE_PATH => 'lib', } );
 
-    print $tt->process( 'book.sty', {
-        content => $output,
-        paper => $paper,
-        page_dim => $page_dim,
-    } );
+    print $tt->process(
+        'book.sty', {
+            content  => $output,
+            paper    => $paper,
+        } );
 
-}
+} ## end sub main
 

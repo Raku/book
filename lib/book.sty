@@ -1,6 +1,6 @@
 \documentclass[
     [% paper %]paper,
-    DIV=12,
+    DIV=10,
     parskip=full,
     headsepline=on,
     footsepline=off,
@@ -8,33 +8,59 @@
     oneside,
 ]{scrbook}
 
-    % For the sidebars.
+% Title in the variable for using in headers
+\newcommand*\mytitle{Using Perl~6}
+
+% XeTeX unicode support -- e.g. character replacements
+\usepackage{xunicode}
+
+% This ensures that our dollar signs, braces, tildes and circumflex are shown correctly
+\DeclareTextSymbol{\textdollar}{EU1}{`\$}
+\DeclareTextSymbol{\textbraceright}{EU1}{`\}}
+\DeclareTextSymbol{\textbraceleft}{EU1}{`\{}
+\DeclareTextSymbol{\textasciitilde}{EU1}{`\~}
+\DeclareTextSymbol{\textasciicircum}{EU1}{`\^}
+
+% For the sidebars.
 \usepackage{fancybox}
 
-    % For index generation. Supplies \printindex.
+% Smart quotes FIXME: Should not convert quotes inside ttseries
+%\usepackage{csquotes}
+%\MakeOuterQuote{"}
+%\MakeBlockQuote{<}{|}{>}
+
+% For index generation. Supplies \printindex.
 \usepackage{index}
 
-    % Fonts.
+% Fonts.
 \usepackage{fontspec}
-\setromanfont[Mapping=tex-text]{DejaVu Serif}
-\setsansfont[Mapping=tex-text]{DejaVu Sans}
-\setmonofont{Inconsolata}
+\setromanfont[Mapping=tex-text]{Century Schoolbook L}
+\setsansfont[Mapping=tex-text]{Luxi Sans}
+\setmonofont[Scale=0.75]{Luxi Mono}
 
-    % Supplies 'tabular' environment and \rowcolor.
+% Actually, this would be the right font to go with Luxi Sans and Luxi Mono
+% However, it looks strangely condensed, which is nice but rather unreadable
+% Maybe we can use this font later on.
+%\setromanfont[Mapping=tex-text]{Luxi Serif}
+
+% microtype is not available for XeTeX yet
+%\usepackage{microtype}
+
+% Supplies 'tabular' environment and \rowcolor.
 \usepackage{colortbl}
 
-    % Optimize for this language.
+% Optimize for this language.
 \usepackage[english]{babel}
 
-    % For code blocks.
+% For code blocks.
 \usepackage{fancyvrb}
 \RecustomVerbatimEnvironment
 {Verbatim}{Verbatim}
-{xleftmargin=0.35in,fontsize=\small,gobble=4,labelposition=topline}
+{xleftmargin=0.35in,numbers=left,fontsize=\small,gobble=4,labelposition=topline}
 
-    % Allows among other things the \documentclass '...paper' option
-    % to be passed on to the DVI processor.
-\usepackage{hyperref}
+% Allows among other things the \documentclass '...paper' option
+% to be passed on to the DVI processor.
+\usepackage[xetex]{hyperref}
 \hypersetup{
     pdftitle={Using Perl~6},
     colorlinks,
@@ -42,10 +68,28 @@
     urlcolor=black,
 }
 
-    % Needed for \includegraphics from '=for figure' in some src/*.pod.
+% URLs
+\DeclareUrlCommand\email{\urlstyle{rm}\urlstyle{bf}}
+
+% Headers and footers
+\usepackage[headsepline,nouppercase,automark]{scrpage2}
+\clearscrheadfoot
+\ofoot[\pagemark]{\pagemark}
+\ohead{\headmark}
+\ihead{\mytitle}
+\setheadsepline{0.3pt}
+\setkomafont{pageheadfoot}{
+  \normalfont\sffamily\bfseries
+}
+\pagestyle{scrheadings}
+
+% Footnote correction
+\deffootnote{1.5em}{1.5em}{\makebox[1.5em][c]{\textsuperscript\thefootnotemark}}
+
+% Needed for \includegraphics from '=for figure' in some src/*.pod.
 \usepackage{graphics,graphicx}
 
-    % Shadow box, for sidebars.
+% Shadow box, for sidebars.
 \newsavebox{\sidebarcontent}
 \newenvironment{sidebar}[1][]{\begin{lrbox}{\sidebarcontent}\begin{minipage}{3.5in}\sloppy
 \ifx\relax#1\else\centerline{\large\bfseries #1}\par\fi}
@@ -56,9 +100,6 @@
 
 \makeindex
 
-[% page_dim %]
-
-\newcommand*\mytitle{Using Perl~6}
 \title{\mytitle}
 
 \author{

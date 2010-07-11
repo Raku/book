@@ -114,33 +114,27 @@ sub encode_text {
 
     # Escape LaTeX-specific characters.
 
-        # Backslashes are special.
+    # Backslashes are special.
     $text =~ s/\\/\\backslash/g;
-    $text =~ s/([#\$&%_{}])/\\$1/g;
-        # Carets are special.
-    $text =~ s/(\^)/\\char94{}/g;
-    $text =~ s/</\\textless{}/g;
-    $text =~ s/>/\\textgreater{}/g;
 
-        # Add unescaped dollars.
+    # Tildes
+    $text =~ s/ ~~ /\\ \\textasciitilde\\textasciitilde\\ /g;
+    $text =~ s/~/\\textasciitilde/g;
+    $text =~ s/([#\$&%_{}])/\\$1/g;
+
+    # Carets are special.
+    $text =~ s/(\^)/\\char94{}/g;
+
+    # Add unescaped dollars.
     $text =~ s/(\\backslash)/\$$1\$/g;
 
-    # FIXME Quotes are gone now too -- csquotes is the right package for that
+    # FIXME: Can't just replace them, since they look awful inside ttseries 
+    # $text =~ s/\.{3}\s*/\\ldots /g;
 
-        # Fix the ellipses
-    $text =~ s/\.{3}\s*/\\ldots /g;
-
-        # Better be fixed in text directly!
-   # $text =~ s/\s--\s/---/g;
-
-        # Probably not needed, since tildes should look nice when
-        # we've got the right font
-   # $text =~ s/~/\$\\sim\$/g;
-
-        # Suggest hyphenation points for module names.
+    # Suggest hyphenation points for module names.
     $text =~ s/::/::\\-/g;
 
-        # Non-breakable spaces.
+    # Non-breakable spaces.
     $text =~ s/Perl 6/Perl~6/g;
     $text =~ s/Perl 5/Perl~5/g;
 
@@ -149,4 +143,3 @@ sub encode_text {
 
 # --------------------------------------------------------------------
 1;
-
