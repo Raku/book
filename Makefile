@@ -19,36 +19,26 @@ else
 
 endif
 
-	# If you're on a Mac, and installed Inkscape via MacPorts, you
-	# might want to manually uncomment the next line, and remove
-	# the one after it.
-#INKSCAPE = /Applications/Inkscape.app/Contents/Resources/bin/inkscape
-INKSCAPE = inkscape
+default: prepare pdf clean
 
-default: print
+prepare: clean
+	mkdir build
 
-html: $(CHAPTERS) bin/book-to-html
+html: prepare $(CHAPTERS) bin/book-to-html
 	perl bin/book-to-html $(CHAPTERS) > $(BOOK).html
 
-print: $(BOOK).pdf
+pdf: tex lib/Makefile
+	cp src/mmd-table.svg build/mmd-table.svg
+	cd build && make -I ../lib -f ../lib/Makefile 
 
-release: print
-	cp $(BOOK).pdf build/book-$$(date +"%Y-%m").$(PAPER).pdf
-
-build/Makefile: lib/Makefile
-	cp $< $@
-
-$(BOOK).pdf: $(BOOK).tex build/Makefile build/mmd-table.pdf
-	cd build && make $*
-
-$(BOOK).tex: $(CHAPTERS) lib/Perl6BookLatex.pm lib/book.sty bin/book-to-latex
+tex: prepare $(CHAPTERS) lib/Perl6BookLatex.pm lib/book.sty bin/book-to-latex
 	perl -Ilib bin/book-to-latex --paper $(PAPER) $(CHAPTERS) > $(BOOK).tex
 
-build/mmd-table.pdf: src/mmd-table.svg
-	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
+release: pdf
+	cp $(BOOK).pdf build/book-$$(date +"%Y-%m").$(PAPER).pdf
 
 clean: 
-	rm -rf build/*
+	rm -rf build/
 
 .PHONY: clean
 
