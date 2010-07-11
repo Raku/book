@@ -296,13 +296,7 @@ depends.  If you do so, the role composer can detect any errors at compile
 time.  If you do not, the problem will only appear at runtime, when and if
 something attempts to call the missing method.
 
-=head1 Runtime Mixins
-
-=for author
-
-I don't like the term "mixin" for this.
-
-=end for
+=head1 Runtime Application of Roles
 
 X<roles; runtime application>
 
@@ -363,8 +357,16 @@ instance.
 
 =head2 The C<but> operator
 
+X<does>
+
+Runtime role application with C<does> modifies an object in-place:
+C<$x does SomeRole> modifies the object stored in C<$x>. When this is not
+desirable, the C<but> operator can be used instead. It returns a clone of
+the object, and applies the role composition only to the clone -- the original
+object stays the same.
+
+TODO: example
 
 =head1 Parametric Roles
-
 
 
