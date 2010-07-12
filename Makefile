@@ -7,9 +7,8 @@ CHAPTERS =src/preface.pod \
 		  src/roles.pod \
 		  src/subtypes.pod \
 		  src/regexes.pod \
-		  src/grammars.pod
-
-#		  src/builtins.pod
+		  src/grammars.pod \
+		  src/builtins.pod
 
 # If you're on a Mac, and installed Inkscape via MacPorts, you might want to
 # manually uncomment the next line, and remove the one after it.

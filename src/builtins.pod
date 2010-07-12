@@ -30,7 +30,7 @@ here too.
 
 =head1 Numbers
 
-Sometimes coercion is intuitively transparent.  Perl 6 has several numeric
+Sometimes coercion is intuitively transparent.  Perl 6 has several numeric
 types which you can intermix freely.  For example, subtracting a floating point
 value from an integer works, as in C<123 - 12.1e1>.
 
