@@ -15,7 +15,7 @@ To build the book, you need to have the following software installed:
 
     * GNU make
     * perl 5
-    * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101050 or newer
+    * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101650 or newer
     * inkscape (for svg -> pdf conversion)
     * pdflatex
     * the 'bera' font as a LaTeX package
