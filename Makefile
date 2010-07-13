@@ -1,14 +1,15 @@
-CHAPTERS =src/preface.pod \
-          src/basics.pod \
-          src/operators.pod \
-		  src/subs-n-sigs.pod \
-		  src/multi-dispatch.pod \
-		  src/classes-and-objects.pod \
-		  src/roles.pod \
-		  src/subtypes.pod \
-		  src/regexes.pod \
-		  src/grammars.pod \
-		  src/builtins.pod
+CHAPTERS = \
+    src/preface.pod \
+    src/basics.pod \
+    src/operators.pod \
+    src/subs-n-sigs.pod \
+    src/multi-dispatch.pod \
+    src/classes-and-objects.pod \
+    src/roles.pod \
+    src/subtypes.pod \
+    src/regexes.pod \
+    src/grammars.pod \
+    src/builtins.pod \
 
 PERL = perl
 
