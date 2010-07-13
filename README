@@ -10,6 +10,9 @@ Jonathan Scott Duff (Scott) and anybody who's willing to work on it.
 If you're not on that list yet, you're still very welcome to join us.
 
 You can find us on #perl6book on irc.freenode.net.
+Logs of the IRC discussions: <http://irclog.perlgeek.de/perl6book/>
+(If you do not have an IRC client, you can use a web-based client at
+<http://webchat.freenode.net/?randomnick=1&channels=perl6book&prompt=1> )
 
 To build the book, you need to have the following software installed:
 
