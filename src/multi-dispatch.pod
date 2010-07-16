@@ -256,6 +256,12 @@ This restriction allows a clever compiler optimization: it can sort all
 candidates by narrowness once to find the candidate with the best matching
 signature by examining nominal type constraints. These are far cheaper to check than constraint checks. Constraint checking occurs next, then the compiler considers the nominal types of candidates.
 
+=for author
+
+I could use a table or figure here to illustrate the hierarchy of narrowing.
+
+=end for
+
 With some trickery it is possible to get an object which conforms to a built-in
 type (C<Num>, for example) but which is also an undefined value. In this case
 the candidate that is specific to C<Num> wins, because the nominal type check
