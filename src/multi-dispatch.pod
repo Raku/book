@@ -2,19 +2,28 @@
 
 Z<multis>
 
+X<multidispatch>
+X<multis>
+
+Perl usually decides which function to call based on the name of the function
+or the contents of a function reference.  This is simple to understand.  Perl
+can also examine the contents of the arguments provided to decide which of
+several variants of a function--variants each with the same name--to call.  In
+this case, the amount and types of the function's arguments help to distinguish
+between multiple variants of a function.  This is I<multidispatch>, and the
+functions to which Perl can dispatch in this case are I<multis>.
+
 X<JSON>
 
-Javascript Object Notation, or JSON for short, is a simple data exchange format
-often used for communicating with web services. It supports arrays, hashes,
-numbers, strings, boolean values, and C<null>, the undefined value.
+Javascript Object Notation (I<JSON>) is a simple data exchange format often
+used for communicating with web services. It supports arrays, hashes, numbers,
+strings, boolean values, and C<null>, the undefined value.
 
-The following example presents a section of C<JSON::Tiny>, a minimal library
-used to convert Perl 6 data structures to JSON.  See L<grammars> for the other
-part of that module, which parses JSON and turns it into Perl 6 data
-structures.
-
-The full code, containing additional documentation and tests, is available from
-U<http://github.com/moritz/json/>.
+C<JSON::Tiny> is a minimal library used to convert Perl 6 data structures to
+JSON.  See L<grammars> for the other part of that module, which parses JSON and
+turns it into Perl 6 data structures.  The full code, containing additional
+documentation and tests, is available from U<http://github.com/moritz/json/>.
+This snippet demonstrates how multis make the code simpler and more obvious:
 
 =begin programlisting
 
@@ -51,38 +60,37 @@ U<http://github.com/moritz/json/>.
 
 X<candidates>
 
-This code defines a single I<multi> sub named C<to-json>, which takes one
-argument and turns that into a string. However there are many candidates of
-that sub: subs with the same name, but different signatures.
-
-The various candidates all look like:
+This code defines a single multi sub named C<to-json>, which takes one argument
+and turns that into a string. C<to-json> has many I<candidates>; these subs all
+have the name C<to-json> but differ in their signatures.  Every candidate
+resembles:
 
 =begin programlisting
 
-    multi to-json(Bool $data) { code here }
-    multi to-json(Real $data) { code here }
+    multi to-json(Bool $data) { ... }
+    multi to-json(Real $data) { ... }
 
 =end programlisting
 
 Which one is actually called depends on the type of the data passed to the
-subroutine.  If you call C<to-json(Bool::True)>, the first one is called. If
-you pass a numeric value of type C<Real> instead, the second one is called.
+subroutine.  A call such as C<to-json(Bool::True)> invokes the first candidate.
+Passing a numeric value of type C<Real> instead invokes the second.
 
 The candidate for handling C<Real> is very simple; because JSON's
 and Perl 6's number formats coincide, the JSON converter can rely on Perl's
 conversion of these numbers to strings. The C<Bool> candidate returns a literal
 string C<'true'> or C<'false'>.
 
-The C<Str> candidate does a bit more work: it adds quotes at the start and the
-end, and escapes literal characters that the JSON spec does not allow in
-strings -- a tab character becomes C<\t>, a newline C<\n>, and so on.
+The C<Str> candidate does more work: it wraps its parameter in quotes and
+escapes literal characters that the JSON spec does not allow in strings--a
+tab character becomes C<\t>, a newline C<\n>, and so on.
 
 The C<to-json(Array $d)> candidate converts all elements of the array to JSON
--- with recursive calls to C<to-json>, joins them with commas and surrounds
-them with square brackets.  The recursive calls demonstrate a powerful truth of
+with recursive calls to C<to-json>, joins them with commas, and surrounds them
+with square brackets.  The recursive calls demonstrate a powerful truth of
 multidispatch: these calls do not necessarily recurse to the C<Array>
-candidate, but dispatch to the appropriate candidate based on the type of their
-single arguments.
+candidate, but dispatch to the appropriate candidate based on the types of
+I<their> arguments.
 
 The candidate that processes hashes turns them into the form C<{ "key1" :
 "value1", "key2" : [ "second", "value" ] }>. It does this again by recursing
@@ -92,6 +100,8 @@ into C<to-json>.
 
 X<constraints>
 X<multidispatch; constraints>
+
+Candidates can specify more complex signatures:
 
 =begin programlisting
 
@@ -111,20 +121,19 @@ X<types; subset>
 X<subset type>
 
 This candidate adds two new twists.  It contains no type definition, in which
-case the type of the parameter defaults to C<Any>, the root of the "normal"
+case the type of the parameter defaults to C<Any>, the root of the normal
 branch of the type hierarchy.  More interestingly, the C<where {!defined $d}>
-clause is
-a I<constraint>, which defines a so-called I<subset type>.  In this case, this
-candidate will match only I<some> values of the type C<Any> -- those where
-the value is undefined.
+clause is a I<constraint>, which defines a so-called I<subset type>.  This
+candidate will match only I<some> values of the type C<Any>--those where the
+value is undefined.
 
 X<nominal type>
 X<types; nominal>
 
-Whenever the compiler performs a type check on
-the parameter C<$d>, it first checks the I<nominal> type (which is C<Any>
-here).  If that check succeeds, it calls the code block. The entire type check
-can only succeed if the code block returns a true value.
+Whenever the compiler performs a type check on the parameter C<$d>, it first
+checks the I<nominal> type (here, C<Any>).  If that check succeeds, it calls
+the code block. The entire type check can only succeed if the code block
+returns a true value.
 
 The curly braces for the constraint can contain arbitrary code.  You can abuse
 this to count how often a type check occurs:
@@ -149,17 +158,17 @@ C<where> clause executes.  Any Perl 6 compiler is free to optimize away type
 checks it knows will succeed.  In the current Rakudo implementation, the second
 line with C<say> will print a higher number than the first.
 
-The first C<$counter> output is always C<0>, since the nominal types
-alone already determine which candidate matches best, so the where-block
-is never executed.
+In the first call of C<a(3)>, the nominal types alone already determine the
+best candidate match, so the where block never executes and the first
+C<$counter> output is always C<0>.
 
-The second output is at least C<1>. The compiler has to execute the
-where-block at least once to check if the third candidate can be called, but
-the specification does not require the minimal possible number of runs.
-This is illustrated in the second C<$counter> output. The specific
+The output after the second call is at least C<1>. The compiler has to execute
+the where-block at least once to check if the third candidate is the best
+match, but the specification does not require the I<minimal> possible number of
+runs.  This is illustrated in the second C<$counter> output. The specific
 implementation used to run this test actually executes the where-block twice.
-Keep in mind that the number of times the subtype checks blocks are
-executed is implementation specific.
+Keep in mind that the number of times the subtype checks blocks execute is
+specific to any particular implementation of Perl 6.
 
 =for author
 
@@ -169,14 +178,14 @@ Verify Rakudo * behavior at press time.
 
 =begin sidebar
 
-You I<can> do this, but you should avoid it in anything other than example
-code.  Relying on the side effects of type checks produces unreliable code.
+Avoid writing code like this in anything other than example code.  Relying on
+the side effects of type checks produces unreliable code.
 
 =end sidebar
 
 =head1 Narrowness
 
-There's one candidate not yet explained from the JSON example:
+One candidate remains from the JSON example:
 
 =begin programlisting
 
@@ -186,15 +195,15 @@ There's one candidate not yet explained from the JSON example:
 
 =end programlisting
 
-This has no explicit type or constraint on its parameter at all, so it defaults
-to C<Any> -- and thus matches any passed object. The body of this function
+With no explicit type or constraint on the parameter C<$d>, its type defaults
+to C<Any>--and thus it matches any passed object. The body of this function
 complains that it doesn't know what to do with the argument.  This works for
 the example, because JSON's specification covers only a few basic structures.
 
 The declaration and intent may seem simple at first, but look closer.  This
 final candidate matches not only objects for which there is no candidate
 defined, but it can match for I<all> objects, including C<Int>, C<Bool>,
-C<Num>.  A call like C<to-json(2)> has I<two> matching candidates -- C<Int>
+C<Num>.  A call like C<to-json(2)> has I<two> matching candidates--C<Int>
 and C<Any>.
 
 X<multidispatch; narrowness>
@@ -214,12 +223,11 @@ with builtin types - any other idea? --moritz
 If you run that code, you'll discover that the C<Int> candidate gets called.
 Because C<Int> is a type that conforms to C<Any>, it is a I<narrower> match for
 an integer.  Given two types C<A> and C<B>, where C<A> conforms to C<B> (C<A ~~
-B>, in Perl 6 code), then an object which conforms to C<A> does so more
-narrowly than to C<B>.  In the case of multi dispatch, the narrowest match
-always wins.
+B>, in Perl 6 code), an object which conforms to C<A> does so more narrowly
+than to C<B>.  In the case of multi dispatch, the narrowest match always wins.
 
-A successfully evaluated constraint makes a match narrower than in the absence
-of a constraint.  In the case of:
+A successfully evaluated constraint makes a match narrower than a similar
+signature without a constraint.  In the case of:
 
 =begin programlisting
 
@@ -245,22 +253,18 @@ more specific match in the nominal type.
 =end programlisting
 
 This restriction allows a clever compiler optimization: it can sort all
-candidates by narrowness once, and can quickly find the candidate with the best
-matching signature by examining nominal type constraints, which are very cheap
-to check. Only then will it run the constraint checks (which tend to be far
-more expensive).  If they fail, it considers candidates that are less narrow by
-nominal types.
+candidates by narrowness once to find the candidate with the best matching
+signature by examining nominal type constraints. These are far cheaper to check than constraint checks. Constraint checking occurs next, then the compiler considers the nominal types of candidates.
 
-With some trickery it is possible to get an object which both conforms to a
-built-in type (C<Num>, for example) but which is also an undefined value. In
-this case the candidate that is specific to C<Num> wins, because the nominal
-type check is narrower than the C<where {!defined $d}> constraint.
+With some trickery it is possible to get an object which conforms to a built-in
+type (C<Num>, for example) but which is also an undefined value. In this case
+the candidate that is specific to C<Num> wins, because the nominal type check
+is narrower than the C<where {!defined $d}> constraint.
 
 =head1 Multiple arguments
 
-Multi dispatch is not limited to one parameter and argument. Candidate
-signatures may contain any number of positional and named arguments, both
-explicit and slurpy. However only positional parameters contribute to the
+Candidate signatures may contain any number of positional and named arguments,
+both explicit and slurpy. However only positional parameters contribute to the
 narrowness of a match:
 
 =begin programlisting
@@ -315,10 +319,9 @@ wins there's a candidate of the form:
 
 X<parameters; anonymous>
 
-The only new thing here is that the parameters don't have names. The bodies of
-the subroutines do not use them, so there's no reason to force the programmer
-to name them.  A single C<$> in a signature stands for an anonymous scalar
-variable.
+Because the bodies of the subs here do not use the parameters, there's no
+reason to force the programmer to name them; they're I<anonymous parameters>.
+A single C<$> in a signature identifies an anonymous scalar variable.
 
 X<types; capture>
 X<type capture>
@@ -327,14 +330,14 @@ The fourth candidate, C<multi wins(::T $, T $) {  0 }> uses C<::T>, which is a
 I<type capture> (similar to I<generics> or I<templates> in other programming
 languages). It binds the nominal type of the first argument to C<T>, which can
 then act as a type constraint. If you pass a C<Rock> as the first argument,
-C<T> is an alias for C<Rock> inside the rest of the signature and the body of
-the routine. The signature C<(::T $, T $)> will bind only two objects of the
+C<T> acts as an alias for C<Rock> inside the rest of the signature and the body
+of the routine. The signature C<(::T $, T $)> will bind only two objects of the
 same type, or where the second is of a subtype of the first.
 
-In the case of this game, that fourth candidate matches only for two objects of
-the same type.  The routine returns C<0> to indicate a draw.
+In this game, that fourth candidate matches only for two objects of the same
+type.  The routine returns C<0> to indicate a draw.
 
-The final candidate is a fallback for the cases not covered yet -- every case
+The final candidate is a fallback for the cases not covered yet--every case
 in which Player Two wins.
 
 If the C<(Scissors, Paper)> candidate matches the supplied argument list,
@@ -343,7 +346,7 @@ C<Scissors> and C<Paper> are direct subtypes of C<Any>, so both contribute
 one step.
 
 If the C<(::T, T)> candidate matches, the type capture in the first parameter
-does not contribute any narrowness -- it is not a constraint, after all.
+does not contribute any narrowness--it is not a constraint, after all.
 However C<T> I<is> a constraint for the second parameter which accounts for as
 many steps of narrowness as the number of inheritance steps between C<T> and
 C<Any>.  Passing two C<Rock>s means that C<::T, T> is one step narrower than
@@ -383,10 +386,12 @@ Traits can apply I<implicit constraints>:
 
 =end programlisting
 
-This routine exchanges the contents of its two arguments. To do that is has to
-bind the two arguments as C<rw> -- both readable and writable. Trying to call
-the C<swap> routine with an immutable value (for example a number literal)
-fails.
+This routine exchanges the contents of its two arguments. It must bind the two
+arguments as C<rw>--both readable and writable. Calling the C<swap> routine
+with an immutable value (for example a number literal) will fail.
+
+X<substr>
+X<functions; substr>
 
 The built-in function C<substr> can not only extract parts of strings, but
 also modify them:
@@ -438,18 +443,17 @@ of arguments are allowed are handled with slurpy parameters instead:
 
 =head1 Nested Signatures in Multi-dispatch
 
-An earlier chapter showed how to use nested signatures to look deeper into
-data structures and extract parts of them. In the context of multiple
-dispatch, nested signatures take on a second task: they act as constraints
-that can be used to distinguish between the candidates. This means that it
-is possible to dispatch based upon the shape of a data structure. This brings
-Perl 6 a lot of the expressive power provided by pattern matching in various
-functional languages.
+An earlier chapter showed how to use nested signatures to look deeper into data
+structures and extract parts of them. In the context of multiple dispatch,
+nested signatures take on a second task: they act as constraints to distinguish
+between the candidates. This means that it is possible to dispatch based upon
+the shape of a data structure. This brings Perl 6 a lot of the expressive power
+provided by pattern matching in various functional languages.
 
-Some algorithms can be very neatly expressed this way, most often those that have
-some base case that will eventually be reached. For example, consider quicksort.
-The base case is that of the empty list, which trivially sorts to the empty list.
-This can be expressed in Perl 6 as:
+Some algorithms have very tidy and natural expressions with this feature,
+especially those which recurse to a simple base case.  Consider quicksort.  The
+base case is that of the empty list, which trivially sorts to the empty list.
+A Perl 6 version might be:
 
 =begin programlisting
 
@@ -457,27 +461,25 @@ This can be expressed in Perl 6 as:
 
 =end programlisting
 
-The C<[]> declares an empty nested signature for the first positional parameter.
-Additionally, it requires that the first positional parameter be something that
-can be indexed into - that is, anything that would match the @ sigil. In totality,
-it means that the signature will only match if it is passed on parameter that is an
-empty list.
+The C<[]> declares an empty nested signature for the first positional
+parameter.  Additionally, it requires that the first positional parameter be an
+indexable item--anything that would match the C<@> sigil.  The signature will
+only match if the multi has a single parameter which is an empty list.
 
-The other case is when the list to sort is not empty. In that case, there will be
-at least one value--which can be used as the pivot--and possibly many other values,
-which will then be partitioned according to the pivot. After that, it's just a couple
-of recursive calls to sort each of the partitions.
+The other case is a list which contains at least one value--the pivot--and
+possibly other values to partition according to the pivot.  The rest of
+quicksort is a couple of recursive calls to sort both partitions:
 
 =begin programlisting
 
     multi quicksort([$pivot, *@rest]) {
         my @before = @rest.grep({ $_ <= $pivot });
-        my @after = @rest.grep({ $_ > $pivot });
+        my @after  = @rest.grep({ $_ >  $pivot });
+
         return quicksort(@before), $pivot, quicksort(@after);
     }
 
 =end programlisting
-
 
 =head1 Protos
 
@@ -492,6 +494,7 @@ latter by installing a I<proto> routine:
 =begin programlisting
 
     proto to-json($) { ... }       # literal ... here
+
     # automatically a multi
     sub to-json(Bool $d) { $d ?? 'true' !! 'false' }
 
@@ -504,9 +507,8 @@ overloadable.  Instead it redispatches to overloadable multi methods.>.
 
 =begin sidebar
 
-To hide all candidates of a multi and replace them by another sub, you can
-declare it as C<only sub YourSub>, though at the time of writing, no compiler
-supports this.
+To hide all candidates of a multi and replace them by another sub, declare it
+as C<only sub YourSub>.  At the time of writing, no compiler supports this.
 
 =end sidebar
 
@@ -516,7 +518,7 @@ X<multimethods>
 X<methods; multidispatch>
 
 Methods can participate in dispatch just as do subroutines.  For multi method
-dispatch the invocant acts just like a positional parameter.
+dispatch the invocant acts as a positional parameter.
 
 The main difference between sub and method calls is where the dispatcher
 searches for the routines: it looks for subroutines in the current and outer
@@ -557,15 +559,7 @@ callee can continue its work.
 If there's no further work to do, the routine can decide to hand control
 completely to the next candidate by calling C<nextsame> or C<nextwith>.  The
 former reuses the argument list and the latter allows the use of a different
-argument list.
-
-=for author
-
-Which "this" is "This"?  An example will clarify here.
-
-=end for
-
-This is often used if an object has to clean up after itself. A sub class can
-provide its own cleanup method for cleaning the own backyard, and then delegate
-to its parent class method by calling C<nextsame> to do the rest of the
-un-dirtying work.
+argument list.  This delegation is common in object destructors, where each
+subclass may perform some cleanup for its own particular data.  After it
+finishes its work, it can delegate to its parent class meethod by calling
+C<nextsame>.
