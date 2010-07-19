@@ -2,8 +2,7 @@
 
 Grammars organize regexes, just like  classes organize methods. The following
 example demonstrates how to parse JSON, a data exchange format already
-introduced in the chapter on multi dispatch (TODO: make this a proper
-reference).
+introduced (L<multis>).
 
 =begin programlisting
 
@@ -17,12 +16,14 @@ reference).
         rule array      { '[' ~ ']' [ <value> ** [ \, ] ]?  }
 
         proto token value { <...> };
+
         token value:sym<number> {
             '-'?
             [ 0 | <[1..9]> <[0..9]>* ]
             [ \. <[0..9]>+ ]?
             [ <[eE]> [\+|\-]? <[0..9]>+ ]?
         }
+
         token value:sym<true>    { <sym>    };
         token value:sym<false>   { <sym>    };
         token value:sym<null>    { <sym>    };
@@ -68,84 +69,90 @@ reference).
 
 =end programlisting
 
-A grammar contains various named regexes, one of which is
-called C<TOP>, and is called by C<JSON::Tiny.parse($string)>.
+A grammar contains various named regexes.  The call to
+C<JSON::Tiny.parse($string)> starts by calling C<TOP>.
 
 Rule C<TOP> anchors the match to the start and end of the string, so that the
 whole string has to be in valid JSON format for the match to succeed. It then
-either matches an C<< <array> >> or an C<< <object> >>, both of which are
-defined later on.
+either matches an C<< <array> >> or an C<< <object> >>.  Subsequent calls are
+straightforward, and reflect the structure in which JSON components can
+appear.
 
-The following calls are straightforward, and reflect the structure in which
-JSON components can appear. This includes some recursive calls: For example
-an C<array> contains C<value>, an in turn a value can be an C<array>. That won't
-cause any infinite loops as long as at least one regex per recursive call
-consumes at least one character. If a set of regexes were to call each other
-recursively without ever progressing in the string, the recursion could
-go on infinitely, never progressing in the string, or to other parts of the
-grammar.
+Regexes can be recursive.  An C<array> contains C<value>, and in turn a value
+can be an C<array>. That won't cause any infinite loops as long as at least
+one regex per recursive call consumes at least one character. If a set of
+regexes were to call each other recursively without ever progressing in the
+string, the recursion could go on infinitely, never progressing in the string
+and never proceeding to other parts of the grammar.
 
 X<goal matching>
 X<~; regex meta character>
 
-A only new regex syntax used in the C<JSON::Tiny> grammar is the
-I<goal matching> syntax C<'{' ~ '}' [ ... ]>, which is something similar
-to C<'{' ... '}'>, but which gives a better error message upon failure.
+=for author
 
-It sets the term to the right of the tilde character as the goal, and then
-matches the final term C<[ ... ]>. If the goal can't be found after it, an
-error message is issued.
+This paragraph is still unclear.
+
+=end for
+
+They only new regex syntax used in the C<JSON::Tiny> grammar is the I<goal
+matching> syntax C<'{' ~ '}' [ ... ]>, which resembles C<'{' ...  '}'>, but
+gives a better error message upon failure.  It sets the term to the right of
+the tilde character as the goal, and then matches the final term C<[ ... ]>.
+If the goal does not match, Perl will issue an error.
 
 X<proto token>
+
 Another novelty is the declaration of a I<proto token>:
 
 =begin programlisting
 
     proto token value { <...> };
+
     token value:sym<number> {
         '-'?
         [ 0 | <[1..9]> <[0..9]>* ]
         [ \. <[0..9]>+ ]?
         [ <[eE]> [\+|\-]? <[0..9]>+ ]?
     }
+
     token value:sym<true>    { <sym>    };
     token value:sym<false>   { <sym>    };
 
 =end programlisting
 
-The C<proto token> syntax means that C<value> is not a single
-regex, but rather by a set of alternatives. Each of these alternatives has a
-name of the form C<< token value:sym<thing> >>, which can be read as
-I<< alternative of C<value> with parameter C<sym> set to C<thing> >>.
+The C<proto token> syntax marks C<value> as a set of alternatives instead of a
+single regex.  Each alternative has a name of the form C<< token
+value:sym<thing> >>, which can read as I<< alternative of C<value> with
+parameter C<sym> set to C<thing> >>.  The body of such an alternative is a
+normal regex, where the call C<< <sym> >> matches the value of the parameter,
+in this example C<thing>.
 
-The body of such an alternative is a normal regex, where the call C<< <sym> >>
-matches the value of the parameter, in our example C<thing>.
-
-When calling the rule C<< <value> >>, all these alternatives are matched
-(notionally in parallel), and the longest match wins.
-
-The reasons for
-splitting the alternatives up into several rules are extensibility and ease of
-use for data extraction, and will be discussed later in detail.
+When calling the rule C<< <value> >>, the grammar engine attempts to match
+every alternative (and can do so in parallel).  The longest match wins.
 
 =head1 Grammar Inheritance
 
-As mentioned earlier, grammars manage regexes just like classes manage
-methods. This analogy goes deeper than just having a namespace into which we
-put routines or regexes -- you can inherit grammars just like classes, mix
-roles into them, and benefit from the usual method call polymorphism. In fact
-a grammar is just class which by default inherits from C<Grammar> instead of
+The similarity of grammars to classes goes deeper than storing regexes in a
+namespace as a class might store methods--you can inherit from and extend
+grammars, mix roles into them, and take advantage of polymorphism.  In fact, a
+grammar is a class which by default inherits from C<Grammar> instead of
 C<Any>.
 
-Suppose you wanted to enhance the JSON grammar to allow single-line javascript
-comments. (Those are the ones starting with C<//> and going on for the rest of
-the line.) The simplest enhancement is to allow it in any place where
-whitespace is also allowed.
+Suppose you wante to enhance the JSON grammar to allow single-line C++ or
+JavaScript comments. (These begin with C<//> and continue until the end of the
+line.) The simplest enhancement is to allow such a comment in any place where
+whitespace is valid.
 
-Whitespace is currently done by using I<rules>, which work just like tokens
-except that they also implicitly enable the C<:sigspace> modifier. This
-modifier in turn internally replaces all whitespace in the regex with calls to
-the C<ws> token. So all you've got to do is to override that token:
+=for author
+
+The explanation of rules seems out of place here.  Can it move?  As well, this
+paragraph was deeply confusing.  Here's my attempt to simplify.
+
+=end for
+
+Most of the grammar uses I<rules>, which as you may recall are like tokens
+with the C<:sigspace> modifier enabled.  As this uses the C<ws> token to find
+significant whitespace, the simplest approach is to override that token:
 
 =begin programlisting
 
@@ -162,6 +169,7 @@ the C<ws> token. So all you've got to do is to override that token:
         "cities": [ "Wien", "Salzburg", "Innsbruck" ],
         "population": 8353243 // data from 2009-01
     }';
+
     if JSON::Tiny::Grammar::WithComments.parse($tester) {
         say "It's valid (modified) JSON";
     }
@@ -169,17 +177,16 @@ the C<ws> token. So all you've got to do is to override that token:
 =end programlisting
 
 The first two lines introduce a grammar that inherits from
-C<JSON::Tiny::Grammar>. The inheritance is specified with the C<is> trait.
-This means that the grammar rules are now called from the derived grammar if
-they exists there, and from the base grammar otherwise -- just like with method
-call semantics.
+C<JSON::Tiny::Grammar> through the use of the C<is> trait.  As subclasses
+inherit methods from superclasses, so any grammar rule not present in the
+derived grammar will come from its base grammar.
 
-In (our relaxed) JSON, whitespace is never mandatory, so the C<ws> is allowed
-to match nothing at all. After optional spaces, two slashes C<'//'> introduce a
-comment, which is followed by an arbitrary number of non-newline characters,
-and then a newline -- in prose: it extends to the rest of the line.
+In this minimal JSON grammar, whitespace is never mandatory, so C<ws> can
+match nothing at all. After optional spaces, two slashes C<'//'> introduce a
+comment, after which must follow an arbitrary number of non-newline
+characters, and then a newline. In prose, it extends to the rest of the line.
 
-In inherited grammars it is also possible to add variants to proto tokens:
+Inherited grammars may also add variants to proto tokens:
 
 =begin programlisting
 
@@ -190,9 +197,9 @@ In inherited grammars it is also possible to add variants to proto tokens:
 
 =end programlisting
 
-In this grammar a call to C<< <value> >> matches either one of the newly added
-alternatives, or any of the old alternatives from parent grammar
-C<JSON::Tiny::Grammar>. Such extensibility would be hard to achieve with
+In this, grammar a call to C<< <value> >> matches either one of the newly
+added alternatives, or any of the old alternatives from the parent grammar
+C<JSON::Tiny::Grammar>. Such extensibility is difficult to achieve with
 ordinary, C<|> delimited alternatives.
 
 =head1 Extracting data
@@ -200,12 +207,11 @@ ordinary, C<|> delimited alternatives.
 X<reduction methods>
 X<action methods>
 
-The C<parse> method of a grammar returns a C<Match> object, and through its
-captures you can access all the relevant information. However, in order to do
-that you have to write a function that traverses the match tree recursively,
-and search for bits and pieces you are interested in. Since this is a
-cumbersome task, an alternative solution exist: I<reduction method>, also
-called I<action methods>.
+The C<parse> method of a grammar returns a C<Match> object, through which you
+can access all the relevant information of the match. If you were to do this
+yourself, you'd have to write a function which traverses the match tree
+recursively to find and to extract the interesting data.  An alternative
+solution exists: I<reduction methods>, also called I<action methods>.
 
 =begin programlisting
 
@@ -217,7 +223,7 @@ called I<action methods>.
         method array($/)    { make [$<value>>>.ast] }
         method string($/)   { make join '', $/.caps>>.value>>.ast }
 
-        # TODO: make that 
+        # TODO: make that
         # make +$/
         # once prefix:<+> is sufficiently polymorphic
         method value:sym<number>($/) { make eval $/ }
@@ -249,28 +255,34 @@ called I<action methods>.
 
 =end programlisting
 
-We pass an actions object to the grammar's C<parse> method. Whenever the
-grammar engine finishes parsing one rule, it calls a method of actions object,
-with the same name as
-the current rule. If no such method is found, the grammar engine just moves
-along and calls no method.
+This example passes an actions object to the grammar's C<parse> method.
+Whenever the grammar engine finishes parsing one rule, it calls a method on
+the actions object with the same name as the current rule. If no such method
+exists, the grammar engine calls no method and moves along.
 
-If a method is found and called, the current match object is passed as a
-positional argument to the method.
+If a method does exist, the grammar engine passes the current match object as
+a positional argument.
 
 X<abstract syntax tree>
 
-Each match object has a slot C<ast> for a payload object, called
-I<abstract syntax tree>. It can hold a custom data structure that you create
-from the action methods. Calling C<make $thing> in an action method sets the
-C<ast> attribute of the current match object to C<$thing>.
+=for author
 
-In the case of our JSON parser the payload can be directly the data structure
-that the JSON string represents.
+This doesn't really explain what an AST is--and isn't that specific to writing
+compilers?
+
+=end for
+
+Each match object has a slot called C<ast> (short for I<abstract syntax tree>)
+for a payload object.  This slot can hold a custom data structure that you
+create from the action methods. Calling C<make $thing> in an action method
+sets the C<ast> attribute of the current match object to C<$thing>.
+
+In the case of the JSON parser, the payload can be the data structure that the
+JSON string represents.
 
 Although the rules and action methods live in different namespaces (and in a
-real-world project probably even in separate files), we show them side by
-side to make the correspondence easier to see.
+real-world project probably even in separate files), here they are adjacent to
+demonstrate their correspondence:
 
 =begin programlisting
 
@@ -281,11 +293,21 @@ side to make the correspondence easier to see.
 
 # TODO: decide if $/.values could be sufficient
 
-The rule has an alternation with two branches, and either of them has a named
-capture, C<object> and C<array>. When the match object is viewed as hash
-through C<$/.hash>, its only value is another match object - that of the
-subrule that matched successfully. The action method takes the AST attached to
-that match object, and promotes it as its own AST by calling C<make>.
+=for author
+
+The C<make> explanation is fuzzy.  The rest of this chapter assumes some
+implicit knowledge that readers likely won't have now.  The real insight for
+me was realizing that transforming trees is the best way to write a compiler,
+but I don't expect readers to have gone through the trouble of writing
+compilers the hard way first.
+
+=end for
+
+The rule has an alternation with two branches, C<object> and C<array>.  Both
+have a named capture.  When you view the match object as a hash through
+C<$/.hash>, its only value is another match object--that of the subrule that
+matched successfully. The action method takes the AST attached to that match
+object and promotes it as its own AST by calling C<make>.
 
 =begin programlisting
 
@@ -294,8 +316,8 @@ that match object, and promotes it as its own AST by calling C<make>.
 
 =end programlisting
 
-The reduction method for C<object> extracts the AST of the C<pairlist> submatch,
-and turns it into a hash by calling the C<hash> method on it.
+The reduction method for C<object> extracts the AST of the C<pairlist>
+submatch and turns it into a hash by calling its C<hash> method.
 
 =begin programlisting
 
@@ -305,8 +327,8 @@ and turns it into a hash by calling the C<hash> method on it.
 
 =end programlisting
 
-The C<pairlist> rule just matches multiple pairs, separated by comma, and the
-reduction method calls the C<.ast> method on each matched pair, and installs the result
+The C<pairlist> rule matches multiple comma-separted pairs.  The reduction
+method calls the C<.ast> method on each matched pair and installs the result
 list in its own AST.
 
 =begin programlisting
@@ -319,12 +341,12 @@ list in its own AST.
 A pair consists of a string key and a value, so the action method constructs a
 Perl 6 pair with the C<< => >> operator.
 
-The other action methods work just the same: They transform the information
+The other action methods work the same way. They transform the information
 they extract from the match object into "native" Perl 6 data structures, and
 call C<make> to set it as their own AST.
 
-The action methods that belong to a proto token are parameterized in the same
-way as the alternative:
+The action methods that belong to a proto token are parametric in the same way
+as the alternative:
 
 =begin programlisting
 
@@ -336,7 +358,7 @@ way as the alternative:
 
 =end programlisting
 
-When a C<< <value> >> call matches, the action method with the
-same parametrization as the matching alternative is executed.
+When a C<< <value> >> call matches, the action method with the same
+parametrization as the matching alternative executes.
 
 =for vim: spell spelllang=en tw=78

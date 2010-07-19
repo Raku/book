@@ -141,6 +141,14 @@ C<@variable.method> calls a method on the C<@variable>, C<@array».method>
 calls a method for each item in C<@array>, and returns the list of the return
 values.
 
+» is called a I<hyper operator>. It is a unicode character that
+can be entered on most computers
+N<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key position
+select on of the keys to be the "Compose" key. Then press
+Compose-key and the "greater than" key twice.>
+If your operating system does not make it easy to write it you can also write it as
+>>.
+
 So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
 and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
 
@@ -443,7 +451,7 @@ X<< <=> >>
 
 The three-way comparison operators take two operands, and return C<-1> if the
 left is smaller, C<0> when both are equal, and C<+1> if the right operand is
-larger. For numbers that operator is spelled C<< <=> >>, and for strings
+smaller. For numbers that operator is spelled C<< <=> >>, and for strings
 C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
 type sensitive three-way comparison operator, and compares numbers like
 C<< <=> >>, string like C<leg>, and for example pairs first by key, and

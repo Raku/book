@@ -1,11 +1,17 @@
-CHAPTERS =src/preface.pod \
-          src/basics.pod \
-          src/operators.pod \
-		  src/subs-n-sigs.pod \
-		  src/multi-dispatch.pod \
-		  src/classes-and-objects.pod \
-		  src/regexes.pod \
-		  src/grammars.pod
+CHAPTERS = \
+    src/preface.pod \
+    src/basics.pod \
+    src/operators.pod \
+    src/subs-n-sigs.pod \
+    src/multi-dispatch.pod \
+    src/classes-and-objects.pod \
+    src/roles.pod \
+    src/subtypes.pod \
+    src/regexes.pod \
+    src/grammars.pod \
+    src/builtins.pod \
+
+PERL = perl
 
 # If you're on a Mac, and installed Inkscape via MacPorts, you might want to
 # manually uncomment the next line, and remove the one after it.
@@ -21,13 +27,13 @@ build/mmd-table.pdf: src/mmd-table.svg
 	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
 
 build/book.html: $(CHAPTERS) bin/book-to-html
-	perl bin/book-to-html $(CHAPTERS) > build/book.html
+	$(PERL) bin/book-to-html $(CHAPTERS) > build/book.html
 
 build/book.pdf:	build/book.tex build/mmd-table.pdf
 	cd build && pdflatex book.tex && makeindex book && pdflatex book.tex
 
 build/book.tex: $(CHAPTERS) bin/book-to-latex
-	perl bin/book-to-latex $(CHAPTERS) > build/book.tex
+	$(PERL) bin/book-to-latex $(CHAPTERS) > build/book.tex
 
 clean: 
 	rm -rf build/*

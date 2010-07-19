@@ -6,9 +6,9 @@ X<signature>
 X<return value>
 
 A I<subroutine> is a piece of code that performs a specific task. It may
-operate on provided data, or I<arguments>, and may also produce results, or
-I<return values>.  The I<signature> of a subroutine is a description of any
-arguments it takes and any return values it produces.
+operate on provided data (I<arguments>) and may produce results (I<return
+values>).  The I<signature> of a subroutine is a description of any arguments
+it takes and any return values it produces.
 
 The first chapter demonstrated simple subroutines.  In one sense, the operators
 described in the second chapter are also subroutines that Perl 6 parses in
@@ -20,8 +20,8 @@ X<subroutines; declaration>
 
 A subroutine declaration consists of several parts.  First, the subroutine
 declarator C<sub> indicates that you are starting a subroutine declaration.
-Next may follow an optional name and signature.  The body of the sub follows;
-this is a block of code enclosed in curly braces.  This is what will execute
+Next comes an optional name and an optional signature.  The body of the sub
+follows as a block of code enclosed in curly braces.  This is what will execute
 every time the subroutine is called.
 
 For example, in:
@@ -48,9 +48,9 @@ here.
 =end for
 
 By default, subroutines are lexically scoped, just like any variable declared
-with C<my>. This means that--unless it is exported--a subroutine may only be
-called within the scope in which it was declared.  Use the scope declarator
-C<our> to make the subroutine available globally within the current package:
+with C<my>. This means that a subroutine may only be called within the scope in
+which it was declared.  Use the scope declarator C<our> to make the subroutine
+available globally within the current package:
 
 =begin programlisting
 
@@ -69,6 +69,9 @@ C<our> to make the subroutine available globally within the current package:
 
 =end programlisting
 
+You may also export (L<exporting>) a subroutine to make it available to another
+scope.
+
 X<anonymous subroutines>
 X<subroutines; anonymous>
 X<subroutines; first-class>
@@ -77,12 +80,15 @@ X<first-class subroutines>
 Perl 6 subroutines are objects. You can pass them around and store them in data
 structures just as you can do with any other piece of data.  Programming
 language designers often call these I<first-class subroutines>; they are as
-fundamental and usable to the language as are hashes or arrays.
+fundamental to and usable from the language as are hashes or arrays.
 
-First-class subroutines are very useful to solve complex problems.  For
-example, to make a little ASCII art dancing figure, you could build up a hash
-where the keys are names of the dance moves, and the values are anonymous
-subroutines:
+First-class subroutines can help you solve complex problems.  For example, to
+make a little ASCII art dancing figure, you could build up a hash where the
+keys are names of the dance moves, and the values are anonymous subroutines.
+Assume that users should be able to enter a list of moves (perhaps on a dance
+pad or other exotic input device).  How can you maintain a variable list of
+custom behaviors, allow user input, and restrict that input to a safe set of
+behaviors?
 
 =begin programlisting
 
@@ -113,7 +119,7 @@ X<parameter>
 X<subroutines; signature>
 X<signatures; subroutines>
 
-A subroutine signature performs two roles. First, it declares the arguments
+A subroutine signature performs two tasks. First, it declares the arguments
 which callers may or must pass to the subroutine. Second, it declares the
 variables in the subroutine to which the arguments are bound. These variables
 are called I<parameters>.  Perl 6 signatures go further; they allow you to
@@ -123,7 +129,7 @@ complex data structures.
 =head2 The Basics
 
 In its simplest form, a signature is a comma separated list of variable names
-to which incoming arguments are bound.
+to which to bind incoming arguments.
 
 =begin programlisting
 
@@ -138,14 +144,13 @@ to which incoming arguments are bound.
 
 The use of the term I<bound> instead of I<assigned> is significant. The
 variables in your signature are read-only references to the passed arguments.
-You cannot modify them passed-in values within the subroutine.
+You cannot modify passed-in values within the subroutine.
 
-If read-only binding is too limiting, you have two different ways to relax this
-restriction.  A parameter marked C<is rw> means that you can modify the
-passed argument within the subroutine.  Any modification modifies the original
-in place.  If you attempt to pass a literal or some other constant value for an
-C<rw> parameter, the binding will fail at the point of the call, with an
-exception thrown:
+If read-only binding is too limiting, you can relax this restriction.  A
+parameter marked C<is rw> means that you can modify the passed argument within
+the subroutine.  Any modification will modify the original in place.  If you
+attempt to pass a literal or some other constant value for an C<rw> parameter,
+the binding will fail at the point of the call, throwing an exception:
 
 =begin programlisting
 
@@ -176,6 +181,13 @@ subroutine--to leave the original untouched--mark the parameter C<is copy>:
 
 =end programlisting
 
+=for author
+
+The final sentence of the next paragraph seems superfluous; is it necessary to
+discuss out parameters here?
+
+=end for
+
 The extra verbosity of marking parameters as mutable may seem excessive, but
 it's likely you won't use these modifiers often.  While certain languages
 require you to mark parameters as C<rw> to emulate returning multiple results
@@ -183,7 +195,7 @@ from a single subroutine, Perl allows you to return multiple values directly.
 
 =head2 Passing Arrays, Hashes and Code
 
-Sigils on variables indicate their intended use.  In a signature, a variable's
+A variable's sigil indicates its intended use.  In a signature, a variable's
 sigil acts as a constraint on the type of argument passed.  The C<@> sigil, for
 example, checks that the passed value is C<Positional>.  Failing to pass
 something that matches this constraint will cause the call to fail.
@@ -203,10 +215,10 @@ something that matches this constraint will cause the call to fail.
 =end programlisting
 
 Similarly, the C<%> sigil implies that the caller must pass something that is
-C<Associative>--that is, it allows indexing through the C<< <...> >> or
+C<Associative>--something which allows indexing through the C<< <...> >> or
 C<{...}> operations. The C<&> sigil requires that the caller pass something
 callable, such as an anonymous subroutine. In that case, you may also call the
-callable parameter without using the C<&> sigil:
+callable parameter without the C<&> sigil:
 
 =begin programlisting
 
@@ -221,7 +233,7 @@ callable parameter without using the C<&> sigil:
 =end programlisting
 
 A scalar (the C<$> sigil) implies no constraints.  Anything may bind to it,
-even if it could bind to one of the other sigils.
+even if it could also bind to one of the other sigils.
 
 =head2 Interpolating Arrays and Hashes
 
@@ -234,6 +246,10 @@ Likewise, you can interpolate hashes into named arguments:
 
 =begin programlisting
 
+    sub order-shrimps($number, $from) {
+        say "I'd like $count pieces of shrimp from the $from, please";
+    }
+
     my %user-preferences = ( from => 'Northern Sea' );
     order-shrimps(3, |%user-preferences)
 
@@ -241,10 +257,10 @@ Likewise, you can interpolate hashes into named arguments:
 
 =head2 Optional Parameters
 
-Some parameters can have sensible default values.  Sometimes, passing an
-argument may be unnecessary.  In these cases, it is possible to mark such
-parameters as optional, so those calling the subroutine can choose whether or
-not to pass an argument.
+Sometimes, passing an argument may be unnecessary.  Other parameters can have
+sensible default values. In these cases, it is possible to mark such parameters
+as optional, so those calling the subroutine can choose whether to pass an
+argument.
 
 Either assign a default value to the parameter in the signature:
 
@@ -260,7 +276,7 @@ Either assign a default value to the parameter in the signature:
 =end programlisting
 
 ... or append a question mark to the parameter's name, in which case the
-parameter bind to an undefined value if no argument is passed:
+parameter binds to an undefined value if no argument is passed:
 
 =begin programlisting
 
@@ -275,10 +291,9 @@ parameter bind to an undefined value if no argument is passed:
 
 =head2 Named Parameters
 
-When a subroutine has many parameters, it is sometimes hard to remember their
-respective order. It is often easier to pass parameters by name instead.  Note
-that when you do so, the order in which they appear as arguments does not
-matter:
+When a subroutine has many parameters, it is often easier to pass parameters by
+name instead of trying to remember the correct order of parameters.  Note that
+when you do so, the order in which they appear as arguments does not matter:
 
 =begin programlisting
 
@@ -304,14 +319,14 @@ To do this, precede the name of the parameter with a colon:
         say "I'd like $count pieces of shrimp from the $from, please";
     }
 
-    order-shrimps(6);                       # takes the default value 'North Sea'
+    order-shrimps(6);                       # takes 'North Sea'
     order-shrimps(4, from => 'Atlantic Ocean');
     order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
 
 =end programlisting
 
-Unlike positional parameters, named parameters are optional by default.  Adding
-a C<!> at the end makes one mandatory.
+Unlike positional parameters, named parameters are optional by default.
+Appending a C<!> makes it mandatory.
 
 =begin programlisting
 
@@ -328,8 +343,8 @@ a C<!> at the end makes one mandatory.
 
 Because you must use their names when passing named parameters, parameter names
 are part of a subroutine's public API.  Choose them carefully!  Sometimes it
-may be convenient to expose a parameter as having one name, but bind the
-argument that is passed to a variable of a different name:
+may be convenient to expose a parameter with one name while binding to a
+variable of a different name:
 
 =begin programlisting
 
@@ -347,10 +362,10 @@ others are Americans, you might write:
 =begin programlisting
 
     sub paint-rectangle(
-            :$x = 0,
-            :$y = 0,
-            :$width = 100,
-            :$height = 50,
+            :$x      =   0,
+            :$y      =   0,
+            :$width  = 100,
+            :$height =  50,
             :color(:colour($c))) {
 
        # print a piece of SVG that reprents a rectangle
@@ -388,8 +403,7 @@ three calls all mean the same thing:
 
 =end programlisting
 
-If you're only passing a boolean value, you don't even need the value portion
-of the pair:
+If you're passing a boolean value, you may omit the value portion of the pair:
 
 =begin programlisting
 
@@ -496,7 +510,7 @@ Z<pair_forms>
 
 =end table
 
-You can use all of these forms in any context where you can use a C<Pair>
+You can use any of these forms in any context where you can use a C<Pair>
 object. For example, when populating a hash:
 
 =begin programlisting
@@ -517,11 +531,10 @@ operator with a quoted string on the left-hand side: C<< "thing" => $thing >>.
 X<slurpy>
 
 In an earlier example the function C<shout-it> accepted an array argument.
-However, this prevented users from passing in a single argument. You may like
-to enable both possibilities, or to allow multiple positional arguments and
-even multiple array arguments all of which will flatten into a single array
-parameter in the subroutine. The I<slurpy> prefix (C<*>) before the parameter
-name accomplishes this:
+This prevented users from passing in a single argument. To enable both
+possibilities, or to allow multiple positional arguments and even multiple
+array arguments all of which will flatten into a single array parameter in the
+subroutine, prepend the I<slurpy> prefix (C<*>) to the parameter name:
 
 =begin programlisting
 
@@ -540,12 +553,12 @@ name accomplishes this:
 
 =end programlisting
 
-A parameter preceded by an asterisk C<*> is known as a I<slurpy>. It stores
-all remaining unbound positional arguments in an array.  Likewise, C<*%hash>
-slurps all the remaining unbound named arguments into a hash.
+A slurpy parameter--a parameter preceded by an asterisk (C<*>)--stores all
+remaining unbound positional arguments in an array.  Likewise, C<*%hash> slurps
+all the remaining unbound named arguments into a hash.
 
 Slurpy arrays and hashes allow you to pass all positional and named arguments
-to another routine, for example:
+to another routine:
 
 =begin programlisting
 
@@ -562,9 +575,8 @@ to another routine, for example:
 
 =head1 Returning Results
 
-Subroutines can also return values.  The ASCII art dancing subroutine example
-from earlier in this chapter, subroutines are simpler when they each return a
-new string for their callers to use:
+Subroutines can also return values.  The ASCII art dancing example from earlier
+in this chapter is simpler when each subroutine returns a new string:
 
 =begin programlisting
 
@@ -576,9 +588,11 @@ new string for their callers to use:
        arms-up         => sub { return '\o/ '   };
 
     my @awesome-dance = <arms-up bird-arms right hands-over-head>;
+
     for @awesome-dance -> $move {
         print %moves{$move}.();
     }
+
     print "\n";
 
 =end programlisting
@@ -601,9 +615,9 @@ A Perl subroutine can return multiple values:
 
 X<return>
 
-Even C<return> itself is not necessary.  If you exclude it, Perl will return
-the value produced by the last statement run inside the subroutine.  This
-simplifies the previous example:
+If you exclude the C<return> statement, Perl will return the value produced by
+the last statement run inside the subroutine.  This simplifies the previous
+example:
 
 =begin programlisting
 
@@ -621,10 +635,9 @@ simplifies the previous example:
 
 X<return; implicit>
 
-Be wary of relying on this, however: when the flow of control within a
-subroutine is sufficiently complex, adding an explicit C<return> will clarify
-the code. As a general rule, only the simplest subroutines benefit from
-implicit C<return>.
+Be wary of relying on this: when the flow of control within a subroutine is
+sufficiently complex, adding an explicit C<return> will clarify the code. As a
+general rule, only the simplest subroutines benefit from implicit C<return>.
 
 C<return> has the additional effect of immediately exiting the subroutine:
 
@@ -646,9 +659,8 @@ the only one you're going to get.
 
 Many subroutines cannot meaningfully work with arbitrary parameters, but
 require that the parameters support certain methods or have other properties.
-
-If that is the case, it makes sense to restrict the types of parameters, such
-that attempts to pass incorrect values as arguments will cause Perl to raise an
+In these cases, it makes sense to restrict the types of parameters, such that
+attempts to pass incorrect values as arguments will cause Perl to raise an
 error at the time of calling the subroutine.
 
 =head2 Basic Types
@@ -657,7 +669,7 @@ X<constraint; type>
 X<parameter type constraint>
 
 The easiest way to restrict the possible values that a subroutine accepts is by
-writing a type name in front of a parameter.  For example, a subroutine that
+writing a type name before a parameter.  For example, a subroutine that
 performs numeric calculations on its parameters could require that its
 arguments are of the type C<Numeric>:
 
@@ -672,24 +684,26 @@ arguments are of the type C<Numeric>:
 
 =end programlisting
 
-This produces this output:
+This produces the output:
 
 =begin screen
 
     2
-    Nominal type check failed for parameter '$a'; expected Numeric but got Str instead
+    Nominal type check failed for parameter '$a';
+        expected Numeric but got Str instead
 
 =end screen
 
-If multiple parameters have type constraints, each argument has to fulfill the
+If multiple parameters have type constraints, each argument must fulfill the
 type constraint of the parameter to which it binds.
 
 =head2 Adding Constraints
 
 X<constraint>
+X<where>
 
-Sometimes a type name is not enough to sufficiently describe the requirements
-for an argument. In this case, you may add an additional I<constraint> to the
+Sometimes a type name is insufficient to describe the requirements for an
+argument. In this case, you may add an additional I<constraint> to the
 parameter with a C<where> block:
 
 =begin programlisting
@@ -697,6 +711,7 @@ parameter with a C<where> block:
     sub circle-radius-from-area(Numeric $area where { $area >= 0 }) {
         ($area / pi).sqrt
     }
+
     say circle-radius-from-area(3);    # OK
     say circle-radius-from-area(-3);   # Error
 
@@ -704,12 +719,12 @@ parameter with a C<where> block:
 
 Because the calculation is meaningful only for non-negative area values, the
 parameter includes a constraint which returns C<True> for non-negative values.
-If this constraint returns a false value, the type check will fail at the time
-the routine is called.
+If this constraint returns a false value, the type check will fail when
+something calls this subroutine.
 
-The block after the C<where> is not required; Perl performs the check by smart
-matching the argument against whatever follows the C<where>. Therefore, it is
-possible to accept arguments in a certain range by just writing:
+The block after the C<where> optional; Perl performs the check by smart
+matching the argument against whatever follows the C<where>. It is possible to
+accept arguments in a certain range by writing:
 
 =begin programlisting
 
@@ -747,11 +762,17 @@ whole--instead focusing on individual parameters--you rarely have to think
 about captures.  When you do, Perl 6 allows you to manipulate captures
 directly.
 
-Captures have both positional and named parts, which act like a list and a hash
-respectively. The list-like part contains positional parameters and the
-hash-like part contains named parameters.
+Captures have both positional and named parts which act like lists and hashes,
+respectively. The list-like parts contain positional parameters and the
+hash-like parts contain named parameters.
 
 =head2 Creating And Using A Capture
+
+=for author
+
+"Interpolate" seems like the wrong word here; is there a better rephrasing?
+
+=end for
 
 To build a capture, use the C<\(...)> syntax. Like arrays and hashes, you can
 interpolate a capture into an argument by using C<|>:
@@ -773,16 +794,15 @@ interpolate a capture into an argument by using C<|>:
 
 This program creates an array of captures, each of which contains two
 positional arguments and one named argument. It then iterates over the array,
-making a call to C<act> with each argument set. The power here is that Perl 6
-allows you to specificy of the arguments for a call and the call itself
-separately, so as to apply the same arguments over many calls, or the same call
-to many sets of arguments. Significantly, the code that performs the
-application need not know whether any of the arguments are named or positional.
+making a call to C<act> with each argument set. Perl 6 allows you to specify
+the arguments for a call and the call itself separately, so as to apply the
+same arguments over many calls, or the same call to many sets of arguments.
+The code that performs the application need not know whether any of the
+arguments are named or positional.
 
-A deeper difference is that captures work like references. If a variable is
-mentioned in a capture, then the capture contains not just the value, as would
-happen in a list assignment, but instead a reference to the variable. Thus
-C<rw> parameters still work with captures involved.
+Unlike signatures, captures work like references. Any variable mentioned in a
+capture exists in the capture as a I<reference> to the variable.  Thus C<rw>
+parameters still work with captures involved.
 
 =begin programlisting
 
@@ -807,21 +827,25 @@ C<rw> parameters still work with captures involved.
 Perl types with both positional and named parts also show up in various other
 situations. For example, regex matches have both positional and named
 matches--C<Match> objects themselves are a type of capture. It's also possible
-to conceive of an XML node type that is a type of capture, where attributes are
-named and child nodes are positional.  Binding this node to a function could
-use the appropriate parameter syntax to work with various children and
-attributes.
+to conceive of an XML node type that is a type of capture, with named
+attributes and positional children.  Binding this node to a function could use
+the appropriate parameter syntax to work with various children and attributes.
+
+=for author
+
+I have the temptation to write "And this is a great way to implement the guts
+of a compiler, as Perl 6 itself does!"
+
+=end for
 
 =head2 Captures In Signatures
 
-All calls build a capture on the caller side and unpack it according to
-the signature on the callee sideN<An optimizing Perl 6 compiler may, of
-course, be able to optimize away building the capture data structure
-every call if it statically knows what is going to be called.>. It is
-also possible to write a signature that binds the capture itself into a
-variable. This is especially useful for writing routines that delegate
-to other routines with the same arguments.
-
+All calls build a capture on the caller side and unpack it according to the
+signature on the callee sideN<An optimizing Perl 6 compiler may, of course, be
+able to optimize away part or all of this process, depending on what it knows
+at compilation time.>. It is also possible to write a signature that binds the
+capture itself into a variable. This is especially useful for writing routines
+that delegate to other routines with the same arguments.
 
 =begin programlisting
 
@@ -878,10 +902,10 @@ X<signature unpacking>
 X<subsignature>
 
 The brackets in the signature tell the compiler to expect a list-like argument.
-Instead of binding to an array parameter, it instead gets I<unpacked> into
-several parameters--in this case, a scalar for the first element and an array
-for the rest.  This I<subsignature> also acts as a constraint on the array
-parameter: the signature binding will fail unless the list in the capture
+Instead of binding to an array parameter, it instead I<unpacks> its arguments
+into several parameters--in this case, a scalar for the first element and an
+array for the rest.  This I<subsignature> also acts as a constraint on the
+array parameter: the signature binding will fail unless the list in the capture
 contains at least one item.
 
 Likewise you can unpack a hash by using C<%(...)> instead of square brackets,
@@ -910,7 +934,15 @@ Is this a little too cute?
 
 =head1 Currying
 
-Consider a module that provided the example from the "Optional Parameters" section:
+=for author
+
+This explains some of the I<why> of currying, but not much of the I<what>.  Is
+that necessary?  Also, I<currying> or I<partial application>?
+
+=end for
+
+Consider a module that provided the example from the "Optional Parameters"
+section:
 
 =begin programlisting
 
@@ -918,10 +950,9 @@ Consider a module that provided the example from the "Optional Parameters" secti
 
 =end programlisting
 
-If you used order-burger repeatedly, but often with a side of french fries, you
-might wish that the author had also provided a "order-burger-and-fries" sub.
-
-You could easily write it yourself:
+If you used C<order-burger> repeatedly, but often with a side of french fries,
+you might wish that the author had also provided a C<order-burger-and-fries>
+sub.  You could easily write it yourself:
 
 =begin programlisting
 
@@ -932,8 +963,8 @@ You could easily write it yourself:
 =end programlisting
 
 If your personal order is always vegetarian, you might instead wish for a
-"order-the-usual" sub. This is less concise to write, due to the second
-parameter being optional:
+C<order-the-usual> sub. This is less concise to write, due to the optional
+second parameter:
 
 =begin programlisting
 
@@ -949,8 +980,8 @@ parameter being optional:
 =end programlisting
 
 Currying gives you a shortcut for these exact cases; it creates a new sub from
-an existing sub, with parameters already filled in. In Perl 6, we curry by
-using the .assuming method.
+an existing sub, with parameters already filled in. In Perl 6, curry with the
+C<.assuming> method:
 
 =begin programlisting
 
@@ -974,9 +1005,9 @@ parameter-passing schemes already described.
 
 =head1 Introspection
 
-Subroutines and their signatures are objects like any other. You can not only
-call them, but also learn things about them, including exaimining the details
-of their parameters:
+Subroutines and their signatures are objects like any other. Besides calling
+them, you can learn things about them, including the details of their
+parameters:
 
 =begin programlisting
 
@@ -1014,10 +1045,9 @@ of their parameters:
 =end screen
 
 The C<&> sigil followed by a subroutine name gets the object representing that
-subroutine rather than calling it. C<&logarithm.signature> returns the
-signature associated with the subroutine, and calling C<.params> on the
-signature returns a list of C<Parameter> objects. Each of these objects
-describes one parameter in detail.
+subroutine. C<&logarithm.signature> returns the signature associated with the
+subroutine, and calling C<.params> on the signature returns a list of
+C<Parameter> objects. Each of these objects describes one parameter in detail.
 
 =begin table Methods in the Parameter class
 
@@ -1109,12 +1139,12 @@ describes one parameter in detail.
 
 # TODO: talk about &signature.cando once that's implemented
 
-Being able to introspect signatures enables building interfaces that can obtain
-and then pass the right data to a subroutine. For example, you could build a
-web form generator that knew how to get input from a user, validate it and then
-call a routine with it based upon the information obtained through
-introspection.  A similar approach might generate a command line interface
-along with some basic usage instructions.
+Signature introspection allows you to build interfaces that can obtain and then
+pass the right data to a subroutine. For example, you could build a web form
+generator that knew how to get input from a user, validate it, and then call a
+routine with it based upon the information obtained through introspection.  A
+similar approach might generate a command line interface along with some basic
+usage instructions.
 
 =for author
 
