@@ -1,0 +1,55 @@
+Pm-1:  (basics) The first example uses C<.split> (e.g. to get the list
+    of names), but in Perl 6 the canonical way to grab a list
+    of words is via C<.comb>.  Should we switch?
+
+Pm-2:  (basics) Footnote 1 -- I'd reword as "Unlike in Perl 5, in Perl 6
+    the sigil does not change when accessing an array or hash
+    using C<[ ]> or C<{ }>.  This is called I<sigil invariance>."
+
+Pm-3:  (basics) I know it's a bit early to talk about Junctions, but
+    for the answer to problem #2 it might be better to say
+
+         unless all($p1, $p2) ~~ @names { ... }
+
+Pm-4:  (operators)  The &infix:<,> operator doesn't construct a C<List>,
+    and C<List>s are no longer immutable.
+
+Pm-5:  (operators, footnote #3)  "When the right-hand side appears
+    to be a list or array..."   actually gets the test backwards.
+    If the right-hand side is clearly a scalar, it's a tight item assignment,
+    otherwise it defaults to a loose-precedence list assignment.
+
+Pm-6:  (operators, "Comparisons and Smart Matching")  The first paragraph
+    is completely wrong -- C<===> tests for value equivalents, not
+    object identity.
+
+Pm-7: (operators, "Three-way Comparison")  Actually, the three-way
+    comparisons return C<Order::Increase>, C<Order::Same>, and
+    C<Order::Decrease>, not integers.  (And while we're at it,
+    C<.sort> tests for greater than, less than, and equal to 0, not
+    for -1 and +1.)
+
+Pm-8: (subroutines)  The code for C<@awesome-dance>  uses the
+    C<< <...> >> quoting operator but it hasn't been introduced
+    yet in the text.
+
+Pm-9: (subroutines, "Alternative Named Argument Syntaxes")
+    Actually, it's not the case that all Pairs act as named
+    arguments.  We ought to clean this up.  We should also
+    probably make explicit the terms "colonpair" and "autoquoted
+    pair".
+
+Pm-10: (subroutines, pairs)  "You can use any of these forms
+    in any context where you can use a Pair object."  Again this
+    is horribly imprecise and likely to confuse people.
+
+Pm-11: (subroutines, "return")  The code here uses a statement
+    modifier when we haven't introduced them yet.
+
+Pm-12: More generally, it seems like we ought to have a chapter on
+    statements before diving into subroutines.
+
+Pm-13: (subroutines, "Capture in Signatures")  uses the :(...)
+    syntax before it's been introduced.
+
+
