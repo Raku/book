@@ -12,9 +12,9 @@ simple technique uses so-called I<regular expressions> or I<regexes>:
     my $s = 'the quick brown fox jumped over the the lazy dog';
 
     my token word { \w+ [ \' \w+]? }
-    my regex dup { <word> \W+ $<word> }
-    if $s ~~ m/ <dup> / {
-        say "Found '{$<dup><word>}' twice in a row";
+    my regex dup { <word=&word> \W+ $<word> }
+    if $s ~~ m/ <dup=&dup> / {
+        say "Found '$<dup><word>' twice in a row";
     }
 
 =end programlisting
@@ -509,9 +509,9 @@ or C<isn't>:
 =begin programlisting
 
     my regex word { \w+ [ \' \w+]? }
-    my regex dup  { « <word> \W+ $<word> » }
+    my regex dup  { « <word=&word> \W+ $<word> » }
 
-    if $s ~~ m/ <dup> / {
+    if $s ~~ m/ <dup=&dup> / {
         say "Found '{$<dup><word>}' twice in a row";
     }
 
@@ -521,11 +521,21 @@ X<regex; backreference>
 
 This code introduces a regex named C<word>, which matches at least one word
 character, optionally followed by a single quote. Another regex called C<dup>
-(short for I<duplicate>) is anchored at a word boundary.  It calls the regex
-C<word> (via C<< <word> >>), matches at least one non-word character, and then
+(short for I<duplicate>) is anchored at a word boundary.
+
+With the syntax C<< <&word> >> it can pick up the regex C<word> from the
+current lexical scope. The C<< <name=&regex> >> syntax creates a capture named
+C<name>, which records what C<&regex> matched.
+
+
+In our example, C<dup> calls the C<word> regex, then matches at least one
+non-word character, and then
 matches the same string as previously matched by the regex C<word>.  It ends
 with another word boundary.  The syntax for this I<backreference> is a dollar
-sign followed by the name of the named regex in angle brackets.
+sign followed by the name of the capture in angle brackets.
+N<In grammars, which are introduced in the next chapter, C<< <word> >> simply
+looks up a regex named C<word> in the current grammar and parent grammars, and
+creates a capture of the same name.>
 
 X<subrule>
 X<regex; subrule>
@@ -569,9 +579,9 @@ C<:sigspace> modifier (shortened to C<:s>):
 
 =end programlisting
 
-This modifier allows optional whitespaces in the text wherever there is one or
+This modifier allows optional whitespace in the text wherever there is one or
 more whitespace character in the pattern. It's even a bit cleverer than that:
-between two word characters whitespaces are mandatory.  The regex does I<not>
+between two word characters whitespace is mandatory.  The regex does I<not>
 match the string C<eggs, milk, sugarandflour>.
 
 X<regex; :ignorecase modifier>
@@ -621,11 +631,11 @@ word:
 =begin programlisting
 
     my regex word { :ratchet \w+ [ \' \w+]? }
-    my regex dup  { <word> \W+ $<word> }
+    my regex dup  { <word=&word> \W+ $<word> }
 
     # no match, doesn't match the 'and'
     # in 'strand' without backtracking
-    'strand and beach' ~~ m/<dup>/
+    'strand and beach' ~~ m/<&dup>/
 
 =end programlisting
 
