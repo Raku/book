@@ -763,8 +763,8 @@ about captures.  When you do, Perl 6 allows you to manipulate captures
 directly.
 
 Captures have both positional and named parts which act like lists and hashes,
-respectively. The list-like parts contain positional parameters and the
-hash-like parts contain named parameters.
+respectively. The list-like parts contain positional arguments and the
+hash-like parts contain named arguments.
 
 =head2 Creating And Using A Capture
 

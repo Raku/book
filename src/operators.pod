@@ -74,7 +74,7 @@ could also write the example above as
 
 =end programlisting
 
-Finally, the C<,> operator constructs a C<List>, which is an immutable sequence
+Finally, the C<,> operator constructs a C<List>, which is a sequence
 of objects. In this case the objects are pairs.
 
 X<infix>
@@ -137,7 +137,7 @@ the product, and use C<< [<=] >> to check if a list is ordered by ascending
 values.
 
 After the C<[max]> you see the expression C<@scores».key».chars>. Just like
-C<@variable.method> calls a method on the C<@variable>, C<@array».method>
+C<@variable.method> calls a method on C<@variable>, C<@array».method>
 calls a method for each item in C<@array>, and returns the list of the return
 values.
 
@@ -146,8 +146,7 @@ can be entered on most computers
 N<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key position
 select on of the keys to be the "Compose" key. Then press
 Compose-key and the "greater than" key twice.>
-If your operating system does not make it easy to write it you can also write it as
->>.
+If your operating system does not make it easy to write it you can also write it using two angle brackets (>>).
 
 So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
 and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
@@ -322,10 +321,10 @@ right an integer and so they are not of the same type.
 
 =head2 Numeric Comparisons
 
-You can ask if two objects are the same number with the C<==> infix operator.
-If one of the objects is not number,  Perl will do its best to convert it to a
-number. If there is no good way to convert an object to a number, the default
-of C<0> is assumed.
+You can ask if two objects have the same numeric value with the C<==> infix 
+operator.  If one of the objects is not numeric,  Perl will do its best to
+make it numeric before doing the comparison.  If there is no good way to 
+convert an object to a number, the default of C<0> is assumed.
 
 =begin programlisting
 
