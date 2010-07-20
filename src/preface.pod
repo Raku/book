@@ -89,9 +89,7 @@ Did the lexical fix get merged?
 
 If you invoke the Rakudo compiler without an explicit script to run, it enters
 a small interactive mode that allows Perl 6 statements to be executed from the
-command line. Each line entered is treated as a separate compilation unit,
-however (which means that subroutines are preserved after they are defined, but
-variables are not).
+command line. 
 
 =head1 Getting involved
 
