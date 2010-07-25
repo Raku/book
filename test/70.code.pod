@@ -11,6 +11,16 @@ Following is "=begin/=end programlisting" wrapped:
 
 =end programlisting
 
+The same, this time with bold variable names:
+
+=begin programlisting
+
+    my B<$s> = 'the quick brown fox jumped over the the lazy dog';
+    my B<$camelia> = "»ö«";
+
+=end programlisting
+
+
 =head1 "=begin/=end screen"
 
 =begin screen
