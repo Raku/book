@@ -33,14 +33,12 @@ BEGIN {
 sub start_B {
     my $self = shift;
     my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
-    return if $target eq 'programlisting';
     $self->{scratch} .= '\\textbf{';
 }
 
 sub end_B {
     my $self = shift;
     my $target = eval { $self->{curr_open}[-1][-1]{target} } || '';
-    return if $target eq 'programlisting';
     $self->{scratch} .= '}';
 }
 
@@ -58,7 +56,10 @@ sub end_U {
 # --------------------------------------------------------------------
 sub encode_verbatim_text {
     my ($self, $text) = @_;
-        # Needs fixing.
+
+    $text =~ s/([{}])/\\$1/g;
+    $text =~ s/\\(?![{}])/\\textbackslash{}/g;
+    
     return $text;
 }
 
