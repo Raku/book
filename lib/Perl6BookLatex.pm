@@ -78,7 +78,7 @@ sub start_Verbatim {
    #     $self->{scratch} .= "\\begin{perlcode}\n";
    # }
     else {
-        $self->{scratch} .= "\\begin{Verbatim}\n";
+        $self->{scratch} .= "\\begin{Verbatim}[numbers=left]\n";
     }
 
     $self->{flags}{in_verbatim}++;
