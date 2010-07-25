@@ -1,7 +1,7 @@
 PERL = perl
 
 ifeq "$(PAPER)" ""
-	PAPER = a4
+	PAPER = $(shell paperconf)
 endif
 
 ifneq "$(TEST)" ""
