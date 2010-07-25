@@ -1,0 +1,104 @@
+=head0 Code blocks
+
+See how UTF-8 is handled: »ö« é À (camelia, eacute, Agrave).
+
+Following is "=begin/=end programlisting" wrapped:
+
+=begin programlisting
+
+    my $s = 'the quick brown fox jumped over the the lazy dog';
+    my $camelia = "»ö«";
+
+=end programlisting
+
+=head1 "=begin/=end screen"
+
+=begin screen
+
+    Screen line 1.
+    Screen line 2.
+
+    Screen line 4.
+
+=end screen
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=begin screen
+
+    Screen line 1.
+    Screen line 2.
+
+    Screen line 4.
+
+=end screen
+
+=begin screen
+
+    Screen line 1.
+    Screen line 2.
+
+    Screen line 4.
+
+=end screen
+
+=head1 Indented lines
+
+The following is simply two indented lines in the source:
+
+    This is line 1.
+    And this, line 2.
+
+=head1 "=begin/=end sidebar"
+
+=begin sidebar
+
+Sidebar text.
+
+=end sidebar
+
+=head1 Head 1
+
+Foo
+
+=head2 Head 2
+
+=head1 "=begin/=end table"
+
+=begin table This is the table title
+
+=headrow
+
+=row
+
+=cell First cell head row.
+
+=cell Second cell head row.
+
+=bodyrows
+
+=row
+
+=cell Cell 1, row 1.
+
+=cell Cell 2, row 1.
+
+=row
+
+=cell Cell 1, row 2.
+
+=cell Cell 2, row 2.
+
+=end table
+
+=head1 "=for figure"
+
+=for figure
+        \includegraphics[width=0.8\textwidth]{mmd-table.pdf}
+        \caption{Who wins the \emph{Rock, Paper, Scissors} game?}
+        \label{fig:mmd-rock-paper-scissors}
+
+=for vim: tw=70

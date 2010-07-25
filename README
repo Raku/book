@@ -17,26 +17,19 @@ Logs of the IRC discussions: <http://irclog.perlgeek.de/perl6book/>
 To build the book, you need to have the following software installed:
 
     * GNU make
-    * perl 5
-    * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101650 or newer
-    * inkscape (for svg -> pdf conversion) <http://www.inkscape.org/download/>
-    * pdflatex
-    * the 'bera' font as a LaTeX package
-    * the 'fancyvrb' package for LaTex
+    * perl 5.10
+    * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101050 or newer
+    * inkscape (for svg -> pdf conversion)
+    * A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04 supplies
+      most of what is needed with its texlive-latex-base,
+      texlive-fonts-extra, and texlive-latex-recommended packages.
 
-      In Ubuntu 10.04 the last three bullet items are available from 
-      the texlive-latex-base, texlive-fonts-extra, and 
-      texlive-latex-recommended packages.
-      On Mac OS X, they are part of MacTeX (TeX Live) 2009
-      <http://www.tug.org/mactex/2009/> .
-      Otherwise, you will need a TeX or LaTeX package for your platform
-      to get pdflatex, and might need to install bera and fancyvrb manually.
-      <http://mirror.ctan.org/tex-archive/systems/>
-      <http://mirror.ctan.org/fonts/bera.zip>
-      <http://mirror.ctan.org/tex-archive/macros/latex/contrib/fancyvrb.zip>
+The book is produced from src/*.pod chapters ultimately rendered into
+build/*.pdf using bin/* and lib/* files.
 
 Just type 'make' on your command line, and the book should be built in
-build/book.pdf
+build/UsingPerl6.a4.pdf, with an A4 paper size; to get U.S. letter size,
+type 'make PAPER=letter'.
 
 All material in this repository is licensed under a CC-by-nc-sa license:
 <http://creativecommons.org/licenses/by-nc-sa/2.5/> (attribution,

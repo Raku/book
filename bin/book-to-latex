@@ -1,48 +1,37 @@
-#!perl -w
+#!/usr/bin/perl
 use strict;
-use Pod::PseudoPod::LaTeX 1.101650;
+use warnings;
+use feature ':5.10';
+use Getopt::Long;
+use Perl6BookLatex;
+use Template;
 
-print <<'HEADER';
-\documentclass[11pt,a4paper,oneside]{report}
-\usepackage{graphics,graphicx}
-\usepackage{colortbl}
-\usepackage{fancybox}
-\usepackage{fancyvrb}
-\usepackage[T1]{fontenc}
-\usepackage{bera}
-\usepackage[utf8]{inputenc}
-\usepackage{makeidx}
-\usepackage[colorlinks=true,pagebackref]{hyperref}
+main();
 
-% shadowbox
-\newsavebox{\sidebarcontent}
-\newenvironment{sidebar}[1][]{\begin{lrbox}{\sidebarcontent}\begin{minipage}{3.5in}\sloppy
-\ifx\relax#1\else\centerline{\large\bfseries #1}\par\fi}
-{\end{minipage}\end{lrbox}\begin{center}\shadowbox{\usebox{\sidebarcontent}}\end{center}}
+sub main {
+    my $paper;
+    GetOptions(
 
-\makeindex
+        # Should be one of: a4, letter.
+        'paper:s' => \$paper,
+    ) or die;
 
-\title{Using Perl~6}
-\author{Jonathan S. Duff, Moritz Lenz, Carl Mäsak, Patrick R. Michaud, Jonathan Worthington}
- 
-\begin{document}
+    my $output;
+    for (@ARGV) {
+        my $parser = Perl6BookLatex->new();
+        $parser->emit_environments( sidebar => "sidebar" );
+        $parser->codes_in_verbatim(1);
+        $parser->output_string( \$output );
+        $parser->parse_file($_);
+    }
 
-\maketitle
+    my $tt = Template->new( { INCLUDE_PATH => 'lib', } );
 
-\tableofcontents
-HEADER
+    print $tt->process(
+        'book.sty', {
+            content  => $output,
+            paper    => $paper,
+        } );
 
-for (@ARGV) {
-    my $parser = Pod::PseudoPod::LaTeX->new();
-    $parser->emit_environments( sidebar => "sidebar" );
-    $parser->codes_in_verbatim(1);
-    $parser->output_fh( *STDOUT );
-    $parser->parse_file( $_ );
-}
+} ## end sub main
 
-print <<'FOOTER';
-
-\printindex
-
-\end{document}
-FOOTER

@@ -1,0 +1,88 @@
+=head0 This test book
+
+This test book can be built with the same options as the real book, to
+see how the fonts, features, and spacing come out. It takes less time
+to build too, so it's easier to try out things.
+
+It tries to use most of the POD and PseudoPod directives, as listed in
+C<perldoc perlpod> and C<perldoc Pod::PseudoPod::Tutorial>, although
+perhaps many of them are not actually used in the actual book. This
+chapter shows how ordinary paragraphs appear. Here is a "verbatim
+paragraph":
+
+    Indented four spaces
+	Indented one tab. Next line blank.
+
+ Indented one space. A backslash: \
+  Indented two spaces. A backslash: \
+
+Now, let's look at C<=head1>, C<=head2>, C<=head3>.
+C<Pod::PseudoPod::Latex> also gives us a C<=head0> for our chapter
+titles, but C<=head4> appears to be unsupported.
+
+=head1 This is a =head1
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=head2 This is a =head2
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=head3 This is a =head3
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=head1 (back to =head1) 
+
+What will now follow is:
+
+    =over 4
+    =item First item
+    =item Second item
+    ...
+    =back
+
+=over 4
+
+=item First item (no content)
+
+=item Second item (no content)
+
+=item Third item
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=item Fourth item
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo
+
+=back
+
+Finally, we close this chapter with a C<=pod/=cut>. Note that anything
+that follows the C<=cut> will not be processed (unless it is preceded
+by another paragraph directive, which it isn't).
+
+=pod
+
+This is a C<=pod/=cut> paragraph.
+
+=cut
+
+This will not appear.
+
+=for vim: tw=70
