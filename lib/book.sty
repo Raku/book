@@ -5,11 +5,11 @@
     headsepline=on,
     footsepline=off,
     chapterprefix=on,
-    oneside,
+    12pt,
+    twoside,
+    openright,
+    cleardoublepage=plain
 ]{scrbook}
-
-% Title in the variable for using in headers
-\newcommand*\mytitle{Using Perl~6}
 
 % XeTeX unicode support -- e.g. character replacements
 \usepackage{xunicode}
@@ -33,14 +33,9 @@
 
 % Fonts.
 \usepackage{fontspec}
-\setromanfont[Mapping=tex-text]{Century Schoolbook L}
-\setsansfont[Mapping=tex-text]{Luxi Sans}
+\setromanfont[Mapping=tex-text]{Minion Pro}
+\setsansfont[Mapping=tex-text]{Myriad Pro}
 \setmonofont[Scale=0.75]{Luxi Mono}
-
-% Actually, this would be the right font to go with Luxi Sans and Luxi Mono
-% However, it looks strangely condensed, which is nice but rather unreadable
-% Maybe we can use this font later on.
-%\setromanfont[Mapping=tex-text]{Luxi Serif}
 
 % microtype is not available for XeTeX yet
 %\usepackage{microtype}
@@ -70,57 +65,246 @@
 % URLs
 \DeclareUrlCommand\email{\urlstyle{rm}\urlstyle{bf}}
 
-% Headers and footers
-\usepackage[headsepline,nouppercase,automark]{scrpage2}
-\clearscrheadfoot
-\ofoot[\pagemark]{\pagemark}
-\ohead{\headmark}
-\ihead{\mytitle}
-\setheadsepline{0.3pt}
-\setkomafont{pageheadfoot}{
-  \normalfont\sffamily\bfseries
-}
-\pagestyle{scrheadings}
-
 % Footnote correction
 \deffootnote{1.5em}{1.5em}{\makebox[1.5em][c]{\textsuperscript\thefootnotemark}}
 
 % Needed for \includegraphics from '=for figure' in some src/*.pod.
 \usepackage{graphics,graphicx}
 
-% Shadow box, for sidebars.
-\newsavebox{\sidebarcontent}
-\newenvironment{sidebar}[1][]{\begin{lrbox}{\sidebarcontent}\begin{minipage}{3.5in}\sloppy
-\ifx\relax#1\else\centerline{\large\bfseries #1}\par\fi}
-{\end{minipage}\end{lrbox}
-\begin{center}
-\shadowbox{\usebox{\sidebarcontent}}
-\end{center}}
-
-\makeindex
-
-\title{\mytitle}
-
-\author{
-    Jonathan S. Duff \\
-    Moritz Lenz \\
-    Carl Mäsak \\
-    Patrick R. Michaud \\
-    Jonathan Worthington \\
+% Set TOC to mostly sans-serif
+\usepackage[titles]{tocloft}
+ 
+\setlength{\cftbeforechapskip}{2ex}
+\setlength{\cftbeforesecskip}{0.8ex}
+\setlength{\cftbeforesubsecskip}{0.8ex}
+ 
+\renewcommand{\cftchapfont}{%
+   \sffamily\bfseries
 }
+\renewcommand{\cftchappagefont}{\sffamily}
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftsubsecpagefont}{\sffamily}
+\usepackage[sf,sl,outermarks,noindentafter,nobottomtitles]{titlesec}
 
-    % Clear title page date.
-\date{}
+% Headlines formatting
+\titleformat{\section}[hang]{\Large\sffamily}{\thetitle}{8pt}{}
+\titleformat{\subsection}[hang]{\large\sffamily}{\thetitle}{8pt}{}
+\titleformat{\subsubsection}[hang]{\normalfont\sffamily}{\thetitle}{8pt}{}
+\titleformat{\paragraph}[hang]{\bfseries\sffamily}{\thetitle}{8pt}{}
+
+% Chapter heading formatting
+\titleformat{\chapter}[display]
+{\filleft\huge\sffamily}
+{\fontsize{100pt}{90pt}\selectfont\thechapter}
+{-2ex}{\vspace{1ex}}
+[\vspace{1ex}]
+
+%% HEADINGS %%
+\newlength{\marginWidth}
+\setlength\marginWidth{\marginparwidth+\marginparsep}
+\newlength{\fulllinewidth}
+\setlength\fulllinewidth{\textwidth+\marginWidth}
+ 
+\usepackage{truncate}
+ 
+\footskip=1.6cm
+\makeatletter
+
+% Standard footer on odd pages 
+\def\oddfootSTANDARD{
+  \renewcommand{\@oddfoot}{
+      \hbox to\textwidth{\vbox{\hbox to\textwidth{
+         \hfill
+         \strut
+         \hspace{1pt}
+       }}}
+       \hbox to\marginWidth{\vbox{\hbox to\marginWidth{
+          \strut 
+               \hspace{5pt}              
+               \vrule width 1pt height 2ex
+            \hspace{8pt}            
+            \textsf{\thepage}
+            \hfill
+       }}}\hss  
+   }
+}
+ 
+% Standard footer on even pages
+\def\evenfootSTANDARD{
+  \renewcommand{\@evenfoot}{
+     \hspace{-\marginWidth}  
+         \hbox to\marginWidth{\vbox{\hbox to\marginWidth{
+         \strut 
+         \hfill
+         \textsf{\thepage}
+         \hspace{5pt}
+         \vrule width 1pt height 2ex
+         \hspace{7pt}
+      }}}\hss
+   }  
+}
+ 
+\newcommand{\ps@doc}{
+  %% TODO: Re-enable when all text is in some kind of subchapter, since otherwise
+  %% the header is empty and the number is 2.0 or something like it.
+
+  %% \renewcommand{\@oddhead}{
+  %%       \hbox to\textwidth{\vbox{\hbox to\textwidth{
+  %%          \textsf
+  %%          \hfill
+  %%          \rightmark
+  %%          \strut
+  %%          \hspace{1pt}
+  %%     }}}
+  %%        \hbox to\marginWidth{\vbox{\hbox to\marginWidth{
+  %%           \strut 
+  %%           \hspace{5pt}
+  %%           \vrule width 1pt
+  %%           \hspace{5pt}
+  %%           \textsf
+  %%           \thesection
+  %%           \hfill
+  %%        }}}\hss
+  %%  }  
+   
+   \renewcommand{\@evenhead}{
+     \hspace{-\marginWidth}  
+         \hbox to\marginWidth{\vbox{\hbox to\marginWidth{
+            \hfill
+            \strut 
+            \textbf{\textsf{Chapter~\thechapter}}
+            \hspace{5pt}
+            \vrule width 1pt
+            \hspace{7pt}
+            \strut
+         }}}\hss
+         
+         \hbox to\textwidth{\vbox{\hbox to\textwidth{
+            \strut 
+         \truncate{.9\textwidth}{\leftmark}
+         \hfill
+      }}}\hss
+   }
+   
+   \oddfootSTANDARD  
+   \evenfootSTANDARD  
+}
+ 
+\renewcommand{\ps@plain}{
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \let\@evenfoot\@empty  
+  \oddfootSTANDARD
+}
+ 
+\newcommand{\ps@docINTRO}{
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \oddfootSTANDARD  
+  \evenfootSTANDARD  
+}
+ 
+\newcommand{\ps@docAPPENDIX}{
+  \let\@oddhead\@empty
+   \renewcommand{\@evenhead}{
+     \hspace{-\marginWidth}  
+         \hbox to\marginWidth{\vbox{\hbox to\marginWidth{
+            \hfill
+            \strut 
+            \textbf{\textsf{Appendix~\thechapter}}
+            \hspace{5pt}
+            \vrule width 1pt
+            \hspace{7pt}
+            \strut
+         }}}\hss
+         
+         \hbox to\textwidth{\vbox{\hbox to\textwidth{
+            \strut 
+            \truncate{.9\textwidth}{\leftmark}
+            \hfill
+         }}}\hss  
+   }
+   
+   \oddfootSTANDARD
+   \evenfootSTANDARD
+}
+ 
+\newcommand{\ps@reallyempty}{
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+}
+ 
+\renewcommand{\chaptermark}[1]{\markboth{\uppercase{\textsf{#1}}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\textsf{#1}}}
+ 
+\makeatother
+ 
+%% \let\origdoublepage\cleardoublepage
+%% \newcommand{\clearemptydoublepage}{%
+%%   \clearpage
+%%   {\pagestyle{empty}\origdoublepage}%
+%% }
+%% \let\cleardoublepage\clearemptydoublepage
+
+%% HEADINGs END %%
+
+% No widows and orphans
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+% Admonition
+\usepackage{framed}
+\usepackage{xcolor}
+ 
+\definecolor{MyBoxColor}{rgb}{0.9,0.9,0.9}
+\newenvironment{sidebar}{
+ \def\FrameCommand{\fboxsep=\FrameSep \colorbox{MyBoxColor}}
+  \MakeFramed {\advance\hsize-2\width\FrameRestore}}
+{\endMakeFramed}
+ 
+\makeindex
 
 \begin{document}
 
+\subject{\includegraphics{../src/perl6logo}}
+\title{Using Perl~6}
+\subtitle{}
+\author{
+    Jonathan S. Duff \and
+    Moritz Lenz \and
+    Carl Mäsak \and
+    Patrick R. Michaud \and
+    Jonathan Worthington \and
+}
+\date{}
+\publishers{With contributions by the community}
+\lowertitleback{Fonts: Adobe MinionPro, Adobe MyriadPro, B\&H Luxi Sans.\\\LaTeX-Layout: Nikolai Prokoschenko et al. Big thanks to Konrad Mühler for his \LaTeX\ tips collection (\url{http://www.kfiles.de/latex.php})}
 \maketitle
+
+
+\pagestyle{docINTRO}
+\pagenumbering{roman}
 
 \tableofcontents
 
-[% content %]
+\cleardoublepage
+%\newpage
+\pagestyle{doc}
+\pagenumbering{arabic}
 
+[% content %]
+\begin{appendix}
+\cleardoublepage
+%\newpage
+\pagestyle{docAPPENDIX}
 \printindex
+
+\end{appendix}
 
 \end{document}
 
