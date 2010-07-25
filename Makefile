@@ -20,7 +20,8 @@ else
     src/subtypes.pod \
     src/regexes.pod \
     src/grammars.pod \
-    src/builtins.pod \
+    src/builtins.pod
+
 endif
 
 default: prepare pdf clean
