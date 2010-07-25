@@ -1,5 +1,7 @@
 =head0 Classes and Objects
 
+TODO: start with a much simpler bare-bones example!
+
 The following program shows how a dependency handler might look in Perl 6.
 It showcases custom constructors, private and public attributes, methods
 and various aspects of signatures. It's not very much code, and yet the

@@ -313,11 +313,15 @@ because they really point to the same object.
  
 =end programlisting
 
+TODO 'immutable' is used above but hasn't been explained
+
 The C<eqv> operator returns C<True> only if two objects are of the same type,
 and of the same structure. With the variables defined above, C<@a eqv @b> is
 true because C<@a> and C<@b> contain the same values each. On the other hand
 C<'2' eqv 2> returns C<False>, because the left argument is a string, the
 right an integer and so they are not of the same type.
+
+TODO clarify "same structure"
 
 =head2 Numeric Comparisons
 
@@ -524,6 +528,10 @@ C<$answer ~~ 42> actually desugars to a method call like C<42.ACCEPTS($answer)>.
 The upshot of this is that -- after reading the chapter on writing classes and
 methods -- you too will be able to write things that can be smart-match against
 just by implementing an C<ACCEPTS> method to do the right thing.
+
+TODO: explain 'desugars' terminology
+
+TODO: add := operator as that's used in subs-n-sigs.pod
 
 =end sidebar
 
