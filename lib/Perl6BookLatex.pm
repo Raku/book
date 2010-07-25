@@ -42,6 +42,16 @@ sub end_B {
     $self->{scratch} .= '}';
 }
 
+sub start_C {
+    my $self = shift;
+    $self->{scratch} .= "\\VerbatimQuotes\\texttt{";
+}
+
+sub end_C {
+    my $self = shift;
+    $self->{scratch} .= "}\\EnableQuotes{}";
+}
+
 # --------------------------------------------------------------------
 sub start_U {
     my $self = shift;
