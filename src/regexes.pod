@@ -17,14 +17,13 @@ See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
 
 A common writing error is to duplicate a word by accident. It is hard to
 catch such errors by rereading your own text, but Perl can do it for you
-using C<regex>.
+using C<regex>:
 
 =begin programlisting
 
     my $s = 'the quick brown fox jumped over the the lazy dog';
 
-    my $word = rx/ \w+ [ \' \w+]? /;
-    if $s ~~ m/ ($word) \W+ $0 / {
+    if $s ~~ m/ « (\w+) \W+ $0 » / {
         say "Found '$0' twice in a row";
     }
 
@@ -51,7 +50,9 @@ one.
 Only word characters, digits, and the underscore cause an exact substring
 search. All other characters may have a special meaning. If you want to search
 for a comma, an asterisk, or another non-word character, you must quote or
-escape it:
+escape itN<If you're just searching for literal text and not actually utilizing the
+pattern matching features of regex, consider using the C<index> or C<rindex> subroutines
+instead.>:
 
 =begin programlisting
 
@@ -63,16 +64,6 @@ escape it:
     if $str ~~ m/ \* very \* / { say '\o/' }
 
 =end programlisting
-
-=for author
-
-What are the C<index> and C<rindex> ops in Perl 6?
-
-There's a sidebar explaining rindex -- did you miss that? Is it too far
-away from the example? (I've also added an explanation for index() now)
-    --moritz
-
-=end for
 
 X<regex; metasyntactic characters>
 X<regex; special characters>
@@ -118,13 +109,20 @@ Suppose you have a big chunk of text.  For solving a crossword puzzle you are
 looking for words containing C<pe>, then an arbitrary letter, and then an C<l>
 (but not a space, as your puzzle has extra markers for those). The appropriate
 regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
-"word" character--a letter, digit, or an underscore. Several other common
-control sequences each match a single character:
+"Word" character--a letter, digit, or an underscore.  In the example
+at the beginning of this chapter C<\w> is used to build the definition
+of a "word".
+
+Several other common control sequences each match a single character:
 
 =begin table Backslash sequences and their meaning
 
+=for todo
+
 # TODO: Add a non-latin digit to \d
 # we used to have \c[ARABIC-INDIC DIGIT NINE], but LaTeX didn't like that :/
+
+=end
 
 =headrow
 
@@ -152,7 +150,7 @@ control sequences each match a single character:
 
 =cell digit
 
-=cell 0, 1,
+=cell 0, 1
 
 =row
 
@@ -430,7 +428,7 @@ for I<extracting> information too.
 
 X<regex; $/>
 
-Surrounding a part of a regex with round brackets C<(...)> makes Perl
+Surrounding part of a regex with round brackets (aka parentheses) C<(...)> makes Perl
 I<capture> the string it matches. The string matched by the first group of
 parentheses is available in C<$/[0]>, the second in C<$/[1]>, etc.  C<$/> acts
 as an array containing the captures from each parentheses group.
@@ -479,21 +477,21 @@ first capture matches, the second is still available in C<$/[1]>.
 As a shortcut, C<$/[0]> is also available under the name C<$0>, C<$/[1]> as
 C<$1>, and so on. These aliases are also available inside the regex. This
 allows you to write a regex that detects that common error of duplicated
-words:
+words, just like the example at the beginning of this chapter:
 
 =begin programlisting
 
-    my $s = 'the quick brown fox jumped over B<the the> lazy dog';
+    my $s = 'the quick brown fox jumped over the the lazy dog';
 
-    if $s ~~ m/ « ( \w+ ) \W+ $0 » / {
-        say "Found two '$0' in a row";
+    if $s ~~ m/ « (\w+) \W+ $0 » / {
+        say "Found '$0' twice in a row";
     }
 
 =end programlisting
 
 The regex first anchors to a left word boundary with C<«> so that it doesn't
-match partial duplication of words.  Next, the regex captures a word (C<( \w+
-)>), followed by at least one non-word character C<\W+>.  This implies a right
+match partial duplication of words.  Next, the regex captures a word (C<( \w+)>),
+followed by at least one non-word character C<\W+>.  This implies a right
 word boundary, so there is no need to use an explicit boundary.  Then it
 matches the previous capture followed by a right word boundary.
 
@@ -505,10 +503,10 @@ word boundary anchor it would also match I<< B<the the>ory >>.
 
 X<regex; named>
 
-You can declare regexes just like subroutines and even name them. Suppose you
-found the previous example useful and want to make it available easily.
-Suppose also you want to extend it to handle contractions such as C<doesn't>
-or C<isn't>:
+You can declare regexes just like subroutines and even name them.
+Suppose you found the example at the beginning of this chapter useful
+and want to make it available easily.  Suppose also you want to extend
+it to handle contractions such as C<doesn't> or C<isn't>:
 
 =begin programlisting
 
@@ -527,19 +525,19 @@ This code introduces a regex named C<word>, which matches at least one word
 character, optionally followed by a single quote. Another regex called C<dup>
 (short for I<duplicate>) is anchored at a word boundary.
 
-With the syntax C<< <&word> >> it can pick up the regex C<word> from the
-current lexical scope. The C<< <name=&regex> >> syntax creates a capture named
-C<name>, which records what C<&regex> matched.
-
+Since named regex are very much like subroutines, within a regex, the syntax C<< <&word> >> 
+locates the regex C<word> within the current lexical scope and matches as if the regex
+were used in its place. The C<< <name=&regex> >> syntax creates a capture named
+C<name>, which records what C<&regex> matched in the match object.
 
 In our example, C<dup> calls the C<word> regex, then matches at least one
-non-word character, and then
-matches the same string as previously matched by the regex C<word>.  It ends
-with another word boundary.  The syntax for this I<backreference> is a dollar
-sign followed by the name of the capture in angle brackets.
-N<In grammars, which are introduced in the next chapter, C<< <word> >> simply
-looks up a regex named C<word> in the current grammar and parent grammars, and
-creates a capture of the same name.>
+non-word character, and then matches the same string as previously matched 
+by the regex C<word>.  It ends with another word boundary.  The syntax for 
+This I<backreference> is a dollar sign followed by the name of the
+capture in angle brackets.  N<In grammars, which are introduced in the
+next chapter, c<< <word> >> simply looks up a regex named C<word> in
+the current grammar and parent grammars, and creates a capture of the
+same name.>
 
 X<subrule>
 X<regex; subrule>
