@@ -2,14 +2,23 @@ Pm-1:  (basics) The first example uses C<.split> (e.g. to get the list
     of names), but in Perl 6 the canonical way to grab a list
     of words is via C<.comb>.  Should we switch?
 
+perlpilot: I don't think so.  C<.comb> takes a regex to describe
+           what you want and it's too soon and potentially
+           confusing to bring those up.
+
 Pm-2:  (basics) Footnote 1 -- I'd reword as "Unlike in Perl 5, in Perl 6
     the sigil does not change when accessing an array or hash
     using C<[ ]> or C<{ }>.  This is called I<sigil invariance>."
+
+perlpilot: reworded mostly the same.
 
 Pm-3:  (basics) I know it's a bit early to talk about Junctions, but
     for the answer to problem #2 it might be better to say
 
          unless all($p1, $p2) ~~ @names { ... }
+
+perlpilot: Definitely not.  We don't talk about Junctions B<at all> in
+           the book yet  :)
 
 Pm-4:  (operators)  The &infix:<,> operator doesn't construct a C<List>,
     and C<List>s are no longer immutable.
