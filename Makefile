@@ -1,4 +1,15 @@
-CHAPTERS = \
+PERL = perl
+
+ifeq "$(PAPER)" ""
+	PAPER = $(shell paperconf)
+endif
+
+ifneq "$(TEST)" ""
+	BOOK = build/test.$(PAPER)
+	CHAPTERS = $(wildcard test/*.pod)
+else
+	BOOK = build/UsingPerl6.$(PAPER)
+	CHAPTERS = \
     src/preface.pod \
     src/basics.pod \
     src/operators.pod \
@@ -9,34 +20,30 @@ CHAPTERS = \
     src/subtypes.pod \
     src/regexes.pod \
     src/grammars.pod \
-    src/builtins.pod \
+    src/builtins.pod
 
-PERL = perl
+endif
 
-# If you're on a Mac, and installed Inkscape via MacPorts, you might want to
-# manually uncomment the next line, and remove the one after it.
-#INKSCAPE = /Applications/Inkscape.app/Contents/Resources/bin/inkscape
-INKSCAPE = inkscape
+default: prepare pdf clean
 
-default: build/book.pdf
+prepare: clean
+	mkdir build
 
-release: build/book.pdf
-	cp build/book.pdf build/book-$$(date +"%Y-%m").pdf
+html: prepare $(CHAPTERS) bin/book-to-html
+	$(PERL) bin/book-to-html $(CHAPTERS) > $(BOOK).html
 
-build/mmd-table.pdf: src/mmd-table.svg
-	$(INKSCAPE) --export-pdf=build/mmd-table.pdf -D src/mmd-table.svg
+pdf: tex lib/Makefile
+	cp src/mmd-table.svg build/mmd-table.svg
+	cd build && make -I ../lib -f ../lib/Makefile 
 
-build/book.html: $(CHAPTERS) bin/book-to-html
-	$(PERL) bin/book-to-html $(CHAPTERS) > build/book.html
+tex: prepare $(CHAPTERS) lib/Perl6BookLatex.pm lib/book.sty bin/book-to-latex
+	$(PERL) -Ilib bin/book-to-latex --paper $(PAPER) $(CHAPTERS) > $(BOOK).tex
 
-build/book.pdf:	build/book.tex build/mmd-table.pdf
-	cd build && pdflatex book.tex && makeindex book && pdflatex book.tex
-
-build/book.tex: $(CHAPTERS) bin/book-to-latex
-	$(PERL) bin/book-to-latex $(CHAPTERS) > build/book.tex
+release: pdf
+	cp $(BOOK).pdf build/book-$$(date +"%Y-%m").$(PAPER).pdf
 
 clean: 
-	rm -rf build/*
+	rm -rf build/
 
 .PHONY: clean
 

@@ -52,6 +52,8 @@ with C<my>. This means that a subroutine may only be called within the scope in
 which it was declared.  Use the scope declarator C<our> to make the subroutine
 available globally within the current package:
 
+TODO: clarify "globally within the current package". It's confusing/ambiguous.
+
 =begin programlisting
 
     {
@@ -90,6 +92,9 @@ pad or other exotic input device).  How can you maintain a variable list of
 custom behaviors, allow user input, and restrict that input to a safe set of
 behaviors?
 
+TODO this example uses the ~= operator before it's been introduced.
+TODO this example doesn't seem like a good one for first-class subs.
+
 =begin programlisting
 
     my $dance = '';
@@ -125,6 +130,8 @@ variables in the subroutine to which the arguments are bound. These variables
 are called I<parameters>.  Perl 6 signatures go further; they allow you to
 constrain the values of arguments and to match against and extract parts of
 complex data structures.
+
+TODO A third task: specifying a return type.
 
 =head2 The Basics
 
@@ -197,8 +204,10 @@ from a single subroutine, Perl allows you to return multiple values directly.
 
 A variable's sigil indicates its intended use.  In a signature, a variable's
 sigil acts as a constraint on the type of argument passed.  The C<@> sigil, for
-example, checks that the passed value is C<Positional>.  Failing to pass
+example, checks that the passed value does the C<Positional> role.  Failing to pass
 something that matches this constraint will cause the call to fail.
+
+TODO: note the forward reference to roles and/or Positional.
 
 =begin programlisting
 
@@ -330,7 +339,7 @@ Appending a C<!> makes it mandatory.
 
 =begin programlisting
 
-    sub design-ice-cream-mixture(:$name!, $base = 'Vanilla', @mixins) {
+    sub design-ice-cream-mixture(:$name!, $base = 'Vanilla') {
         say "Creating a new recipe named $name!"
     }
 
@@ -478,9 +487,9 @@ Z<pair_forms>
 
 =row
 
-=cell C<< :hash{ a => 2 } >>
+=cell C<< :opts{ a => 2 } >>
 
-=cell C<< hash => { a => 2} >>
+=cell C<< opts => { a => 2 } >>
 
 =cell Hash
 
@@ -763,8 +772,8 @@ about captures.  When you do, Perl 6 allows you to manipulate captures
 directly.
 
 Captures have both positional and named parts which act like lists and hashes,
-respectively. The list-like parts contain positional parameters and the
-hash-like parts contain named parameters.
+respectively. The list-like parts contain positional arguments and the
+hash-like parts contain named arguments.
 
 =head2 Creating And Using A Capture
 

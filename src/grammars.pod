@@ -72,6 +72,16 @@ introduced (L<multis>).
 A grammar contains various named regexes.  The call to
 C<JSON::Tiny.parse($string)> starts by calling C<TOP>.
 
+Regexes inside a grammar do not need a scope declarator, the default to the
+same lookup semantics as methods in classes. The call to another regex
+simplifies to C<< <regex_name> >>, which also creates a capture of the same
+name.
+
+Regexes inside a grammar do not need a scope declarator, the default to the
+same lookup semantics as methods in classes. The call to another regex
+simplifies to C<< <regex_name> >>, which also creates a capture of the same
+name.
+
 Rule C<TOP> anchors the match to the start and end of the string, so that the
 whole string has to be in valid JSON format for the match to succeed. It then
 either matches an C<< <array> >> or an C<< <object> >>.  Subsequent calls are

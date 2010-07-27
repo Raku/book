@@ -47,7 +47,7 @@ Some might ask, "Why call it Perl if it's a different language?" Perl is more
 than the vagaries of syntax. Perl is philosophy (there's more than one way to
 do it; easy things easy, hard things possible); Perl is custom (comprehensive
 testing); Perl is architectural edifice (the Comprehensive Perl Archive
-Network); and Perl is community (perl5porters, perl6-language).  Both Perl 5
+Network); and Perl is community (perl5-porters, perl6-language).  Both Perl 5
 and Perl 6 share these attributes to varying degrees. As well, Perl is
 syncretic.  Just as Perl borrows good ideas from other languages, so Perl 5 and
 Perl 6 share features.
@@ -89,9 +89,7 @@ Did the lexical fix get merged?
 
 If you invoke the Rakudo compiler without an explicit script to run, it enters
 a small interactive mode that allows Perl 6 statements to be executed from the
-command line. Each line entered is treated as a separate compilation unit,
-however (which means that subroutines are preserved after they are defined, but
-variables are not).
+command line. 
 
 =head1 Getting involved
 
@@ -121,6 +119,28 @@ to C<perl6-compiler@perl.org>.
 =back
 
 =for editors
+
+=head1 Copy-n-paste doesn't work
+
+Can't safely copy-n-paste examples from the PDF because many don't flow sanely.
+
+Examples use non-ASCII quote chars (ideally fix or else explain in sidebar).
+
+=head1 Examples
+
+Tell readers how to download examples. Perhaps suggest they copy-n-paste from
+the pod on github.
+
+=head1 Entering non-ASCII ops
+
+Many users won't know how to enter non-ASCII ops like the double arrows.
+Add explanations for PC and Mac keyboards (but beware of variations in national
+keyboards, so also give meta help, like using "open -a KeyboardViewer" on OS X
+and pressing the meta keys like Alt and Shift to see the characters).
+
+=head1 Glossary
+
+Add a glossary of terms (immutable, desugar etc)
 
 =head1 Acknowledgements
 

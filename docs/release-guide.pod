@@ -18,6 +18,7 @@ should finalize in mid March 2010.
     2009-12-18      masak
     2010-04-06      moritz
     2010-06-10      moritz
+    2010-07-24      pmichaud
 
 =head1 RELEASE PROCEDURE
 
