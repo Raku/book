@@ -23,14 +23,12 @@ using C<regex>.
 
     my $s = 'the quick brown fox jumped over the the lazy dog';
 
-    my token word { \w+ [ \' \w+]? }
-    my regex dup { <word=&word> \W+ $<word> }
-    if $s ~~ m/ <dup=&dup> / {
-        say "Found '$<dup><word>' twice in a row";
+    my $word = rx/ \w+ [ \' \w+]? /;
+    if $s ~~ m/ ($word) \W+ $0 / {
+        say "Found '$0' twice in a row";
     }
 
 =end programlisting
-
 
 In the simplest case a regex consists of a constant string. Matching a string
 against that regex searches for that string:
