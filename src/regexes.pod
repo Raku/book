@@ -3,6 +3,18 @@
 X<regular expressions>
 X<regex>
 
+Regular expressions are a concept from computer science where simple
+patterns are used to describe the format of text.  Pattern matching is
+applying these patterns to actual strings to see if they ... well,
+match.  Most moderm regular expression facilities are more powerful
+than traditional regular expressions due to the influence of languages
+such as Perl, but the short-hand term C<regex> has stuck and continues
+to mean "regular expression like pattern matching".  In Perl 6, though
+the specific syntax used to describe the patterns is 
+different from PCREN<B<P>erl B<C>ompatible B<R>egular B<E>xpressions> and
+POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for UniB<x>.
+See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
+
 A common writing error is to duplicate a word by accident.  It is hard to
 catch such errors by rereading your own text, but Perl can do it for you.  A
 simple technique uses so-called I<regular expressions> or I<regexes>:
@@ -19,12 +31,6 @@ simple technique uses so-called I<regular expressions> or I<regexes>:
 
 =end programlisting
 
-Regular expressions are a concept from computer science, and consist of
-primitive patterns that describe how text looks. In Perl 6 the pattern
-matching is much more powerful (comparable to Context-Free Languages), so we
-prefer to call them just C<regex>. (If you know regexes from other programming
-languages it's best to forget their syntax; Perl 6 differs from PCRE or POSIX
-regexes.)
 
 In the simplest case a regex consists of a constant string. Matching a string
 against that regex searches for that string:
