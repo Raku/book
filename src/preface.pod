@@ -31,6 +31,18 @@ programming language, though no prior knowledge of Perl is necessary. After
 working through this book, you should have a solid grasp of the basics of Perl
 6 sufficient to solve your own problems with Perl 6.
 
+=head1 Format of this book
+
+Each chapter opens with a reasonably complete example that illustrates
+the topic of the chapter. The example is meant to give an overall
+impression of how the chapter's topic is used in a real program.
+Following the example will be a detailed explanation of the code as well
+as some insight into the techniques and idioms used. This is meant to
+convey the "flavor" of writing Perl 6 programs so that the reader may
+proceed to write their own native Perl 6 programs rather than programs
+that resemble some other languageN<Some programmers can still write
+Fortran in any language, however :)>.
+
 =head1 Relationship between Perl 6 and Perl 5
 
 Perl 6 is the newest member of the family of languages known as Perl. It
