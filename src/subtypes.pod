@@ -1,5 +1,7 @@
 =head0 Subtypes
 
+Z<subtypes>
+
 =begin programlisting
 
     enum Suit <spades hearts diamonds clubs>;

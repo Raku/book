@@ -23,20 +23,28 @@ perlpilot: Definitely not.  We don't talk about Junctions B<at all> in
 Pm-4:  (operators)  The &infix:<,> operator doesn't construct a C<List>,
     and C<List>s are no longer immutable.
 
+perlpilot: Changed to mention C<Parcel>s but with no other explanation for now.
+
 Pm-5:  (operators, footnote #3)  "When the right-hand side appears
     to be a list or array..."   actually gets the test backwards.
     If the right-hand side is clearly a scalar, it's a tight item assignment,
     otherwise it defaults to a loose-precedence list assignment.
 
+perlpilot: reworded.
+
 Pm-6:  (operators, "Comparisons and Smart Matching")  The first paragraph
     is completely wrong -- C<===> tests for value equivalents, not
     object identity.
+
+perlpilot: reworded, perhaps poorly.
 
 Pm-7: (operators, "Three-way Comparison")  Actually, the three-way
     comparisons return C<Order::Increase>, C<Order::Same>, and
     C<Order::Decrease>, not integers.  (And while we're at it,
     C<.sort> tests for greater than, less than, and equal to 0, not
     for -1 and +1.)
+
+perlpilot: updated
 
 Pm-8: (subroutines)  The code for C<@awesome-dance>  uses the
     C<< <...> >> quoting operator but it hasn't been introduced

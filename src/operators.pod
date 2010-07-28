@@ -74,7 +74,7 @@ could also write the example above as
 
 =end programlisting
 
-Finally, the C<,> operator constructs a C<List>, which is a sequence
+Finally, the C<,> operator constructs a C<Parcel>, which is a sequence
 of objects. In this case the objects are pairs.
 
 X<infix>
@@ -141,12 +141,12 @@ C<@variable.method> calls a method on C<@variable>, C<@array».method>
 calls a method for each item in C<@array>, and returns the list of the return
 values.
 
-» is called a I<hyper operator>. It is a unicode character that
+C<»> is called a I<hyper operator>. It is a unicode character that
 can be entered on most computers
 N<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key position
 select on of the keys to be the "Compose" key. Then press
 Compose-key and the "greater than" key twice.>
-If your operating system does not make it easy to write it you can also write it using two angle brackets (>>).
+If your operating system does not make it easy to write it you can also write it using two angle brackets (C<<< >> >>>).
 
 So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
 and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
@@ -257,17 +257,18 @@ Perl 5 interpreter, it parses it as
 =end programlisting
 
 and thus stores only one item in the variable C<@scores>, the rest is
-parsed as a list  N<and discarded, because it is not stored in any variable>.
+parsed as a listN<and discarded, because it is not stored in any variable>.
 
 The ways in which this statement is parsed in Perl 6 is governed by
 I<precedence rules>. For example, they state that the infix C<< => >> operator
 binds its arguments tighter than the infix C<,> operator, which in turn binds
-tighter than the C<=> assignment operator N<there are actually two assignment
-operators with different precedence. When the right-hand side appears to be a
-list or an array, the looser one is used, otherwise the I<item assignment
-operator> with tighter precedence is used. This allows the two expressions C<$a = 1, $b = 2>
-and C<@a = 1, 2> to both mean something sensible: assignment to two variables in a list,
-and assignment of a two-item list to a single variable>.
+tighter than the C<=> assignment operatorN<There are actually two assignment
+operators with different precedence. When the right-hand side is a scalar,
+the I<item assignment operator> with tight precedence is used,
+otherwise the loose-precedence I<list assignment operator> is used. This
+allows the two expressions C<$a = 1, $b = 2> and C<@a = 1, 2> to both
+mean something sensible: assignment to two variables in a list, and
+assignment of a two-item list to a single variable>.
 
 
 The precedence rules for Perl 6 allow many commonly used idioms to be expressed
@@ -291,12 +292,20 @@ possible precedence.
 
 =head1 Comparisons and Smart Matching
 
-X<object identity>
+X<value identity>
 
-There are several ways to compare objects in Perl. You can ask if two
-variables contain the same object with the C<===> infix operator. If it
-returns C<True>, modifying one of its arguments also modifies the other,
-because they really point to the same object.
+There are several ways to compare objects in Perl. You can test for
+value equivalence using the C<===> infix operator. For immutable
+objectsN<Objects whose value I<can not> be changed;  a literal value.
+For instance, the literal C<7> will always and forever be just a C<7>.>,
+this is an ordinary value comparison.  C<"hello" === "hello"> is true
+because both strings are immutable and have the same value.
+
+For mutable objects, C<===> compares their identities.  Two objects
+only share the same identity if, in fact, they are the same object.
+In the following example, the two arrays C<@a> and C<@b>, while they
+I<contain> the same values, are two separate array objects which have
+different identities and are thus I<not> equivalent under C<===>.
 
 =begin programlisting
 
@@ -306,14 +315,15 @@ because they really point to the same object.
     say @a  === @a;    # 1
     say @a  === @b;    # 0
 
-    # built-in, immutable types act as singletons:
+    # these use identity for value
 
     say 3   === 3;     # 1
     say 'a' === 'a';   # 1
+
+    my $a = 'a';
+    say $a === 'a';     # 1
  
 =end programlisting
-
-TODO 'immutable' is used above but hasn't been explained
 
 The C<eqv> operator returns C<True> only if two objects are of the same type,
 and of the same structure. With the variables defined above, C<@a eqv @b> is
@@ -452,10 +462,13 @@ X<leg>
 X<cmp>
 X<< <=> >>
 
-The three-way comparison operators take two operands, and return C<-1> if the
-left is smaller, C<0> when both are equal, and C<+1> if the right operand is
-smaller. For numbers that operator is spelled C<< <=> >>, and for strings
-C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
+The three-way comparison operators take two operands, and return
+C<Order::Increase> if the left is smaller, C<Order::Same> when both are
+equal, and C<Order::Decrease> if the right operand is
+smallerN<C<Order::Increase>, C<Order::Same>, and C<Order::Decrease>
+are enumerations (enums) which are further explained in L<subtypes>>. For
+numbers that operator is spelled C<< <=> >>, and for strings C<leg>
+(from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
 type sensitive three-way comparison operator, and compares numbers like
 C<< <=> >>, string like C<leg>, and for example pairs first by key, and
 then by values if the keys are identical.
@@ -469,9 +482,9 @@ then by values if the keys are identical.
 =end programlisting
 
 A typical use case for three-way comparison is sorting. The C<sort> method in
-lists can take a block or function that takes two values, compares them,
-returns -1, 0 or +1. The sort method then orders the values according to that
-return value.
+lists can take a block or function that takes two values, compares
+them, and returns a value less than, equal to or, greater than 0. The
+sort method then orders the values according to that return value.
 
 =begin programlisting
 
