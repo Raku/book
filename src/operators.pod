@@ -58,6 +58,18 @@ The C<=> operator is the I<assignment operator> -- it takes the
 values from the right-hand side, and stores them in the variable on the
 left-hand side, here C<@scores>.
 
+=begin sidebar
+
+Like other languages that have adopted a similar syntax to C, Perl 6
+allows for a shorthand way to write certain assignments.  Any
+assignment of the form  C<$var = $var R<op> EXPR> can be expressed as
+C<$var R<op>= EXPR>.  So, for instance, C<~> (tilde) is the string
+concatenation operator; to append some text to the end of a string,
+you could say C<$string ~= "text"> which is equivalent to C<$string =
+$string ~ "text">.
+
+=end sidebar
+
 X<pair>
 X<< operator;=> >>
 X< operator; fat arrow>

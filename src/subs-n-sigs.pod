@@ -92,7 +92,6 @@ pad or other exotic input device).  How can you maintain a variable list of
 custom behaviors, allow user input, and restrict that input to a safe set of
 behaviors?
 
-TODO this example uses the ~= operator before it's been introduced.
 TODO this example doesn't seem like a good one for first-class subs.
 
 =begin programlisting
