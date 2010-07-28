@@ -29,7 +29,7 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc3
+version		:= 2.2.0-rc4
 #
 # Note that the user-global version is imported *after* the source directory,
 # so that you can use stuff like ?= to get proper override behavior.
@@ -104,9 +104,16 @@ export LC_ALL		?= C
 #		graceful solution to this issue.
 #
 # CHANGES:
-# Chris Monson (2010-06-08):
+# Chris Monson (2010-07-28):
+# 	* Bumped version to 2.2.0-rc4
+# 	* Bail out when we find the use of the import.sty package
+# 	* Issue 90: Add -z to dvips invocation
+# 	* Issue 67: Add xelatex support (thanks to Nikolai Prokoschenko for the patch!)
+# 	* Issue 85: Add warning about make 3.80
+# Chris Monson (2010-06-20):
 # 	* Bumped version to 2.2.0-rc3
-# 	* Fixed bug with ! error detection (issue 88 - terrible hack)
+# 	* Attempt to fix bug with ! error detection (issue 88)
+# 	* Added svg->pdf direct support (issue 89)
 # Chris Monson (2010-04-28):
 # 	* Bumped version to 2.2.0-rc2
 # 	* Fixed %._show target
@@ -965,6 +972,14 @@ hyperref_driver_pattern		?= hpdf.*
 hyperref_driver_error		?= Using pdflatex: specify pdftex in the hyperref options (or leave it blank).
 endif
 
+ifeq "$(strip $(BUILD_STRATEGY))" "xelatex"
+default_graphic_extension	?= pdf
+latex_build_program		?= $(XELATEX)
+build_target_extension		?= pdf
+hyperref_driver_pattern		?= hdvipdf.*
+hyperref_driver_error		?= Using pdflatex: specify pdftex in the hyperref options (or leave it blank).
+endif
+
 # Files of interest
 all_files.tex		?= $(wildcard *.tex)
 all_files.tex.sh	?= $(wildcard *.tex.sh)
@@ -1129,7 +1144,7 @@ graphic_source_extensions	:= fig \
 ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 graphic_source_extensions	+= png jpg
 graphic_target_extensions	:= eps ps
-endif 
+endif
 
 ifeq "$(strip $(BUILD_STRATEGY))" "pdflatex"
 graphic_source_extensions	+= eps
@@ -1487,6 +1502,17 @@ if $(EGREP) -q '^! LaTeX Error: File .*\.pstex.* not found' $1; then \
 fi
 endef
 
+# Checks for the use of import.sty and bails - we don't support subdirectories
+#
+# $(call die-on-import-sty,<log file>)
+define die-on-import-sty
+if $(EGREP) -s '/import.sty\)' '$1'; then \
+	$(ECHO) "$(C_ERROR)import.sty is not supported - included files must"; \
+	$(ECHO) "$(C_ERROR)be in the same directory as the primary document$(C_RESET)"; \
+	exit 1; \
+fi
+endef
+
 # Checks for build failure due to dot2tex, and gives instructions.
 #
 # $(call die-on-dot2tex,<parsed file>)
@@ -1651,7 +1677,6 @@ $(SED) \
 -e '  x' \
 -e '  G' \
 -e '}' \
--e '/LaTeX Info: Redefining \\!/d' \
 -e '/ LaTeX Error: Cannot determine size/d' \
 -e 's/.* LaTeX Error .*/$(C_ERROR)&$(C_RESET)/p' \
 -e 's/Error: pdflatex (file .*/$(C_ERROR)& - try specifying it without an extension$(C_RESET)/p' \
@@ -1682,7 +1707,7 @@ $(SED) \
 -e '  h' \
 -e '  b' \
 -e '}' \
--e 's/.*\(\n\{0,\}! .*\)/$(C_ERROR)\1$(C_RESET)/p' \
+-e 's/.*\(\n\{2,\}![[:space:]][^[:space:]]*[[:space:]]Error .*\)/$(C_ERROR)\1$(C_RESET)/p' \
 -e 'd' \
 $1
 endef
@@ -2175,7 +2200,7 @@ endef
 # Convert DVI to Postscript
 # $(call make-ps,<dvi file>,<ps file>,<log file>,[<paper size>])
 make-ps		= \
-	$(DVIPS) -o '$2' $(if $(filter-out BEAMER,$4),-t$(firstword $4),) '$1' \
+	$(DVIPS) -z -o '$2' $(if $(filter-out BEAMER,$4),-t$(firstword $4),) '$1' \
 		$(if $(filter BEAMER,$4),| $(enlarge_beamer)) > $3 2>&1
 
 # Convert Postscript to PDF
@@ -2225,6 +2250,11 @@ show: all
 #
 source_includes	:= $(addsuffix .d,$(source_stems_to_include))
 graphic_includes := $(addsuffix .gpi.d,$(graphic_stems_to_include))
+
+# Check the version of the makefile
+ifneq "" "$(filter 3.79 3.80,$(MAKE_VERSION))"
+$(warning $(C_WARNING)Your version of make is too old.  Please upgrade.$(C_RESET))
+endif
 
 # Include only the dependencies used
 ifneq "" "$(source_includes)"
@@ -2603,6 +2633,7 @@ endif
 	$(QUIET)\
 	$(call run-latex,$<,--recorder) || $(sh_true); \
 	$(CP) '$*.log' '$*.$(RESTARTS)-1.log'; \
+	$(call die-on-import-sty,$*.log); \
 	$(call die-on-dot2tex,$*.log); \
 	$(call die-on-no-aux,$*); \
 	$(call flatten-aux,$*.aux,$*.aux.make); \
