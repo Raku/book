@@ -468,6 +468,8 @@ Other operators compare strings lexicographically
 
 For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
+C<!=> is really just a convenience for C<!==>, which in turn is really the C<!> meta operator added to the infix C<==> operator. An equivalent explanation applies to C<ne> and C<!eq>.
+
 =head3 Three-way Comparison
 
 X<leg>
