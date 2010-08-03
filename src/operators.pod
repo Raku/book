@@ -156,7 +156,7 @@ values.
 C<»> is called a I<hyper operator>. It is a unicode character that
 can be entered on most computers
 N<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key position
-select on of the keys to be the "Compose" key. Then press
+select one of the keys to be the "Compose" key. Then press
 Compose-key and the "greater than" key twice.>
 If your operating system does not make it easy to write it you can also write it using two angle brackets (C<<< >> >>>).
 
