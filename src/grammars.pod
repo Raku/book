@@ -6,7 +6,7 @@ introduced (L<multis>).
 
 =begin programlisting
 
-    # file lib/JSON/Tiny/Grammar.pg
+    # file lib/JSON/Tiny/Grammar.pm
 
     grammar JSON::Tiny::Grammar {
         rule TOP        { ^[ <object> | <array> ]$ }
