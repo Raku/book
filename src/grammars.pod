@@ -226,7 +226,7 @@ solution exists: I<reduction methods>, also called I<action methods>.
 =begin programlisting
 
     class JSON::Tiny::Actions {
-        method TOP($/)      { make $/.hash.values.[0].ast }
+        method TOP($/)      { make $/.values.[0].ast }
         method object($/)   { make $<pairlist>.ast.hash }
         method pairlist($/) { make $<pair>>>.ast }
         method pair($/)     { make $<string>.ast => $<value>.ast }
@@ -290,6 +290,10 @@ sets the C<ast> attribute of the current match object to C<$thing>.
 In the case of the JSON parser, the payload can be the data structure that the
 JSON string represents.
 
+For each matching rule an action method is called, which populates the
+C<ast> slot of the match object, thus transforming the match tree to a more
+high-level tree - here the actual JSON tree.
+
 Although the rules and action methods live in different namespaces (and in a
 real-world project probably even in separate files), here they are adjacent to
 demonstrate their correspondence:
@@ -297,11 +301,9 @@ demonstrate their correspondence:
 =begin programlisting
 
     rule TOP        { ^ [ <object> | <array> ]$ }
-    method TOP($/)  { make $/.hash.values.[0].ast }
+    method TOP($/)  { make $/.values.[0].ast }
 
 =end programlisting
-
-# TODO: decide if $/.values could be sufficient
 
 =for author
 
@@ -314,10 +316,11 @@ compilers the hard way first.
 =end for
 
 The rule has an alternation with two branches, C<object> and C<array>.  Both
-have a named capture.  When you view the match object as a hash through
-C<$/.hash>, its only value is another match object--that of the subrule that
-matched successfully. The action method takes the AST attached to that match
-object and promotes it as its own AST by calling C<make>.
+have a named capture. C<$/.values> returns a list of all captures, here just
+one - either the C<object> or the C<array> capture.
+
+The action method takes the AST attached to the match
+object of that sub capture, and promotes it as its own AST by calling C<make>.
 
 =begin programlisting
 
