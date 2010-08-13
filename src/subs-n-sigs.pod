@@ -50,9 +50,7 @@ here.
 By default, subroutines are lexically scoped, just like any variable declared
 with C<my>. This means that a subroutine may only be called within the scope in
 which it was declared.  Use the scope declarator C<our> to make the subroutine
-available globally within the current package:
-
-TODO: clarify "globally within the current package". It's confusing/ambiguous.
+available within the current package:
 
 =begin programlisting
 
@@ -68,6 +66,24 @@ TODO: clarify "globally within the current package". It's confusing/ambiguous.
 
     eat();    # om nom nom
     drink();  # fails, can't drink outside of the block
+
+=end programlisting
+
+C<our> also makes subroutines visible from the outside of a package or module:
+
+=begin programlisting
+
+   module EatAndDrink {
+        our sub eat() {
+            say "om nom nom";
+        }
+
+        sub drink() {
+            say "glug glug";
+        }
+   }
+   EatAndDrink::eat();    # om nom nom
+   EatAndDrink::drink();  # fails, not declared with "our"
 
 =end programlisting
 
@@ -203,10 +219,9 @@ from a single subroutine, Perl allows you to return multiple values directly.
 
 A variable's sigil indicates its intended use.  In a signature, a variable's
 sigil acts as a constraint on the type of argument passed.  The C<@> sigil, for
-example, checks that the passed value does the C<Positional> role.  Failing to pass
+example, checks that the passed value conforms to the C<Positional> type,
+which encompassses types like C<Array> and C<list>.  Failing to pass
 something that matches this constraint will cause the call to fail.
-
-TODO: note the forward reference to roles and/or Positional.
 
 =begin programlisting
 
@@ -218,7 +233,7 @@ TODO: note the forward reference to roles and/or Positional.
 
     my @last_words = <do not want>;
     shout-them(@last_words);  # DO NOT WANT
-    shout-them('help');       # Fails; a string is not iterable
+    shout-them('help');       # Fails; a string is not Positional
 
 =end programlisting
 
@@ -527,6 +542,12 @@ object. For example, when populating a hash:
     my $black = 12;
     my %color-popularities = :$black, :blue(8),
                              red => 18, :white<0>;
+    # same as
+    # my %color-popularities = 
+    #       black => 12,
+    #       blue  => 8,
+    #       red   => 18,
+    #       white => 0;
 
 =end programlisting
 
@@ -937,6 +958,7 @@ Is this a little too cute?
 =end programlisting
 
 # TODO: come up with a good example
+# maybe steal something from http://jnthn.net/papers/2010-yapc-eu-signatures.pdf
 
 # TODO: generic object unpacking
 

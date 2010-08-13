@@ -303,7 +303,7 @@ possible precedence.
 
                        (tightest precedence)
     (),  42.5          term 
-    42.5.floor         method calls and postcircumfixes
+    42.rand            method calls and postcircumfixes
     $x++               autoincrement and -decrement
     $x**2              exponentiation operator
     ?$x,  !$x          boolean prefix
