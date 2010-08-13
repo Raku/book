@@ -228,9 +228,9 @@ solution exists: I<reduction methods>, also called I<action methods>.
     class JSON::Tiny::Actions {
         method TOP($/)      { make $/.values.[0].ast }
         method object($/)   { make $<pairlist>.ast.hash }
-        method pairlist($/) { make $<pair>>>.ast }
+        method pairlist($/) { make $<pair>».ast }
         method pair($/)     { make $<string>.ast => $<value>.ast }
-        method array($/)    { make [$<value>>>.ast] }
+        method array($/)    { make [$<value>».ast] }
         method string($/)   { make join '', $/.caps>>.value>>.ast }
 
         # TODO: make that
@@ -335,8 +335,7 @@ submatch and turns it into a hash by calling its C<hash> method.
 =begin programlisting
 
     rule pairlist   { [ <pair> ** [ \, ] ]? }
-    # TODO: make that » once RT #75434 is resolved
-    method pairlist($/) { make $<pair>>>.ast; }
+    method pairlist($/) { make $<pair>».ast; }
 
 =end programlisting
 
