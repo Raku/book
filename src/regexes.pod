@@ -814,8 +814,6 @@ assertions, though usually not quite as efficient:
 
 =end table
 
-    # TODO: non-contrived example for look-behind
-
 =head1 Match objects
 
 =begin programlisting
