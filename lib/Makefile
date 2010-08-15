@@ -29,7 +29,7 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc4
+version		:= 2.2.0-rc5
 #
 # Note that the user-global version is imported *after* the source directory,
 # so that you can use stuff like ?= to get proper override behavior.
@@ -105,7 +105,7 @@ export LC_ALL		?= C
 #
 # CHANGES:
 # Chris Monson (2010-07-28):
-# 	* Bumped version to 2.2.0-rc4
+# 	* Bumped version to 2.2.0-rc5 (rc4 is broken)
 # 	* Bail out when we find the use of the import.sty package
 # 	* Issue 90: Add -z to dvips invocation
 # 	* Issue 67: Add xelatex support (thanks to Nikolai Prokoschenko for the patch!)
@@ -602,6 +602,7 @@ BIBTEX		?= bibtex
 DVIPS		?= dvips
 LATEX		?= latex
 PDFLATEX	?= pdflatex
+XELATEX		?= xelatex
 EPSTOPDF	?= epstopdf
 MAKEINDEX	?= makeindex
 KPSEWHICH	?= kpsewhich
