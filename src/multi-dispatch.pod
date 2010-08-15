@@ -301,7 +301,7 @@ narrowness of a match:
 =end programlisting
 
 =for figure
-        \includegraphics[width=0.8\textwidth]{mmd-table.pdf}
+        \includegraphics[width=0.8\textwidth]{../src/images/mmd-table.pdf}
         \caption{Who wins the \emph{Rock, Paper, Scissors} game?}
         \label{fig:mmd-rock-paper-scissors}
 

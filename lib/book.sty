@@ -8,8 +8,12 @@
     12pt,
     twoside,
     openright,
-    cleardoublepage=plain
+    cleardoublepage=plain,
+    BCOR=0
 ]{scrbook}
+
+% For (r) and (c)
+\usepackage{textcomp}
 
 % XeTeX unicode support -- e.g. character replacements
 \usepackage{xunicode}
@@ -30,6 +34,9 @@
 
 % For index generation. Supplies \printindex.
 \usepackage{index}
+
+% For cover
+\usepackage{eso-pic}
 
 % Fonts.
 \usepackage{fontspec}
@@ -271,37 +278,41 @@
 
 \begin{document}
 
-\subject{\includegraphics{../src/perl6logo}}
-\title{Using Perl~6}
+\AddToShipoutPicture*{%
+\includegraphics[width=\paperwidth]{../src/images/cover.jpg}
+}
+
+\titlehead{}
+\subject{}
+\title{}
 \subtitle{}
 \author{}
 \date{}
 \publishers{}
+\uppertitleback{
+  {\bfseries Credits}
+  \begin{description}
+  \item[Text] Jonathan S. Duff, Moritz Lenz, Carl Mäsak, Patrick R. Michaud, Jonathan Worthington with numerous contributions from the community.
+  \item[Front cover] Sebastian Riedel (\url{http://kraih.com})
+  \item[Fonts]Adobe Minion® Pro, Adobe Myriad® Pro, B\&H Luxi Mono
+  \item[\LaTeX-Layout] Nikolai Prokoschenko, Luc St-Louis et al. Special thanks to Konrad Mühler for his \LaTeX\ tips collection (\url{http://www.kfiles.de/latex.php})
+  \end{description}
+}
 \lowertitleback{
-\begin{description}
-\item[Text] Jonathan S. Duff, Moritz Lenz, Carl Mäsak, Patrick R. Michaud, Jonathan Worthington with numerous contributions from the community.
-\item[Amelia Perl logo] Sebastian Riedel ({\bfseries kraih})
-\item[Fonts]Adobe Minion\textsuperscript{\textregistered} Pro, Adobe Myriad\textsuperscript{\textregistered} Pro, B\&H Luxi Mono
-\item[\LaTeX-Layout] Nikolai Prokoschenko, Luc St-Louis et al. Special thanks to Konrad Mühler for his \LaTeX\ tips collection (\url{http://www.kfiles.de/latex.php})
-\end{description}
+  \includegraphics[width=\textwidth]{../src/images/license.pdf}
 }
 \maketitle
-
-
+\frontmatter
 \pagestyle{docINTRO}
-\pagenumbering{roman}
-
 \tableofcontents
 
-\cleardoublepage
-%\newpage
+\mainmatter
 \pagestyle{doc}
-\pagenumbering{arabic}
 
 [% content %]
+
+\backmatter
 \begin{appendix}
-\cleardoublepage
-%\newpage
 \pagestyle{docAPPENDIX}
 \printindex
 
