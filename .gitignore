@@ -1,2 +1,4 @@
 book.*
 *.swp
+build
+dist
