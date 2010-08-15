@@ -296,40 +296,185 @@ possible precedence.
 
 =end programlisting
 
-
 =begin table Precedence table
 
-    Examples           Name
+=headrow
 
-                       (tightest precedence)
-    (),  42.5          term 
-    42.rand            method calls and postcircumfixes
-    $x++               autoincrement and -decrement
-    $x**2              exponentiation operator
-    ?$x,  !$x          boolean prefix
-    +$x,  ~$x          prefix context operators
-    2*3,  7/5          multiplicative infix operators
-    1+2,  7-5          additive infix operators
-    $x x 3             replication operators
-    $x ~ ".\n"         string concatenation
-    1&2                junctive AND
-    1|2                junctive OR
-    abs $x             named unary prefix
-    $x cmp 3           non-chaining binary operators
-    $x == 3            chaining binary operators
-    $x && $y           tight AND infix
-    $x || $y           tight OR infix
-    $x > 0 ?? 1 !! -1  conditional operator
-    $x = 1             item assignment
-    not $x             loose unary prefix
-    1, 2               comma
-    1, 2 Z @a          list infix
-    @a = 1, 2          list prefix, list assignment
-    $x and say "Yes"   loose AND infix
-    $x or die "No"     loose OR infix
-    ;                  statement terminator
-                       (loosest precedence)
+=row
 
+=cell Examples
+
+=cell Name
+
+=bodyrows
+
+=row
+
+=cell 
+
+=cell (tightest precedence)
+
+=row
+
+=cell C<(), 42.5>
+
+=cell term 
+
+=row
+
+=cell C<42.rand>
+
+=cell method calls and postcircumfixes
+
+=row
+
+=cell C<$x++>
+
+=cell autoincrement and -decrement
+
+=row
+
+=cell C<$x**2>
+
+=cell exponentiation operator
+
+=row
+
+=cell C<?$x, !$x>
+
+=cell boolean prefix
+
+=row
+
+=cell C<+$x, ~$x>
+
+=cell prefix context operators
+
+=row
+
+=cell C<2*3, 7/5>
+
+=cell multiplicative infix operators
+
+=row
+
+=cell C<1+2, 7-5>
+
+=cell additive infix operators
+
+=row
+
+=cell C<$x x 3>
+
+=cell replication operators
+
+=row
+
+=cell C<$x ~ ".\n">
+
+=cell string concatenation
+
+=row
+
+=cell C<1&2>
+
+=cell junctive AND
+
+=row
+
+=cell C<1|2>
+
+=cell junctive OR
+
+=row
+
+=cell C<abs $x>
+
+=cell named unary prefix
+
+=row
+
+=cell C<$x cmp 3>
+
+=cell non-chaining binary operators
+
+=row
+
+=cell C<$x == 3>
+
+=cell chaining binary operators
+
+=row
+
+=cell C<$x && $y>
+
+=cell tight AND infix
+
+=row
+
+=cell C<$x || $y>
+
+=cell tight OR infix
+
+=row
+
+=cell C<< $x > 0 ?? 1 !! -1 >>
+
+=cell conditional operator
+
+=row
+
+=cell C<$x = 1>
+
+=cell item assignment
+
+=row
+
+=cell C<not $x>
+
+=cell loose unary prefix
+
+=row
+
+=cell C<1, 2>
+
+=cell comma
+
+=row
+
+=cell C<1, 2 Z @a>
+
+=cell list infix
+
+=row
+
+=cell C<@a = 1, 2>
+
+=cell list prefix, list assignment
+
+=row
+
+=cell C<$x and say "Yes">
+
+=cell loose AND infix
+
+=row
+
+=cell C<$x or die "No">
+
+=cell loose OR infix
+
+=row
+
+=cell C<;>
+
+=cell statement terminator
+
+=row
+
+=cell 
+
+=cell (loosest precedence)
 
 =end table
 
