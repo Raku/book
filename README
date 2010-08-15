@@ -22,9 +22,12 @@ To build the book, you need to have the following software installed:
     * perl 5.10
     * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101050 or newer
     * inkscape (for svg -> pdf conversion)
+
     * A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04
       supplies most of what is needed with its texlive-latex-base,
-      texlive-fonts-extra, and texlive-latex-recommended packages.
+      texlive-latex-extra, texlive-xetex, texlive-fonts-extra and
+      texlive-latex-recommended packages.
+
     * Adobe's fonts and B&H Luxi Sans. To get those, install
       ttf-xfree86-nonfree (and uninstall t1-xfree86-nonfree) and
       Acrobat Reader then copy *.otf from
