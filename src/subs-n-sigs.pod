@@ -269,7 +269,7 @@ Likewise, you can interpolate hashes into named arguments:
 
 =begin programlisting
 
-    sub order-shrimps($number, $from) {
+    sub order-shrimps($count, $from) {
         say "I'd like $count pieces of shrimp from the $from, please";
     }
 
