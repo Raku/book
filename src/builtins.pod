@@ -13,7 +13,7 @@ X<coercion>
 
 Many operators work on a particular I<type> of data. If the type of the
 operands differs from the type of the operand, Perl will make copies of the
-operands and convert those to the needed types.  For example, C<$a + $b> will
+operands and convert them to the needed types.  For example, C<$a + $b> will
 convert a copy of both C<$a> and C<$b> to numbers (unless they are numbers
 already). This implicit conversion is called I<coercion>.
 
@@ -46,22 +46,6 @@ X<types; Int>
 C<Int> objects store integer numbers of arbitrary size. If you write a literal
 that consists only of digits, such as C<12>, it is an C<Int>.
 
-=item Rat
-
-X<Rat>
-X<rational type>
-X<types; rational>
-X<types; Rat>
-
-C<Rat>, short for I<rational>, stores fractional numbers without loss of
-precision.  Because C<Rat> tracks its numerator and denominator as integers,
-mathematical operations on C<Rat>s with large components can become quite slow.
-For this reason, rationals with large denominators automatically degrade to
-C<Num>.
-
-Writing a fractional value with a dot as the decimal separator produces a
-C<Rat>, for example C<3.14>.
-
 =item Num
 
 X<Num>
@@ -73,48 +57,183 @@ fast, but subject to limited precision.
 
 Numbers in scientific notation such as C<6.022e23> are of type C<Num>.
 
+=item Rat
+
+X<Rat>
+X<rational type>
+X<types; rational>
+X<types; Rat>
+
+C<Rat>, short for I<rational>, stores fractional numbers without loss of
+precision.  It does so by tracking its numerator and denominator as integers,
+so mathematical operations on C<Rat>s with large components can become quite
+slow.  For this reason, rationals with large denominators automatically degrade
+to C<Num>.
+
+Writing a fractional value with a dot as the decimal separator produces a
+C<Rat>, for example C<3.14>.
+
 =item Complex
 
 X<Complex>
 X<types; Complex>
 
-C<Complex> is the complex number type. Complex numbers have two parts to them:
-a real part and in imaginary part. If either part is C<NaN>, then the entire
-number may possibly be C<NaN>.
+C<Complex> numbers have two parts: a real part and an imaginary part. If either
+part is C<NaN>, then the entire number may possibly be C<NaN>.
 
-Numbers in the form C<a + bi> are of type C<Complex>.
+=for author
+
+What is C<i>, if not sqrt(-1)?
+
+=end for
+
+Numbers in the form C<a + bi>, where C<bi> is the imaginary component, are of
+type C<Complex>.
 
 =back
 
 The following operators are available for all number types:
 
-    Binary operators:
-    Operator     Description
-    **           Exponentiation: $a**$b is $a to the power of $b
-    *            multiplication
-    /            division    
-    div          integer division
-    +            addition
-    -            subtraction
+=begin table Binary numeric operators
 
-    Unary operators:
-    Operator     Description
-    +            conversion to number
-    -            negation
+=headrow
+
+=row
+
+=cell Operator
+
+=cell Description
+
+=bodyrows
+
+=row
+
+=cell C<**>
+
+=cell Exponentiation: C<$a**$b> is C<$a> to the power of C<$b>
+
+=row
+
+=cell C<*>
+
+=cell multiplication
+
+=row
+
+=cell C</>
+
+=cell division
+
+=row
+
+=cell C<div>
+
+=cell integer division
+
+=row
+
+=cell C<+>
+
+=cell addition
+
+=row
+
+=cell C<->
+
+=cell subtraction
+
+=end table
+
+=begin table Unary numeric operators
+
+=headrow
+
+=row
+
+=cell Operator
+
+=cell Description
+
+=bodyrows
+
+=row
+
+=cell C<+>
+
+=cell conversion to number
+
+=row
+
+=cell C<->
+
+=cell negation
+
+=end table
 
 Most mathematical functions are available both as methods and functions, so
 you can write both C<(-5).abs> and C<abs(-5)>.
 
-    Method      Description
-    abs         absolute value
-    sqrt        square root
-    log         natural logarithm
-    log10       logarithm to base 10
+=begin table Mathematical functions and methods
 
-    ceil        rounding up to an integer
-    floor       rounding down to an integer
-    round       rounding to next integer
-    sign        -1 for negative, 0 for 0, 1 for positive values
+=headrow
+
+=row
+
+=cell Method
+
+=cell Description
+
+=bodyrows
+
+=row
+
+=cell C<abs>
+
+=cell absolute value
+
+=row
+
+=cell C<sqrt>
+
+=cell square root
+
+=row
+
+=cell C<log>
+
+=cell natural logarithm
+
+=row
+
+=cell C<log10>
+
+=cell logarithm to base 10
+
+=row
+
+=cell C<ceil>
+
+=cell rounding up to an integer
+
+=row
+
+=cell C<floor>
+
+=cell rounding down to an integer
+
+=row
+
+=cell C<round>
+
+=cell rounding to next integer
+
+=row
+
+=cell C<sign>
+
+=cell -1 for negative, 0 for zero, 1 for positive values
+
+=end table
 
 X<trigonometric functions>
 X<operators; trigonometry>
@@ -129,9 +248,9 @@ Gradians?  Are these functions also methods?
 The trigonometric functions C<sin>, C<cos>, C<tan>, C<asin>, C<acos>, C<atan>,
 C<sec>, C<cosec>, C<cotan>, C<asec>, C<acosec>, C<acotan>, C<sinh>, C<cosh>,
 C<tanh>, C<asinh>, C<acosh>, C<atanh>, C<sech>, C<cosech>, C<cotanh>, C<asech>,
-C<acosech> and C<acotanh> are available, and work in units of radians by
-default. You may specify the unit with an argument of C<Degrees>, C<Gradians> or
-C<Circles>. For example, C<180.sin(Degrees)> is approximately C<0>.
+C<acosech> and C<acotanh> work in units of radians by default. You may specify
+the unit with an argument of C<Degrees>, C<Gradians> or C<Circles>. For
+example, C<180.sin(Degrees)> is approximately C<0>.
 
 =head1 Strings
 
@@ -147,29 +266,113 @@ method converts a C<Str> to C<Buf>. C<decode> goes the other direction.
 
 The following operations are available for strings:
 
+=begin table Binary string operators
 
-    Binary operators:
-    Operator     Description
-    ~            concatenation: 'a' ~ 'b' is 'ab'
-    x            replication: 'a' x 2 is 'aa'
+=headrow
 
-    Unary operators:
-    Operator     Description
-    ~            conversion to string: ~1 becomes '1'
+=row
 
-    Methods:
-    .chomp       remove trailing newline
-    .substr($start, $length)    extract a part of the string. $length defaults
-                                to the rest of the string
-    .chars       number of characters in the string
-    .uc          upper case
-    .lc          lower case
-    .ucfirst     convert first character to upper case
-    .lcfirst     convert first character to lower case
-    .capitalize  convert the first character of each word to upper case, and
-                 all other characters to lower case
+=cell Operator
 
+=cell Description
 
+=bodyrows
+
+=row
+
+=cell C<~>
+
+=cell concatenation: C<'a' ~ 'b'> is C<'ab'>
+
+=row
+
+=cell C<x>
+
+=cell replication: C<'a' x 2> is C<'aa'>
+
+=end table
+
+=begin table Unary string operators
+
+=headrow
+
+=row
+
+=cell Operator
+
+=cell Description
+
+=bodyrows
+
+=row
+
+=cell C<~>
+
+=cell conversion to string: C<~1> becomes C<'1'>
+
+=end table
+
+=begin table String methods/functions
+
+=headrow
+
+=row
+
+=cell Method/function
+
+=cell Description
+
+=bodyrows
+
+=row
+
+=cell C<.chomp>
+
+=cell remove trailing newline
+
+=row
+
+=cell C<.substr($start, $length)>
+
+=cell extract a part of the string. C<$length> defaults to the rest of the string
+
+=row
+
+=cell C<.chars>
+
+=cell number of characters in the string
+
+=row
+
+=cell C<.uc>
+
+=cell upper case
+
+=row
+
+=cell C<.lc>
+
+=cell lower case
+
+=row
+
+=cell C<.ucfirst>
+
+=cell convert first character to upper case
+
+=row
+
+=cell C<.lcfirst>
+
+=cell convert first character to lower case
+
+=row
+
+=cell C<.capitalize>
+
+=cell convert the first character of each word to upper case, and all other characters to lower case
+
+=end table
 
 =for author
 
@@ -184,7 +387,7 @@ X<types; Bool>
 
 A Boolean value is either C<True> or C<False>.  Any value can coerce to a
 boolean in boolean context. The rules for deciding if a value is true or false
-depends on the type of the value:
+depend on the type of the value:
 
 =over
 
