@@ -555,6 +555,23 @@ Finally, to pass an existing C<Pair> object to a subroutine by position, not
 name, either put it in parentheses (like C<(:$thing)>), or use the C<< => >>
 operator with a quoted string on the left-hand side: C<< "thing" => $thing >>.
 
+=head3 Order of Parameters
+
+When both positional and named parameters are present in the same signature,
+all the positional parameters need to come before the named parameters.
+
+=begin programlisting
+
+    sub mix(@ingredients, :$name) { ... }    # OK
+    sub notmix(:$name, @ingredients) { ... } # Error
+
+=end programlisting
+
+Required positional parameters need to come before optional positional
+parameters -- named parameters have no such restriction.
+
+# TODO: example
+
 =head2 Slurpy Parameters
 
 X<slurpy>
