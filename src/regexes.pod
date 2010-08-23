@@ -535,7 +535,7 @@ non-word character, and then matches the same string as previously matched
 by the regex C<word>.  It ends with another word boundary.  The syntax for 
 This I<backreference> is a dollar sign followed by the name of the
 capture in angle brackets.  N<In grammars, which are introduced in the
-next chapter, c<< <word> >> simply looks up a regex named C<word> in
+next chapter, C<< <word> >> simply looks up a regex named C<word> in
 the current grammar and parent grammars, and creates a capture of the
 same name.>
 
