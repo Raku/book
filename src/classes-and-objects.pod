@@ -473,3 +473,9 @@ there a good way to guarantee, in Perl 6, that the attribute C<$!started>
 gets checked-and-set atomically?
 
 =end
+
+=for authors
+
+TODO: Optiionally talk about multi methods
+
+=end authors

@@ -518,35 +518,6 @@ as C<only sub YourSub>.  At the time of writing, no compiler supports this.
 
 =end sidebar
 
-=head1 Multi Methods
-
-X<multimethods>
-X<methods; multidispatch>
-
-Methods can participate in dispatch just as do subroutines.  For multi method
-dispatch the invocant acts as a positional parameter.
-
-The main difference between sub and method calls is where the dispatcher
-searches for the routines: it looks for subroutines in the current and outer
-lexical scopes, whereas it looks for methods in the class of the invocant and
-recursively in any parent classes.
-
-=for author
-
-    # XXX should this explanation moved to the OO tutorial?
-    # XXX     jnthn: in my opinion, yes
-
-    # TODO: Multi method dispatch example
-
-=end for
-
-Unlike subroutine dispatch, you can dispatch to multiple candidates with
-multimethods.  The C<$object.?method> syntax dispatches to zero or one matching
-candidates; it is no error if there is no matching candidate.
-C<$object.*method> calls I<all> matching candidates, but it is no error if
-there are no matching candidates.  C<$object.+method> calls at least one
-matching candidate.
-
 =head1 Toying with the candidate list
 
 Each multi dispatch builds a list of candidates, all of which satisfy the
