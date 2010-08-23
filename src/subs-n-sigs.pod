@@ -73,17 +73,17 @@ C<our> also makes subroutines visible from the outside of a package or module:
 
 =begin programlisting
 
-   module EatAndDrink {
-        our sub eat() {
-            say "om nom nom";
-        }
+    module EatAndDrink {
+         our sub eat() {
+             say "om nom nom";
+         }
 
-        sub drink() {
-            say "glug glug";
-        }
-   }
-   EatAndDrink::eat();    # om nom nom
-   EatAndDrink::drink();  # fails, not declared with "our"
+         sub drink() {
+             say "glug glug";
+         }
+    }
+    EatAndDrink::eat();    # om nom nom
+    EatAndDrink::drink();  # fails, not declared with "our"
 
 =end programlisting
 
