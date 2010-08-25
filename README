@@ -33,7 +33,7 @@ To build the book, you need to have the following software installed:
       Acrobat Reader then copy *.otf from
       /opt/Adobe/Reader9/Resource/Font/ to ~/.fonts/
 	
-    * Run 'sudo fc-cache -f -v' to rebuild the cache incase the fonts
+    * Run 'sudo fc-cache -f -v' to rebuild the cache in case the fonts
       are not found.
 
 The book is produced from src/*.pod chapters ultimately rendered into
