@@ -3,8 +3,9 @@
 X<role>
 X<roles>
 
-A I<role> is a standalone, named, reusable unit of behavior.  You can compose a
-role into a class at compile time or add it to an individual object at runtime.
+A I<role> is a standalone, named, and reusable unit of behavior.  You can
+compose a role into a class at compile time or add it to an individual object
+at runtime.
 
 That's an abstract definition best explained by an example.  This program
 demonstrates a simple and pluggable IRC bot framework which understands a few
@@ -57,6 +58,7 @@ simple commands.
             }
         }
 
+        # I'm tempted to add another candidate here which checks any(@!whoz-op)
         multi method on-message($sender, $msg where /^trust <ws> <nick>/) {
             if $sender eq any(@!whoz-op) {
                 push @!whoz-op, $<nick>;
@@ -97,7 +99,7 @@ simple commands.
 
     my %pluggables =
         karma => KarmaTracking,
-        op => Oping;
+        op    => Oping;
 
     role Plugins {
         multi method on-message($self is rw: $sender, $msg where /^youdo <ws> (\w+)/) {
@@ -108,39 +110,50 @@ simple commands.
         }
     }
 
-    class KarmaKeeper is IRCBot does AnswerToAll does KarmaTracking {
-    }
-
-    class NothingBot is IRCBot does AnswerIfTalkedTo does Plugins {
-    }
+    class AdminBot    is IRCBot does KarmaTracking    does Oping       {}
+    class KarmaKeeper is IRCBot does KarmaTracking    does AnswerToAll {}
+    class NothingBot  is IRCBot does AnswerIfTalkedTo does Plugins     {}
 
 =end programlisting
+
+You don't have to understand everything in this example yet.  It's only
+important right now to notice that the classes C<KarmaKeeper> and C<NothingBot>
+share some behavior by inheriting from C<IRCBot> and differentiate their
+behaviors by performing different roles.
 
 =head1 What is a role?
 
 Previous chapters have explained classes and grammars. A role is another type
 of package. Like classes and grammars, a role can contain methods (including
-named regexes) and attributes. However, a role cannot stand on its own.  To use
-a role, you must incorporate it into an object, a class, or a grammar.
+named regexes) and attributes. However, a role cannot stand on its own; you
+cannot instantiate a role.  To use a role, you must incorporate it into an
+object, class, or grammar.
 
-In traditional object orientation, classes perform two tasks.  They represent
-entities in the system by providing models from which to create instances.
-They also provide a mechanism for code re-use.  These two tasks are somewhat in
-tension. For optimal re-use, classes should be small, but in order to represent
-a complex entity with many behaviors, classes tend to grow large.
+In other object systems, classes perform two tasks.  They represent entities in
+the system, providing models from which to create instances.  They also provide
+a mechanism for code re-use.  These two tasks contradict each other to some
+degree. For optimal re-use, classes should be small, but in order to represent
+a complex entity with many behaviors, classes tend to grow large.  Large
+projects written in such systems often have complex interactions and
+workarounds for classes which want to reuse code but do not want to take on
+additional unnecessary capabilities.
 
 X<composition>
 X<flattening composition>
 
-Perl 6 classes retain the responsibility for instance management.  Roles handle
-the task of code reuse.  A role contains the methods and attributes required to
-provide a named, reusable unit of behavior.  Building a class out of roles uses
-a safe mechanism called I<flattening composition>.  You may also apply a role
-to an individual object.  Both of these design techniques appear in the example
-code.
+Perl 6 classes retain the responsibility for modeling and managing instances.
+Roles handle the task of code reuse.  A role contains the methods and
+attributes required to provide a named, reusable unit of behavior.  Building a
+class out of roles uses a safe mechanism called I<flattening composition>.  You
+may also apply a role to an individual object.  Both of these design techniques
+appear in the example code.
 
-Roles may also support parameters.  This helps Perl 6 provide generic
-programming, along the lines of generics in C# and Java, or templates in C++.
+X<roles; parametric>
+
+Some roles--I<parametric roles>--allow the use of specific customizations to
+change how they provide the features they provide.  This helps Perl 6 provide
+generic programming, along the lines of generics in C# and Java, or templates
+in C++.
 
 =head1 Compile Time Composition
 
@@ -149,20 +162,20 @@ X<composition; methods>
 X<composition; resolution>
 X<composition; conflicts>
 
-Take a look at the C<KarmaKeeper> class definition. The body is empty; the
-class defines no attributes or methods of its own. The class inherits from
-C<IRCBot>, using the C<is> trait modifier -- something familiar from earlier
-chapters -- but it also uses the C<does> trait modifier to compose two roles
-into the class.
+Look at the C<KarmaKeeper> class declaration. The body is empty; the class
+defines no attributes or methods of its own. The class inherits from C<IRCBot>,
+using the C<is> trait modifier--something familiar from earlier chapters--but
+it also uses the C<does> trait modifier to compose two roles into the class.
 
 The process of role composition is simple.  Perl takes the attributes and
 methods defined in each role and copies them into the class. After composition,
-the class appears as if it had defined those behaviors itself.  This is part of
-the flattening property: after composing a role into the class, the roles in
-and of themselves are only important when querying the class to determine I<if>
-it performs the role.  Querying the methods of the C<KarmaKeeper> class through
-introspection will report that the class has both a C<process> method and an
-C<on-message> multi method.
+the class appears as if those attributes and methods had been declared in the
+class's declaration itself.  This is part of the flattening property: after
+composing a role into the class, the roles in and of themselves are only
+important when querying the class to determine I<if> it performs the role.
+Querying the methods of the C<KarmaKeeper> class through introspection will
+report that the class has both a C<process> method and an C<on-message> multi
+method.
 
 If this were all that roles provided, they'd have few advantages over
 inheritance or mixins.  Roles get much more interesting in the case of a
@@ -170,15 +183,14 @@ conflict.  Consider the class definition:
 
 =begin programlisting
 
-    class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {
-    }
+    class MyBot is IRCBot does AnswerToAll does AnswerIfTalkedTo {}
 
 =end programlisting
 
 Both the C<AnswerToAll> and C<AnswerIfTalkedTo> roles provide a method named
 C<process>.  Even though they share a name, the methods perform semantically
-different behaviors--behaviors which conflict.  The role composer will produce
-a compile-time error about this conflict, asking the programmer to provide a
+different--and conflicting--behaviors.  The role composer will produce a
+compile-time error about this conflict, asking the programmer to provide a
 resolution.
 
 Multiple inheritance and mixin mechanisms rarely provide this degree of
@@ -203,7 +215,24 @@ in the class body itself:
 
 If the role composer detects a method with the same name in the class body, it
 will then disregard all of the (possibly conflicting) ones from the roles. Put
-simply, methods in the class always win.
+simply, methods in the class always supersede methods which a role may provide.
+
+=for author
+
+This sidebar gets a bit deep, but it's an important concept.
+
+=end for
+
+=begin sidebar
+
+What happens when a class performs a role but overrides all of its methods?
+That's okay too: declaring that a class performs a role does not require you to
+compose in any behavior from the role.  The role composer will verify that all
+of the role's requirements are satisfied once and only once, and from then on
+Perl's type system will consider all instances of the class as corresponding to
+the type implied by the role.
+
+=end sidebar
 
 =head2 Multi-methods and composition
 
@@ -212,19 +241,19 @@ X<composition; multi methods>
 Sometimes it's okay to have multiple methods of the same name, provided they
 have different signatures such that the multidispatch mechanism can distinguish
 between them.  Multi methods with the same name from different roles will not
-be in conflict. Instead, the candidates from all of the roles will combine
-together during composition into the class.
+conflict with each other. Instead, the candidates from all of the roles will
+combine during role composition.
 
-If the class provides a method of the same name that is also multi, then the
-multi candidates from the class will be included. On the other hand, if the
-class has a method of the same name that is I<not> declared as a multi, then
-the method in the class alone--as usual--will win.
+If the class provides a method of the same name that is also multi, then all
+methods defined in the role and the class will combine into a set of multi
+candidates.  Otherwise, if the class has a method of the same name that is
+I<not> declared as a multi, then the method in the class alone--as usual--will
+take precedence.  This is the mechanism by which the C<AdminBot> class can
+perform the appropriate C<on-message> method provided by both the
+C<KarmaTracking> and the C<Oping> roles.
 
-This is the mechanism by which a class that composes both, for example, the
-C<KarmaTracking> role and the C<Oping> role would end up having the candidates
-that both roles provide for the C<on-message> method. As a class ends up
-composing more than a couple of roles, it may be preferable to use an
-alternative syntax that allows you to list the roles in the class body:
+When a class composes multiple roles, an alternate declaration syntax may be
+more readable:
 
 =begin programlisting
 
@@ -252,26 +281,26 @@ a modified syntax for calling methods:
 
 =end programlisting
 
-The use of C<.*> instead of C<.> changes the semantics of the method dispatch.
-Just as the C<*> quantifier in regexes means "zero or more", the C<.*> dispatch
+The C<.*> method calling syntax changes the semantics of the dispatch.  Just as
+the C<*> quantifier in regexes means "zero or more", the C<.*> dispatch
 operator will call zero or more matching methods.  If no C<on-message> multi
 candidates match, the call will not produce an error.  If more than one
 C<on-message> multi candidate matches, Perl will call all of them, whether
 found by multiple dispatch, searching the inheritance hierarchy, or both.
 
-There are two other variants. C<.+> greedily calls all methods but dies if
-there is not at least one method that matches. C<.?>, which tries to call one
-method, but returns a C<Failure> rather then throwing an exception.  The
-zero-or-more and one-or-more dispatch forms are somewhat rare, but very useful
-in event driven programming.  One-or-failure is very useful when dealing with
-per-object role application.
+There are two other variants. C<.+> greedily calls all methods but dies unless
+it can call at least one method.  C<.?>, tries to call one method, but returns
+a C<Failure> rather then throwing an exception.  These dispatch forms may seem
+rare, but they're very useful for event driven programming.  One-or-failure is
+very useful when dealing with per-object role application.
 
 =head2 Expressing requirements
 
 X<roles; requirements>
 X<required methods>
 
-The role C<AnswerIfTalkedTo> declares a stub for the method C<bot-nick>, but never gives an implementation.
+The role C<AnswerIfTalkedTo> declares a stub for the method C<bot-nick>, but
+never provides an implementation.
 
 =begin programlisting
 
@@ -279,11 +308,11 @@ The role C<AnswerIfTalkedTo> declares a stub for the method C<bot-nick>, but nev
 
 =end programlisting
 
-In the context of a role, this techniques declares that any class which
-composes this role must somehow provide a method named C<bot-nick>.  The class
-itself may provide it, another role must provide it, or a parent class must
-provide it.  IRCBot does the latter; it IRCBot defines an attribute
-C<$!bot-nick> along with an accessor method.
+In the context of a role, this means that any class which composes this role
+must somehow provide a method named C<bot-nick>.  The class itself may provide
+it, another role must provide it, or a parent class must provide it.  C<IRCBot>
+does the latter; it C<IRCBot> defines an attribute C<$!bot-nick> along with an
+accessor method.
 
 =for author
 
@@ -291,25 +320,25 @@ What about C<AUTOMETH>?
 
 =end for
 
-You are not I<required> to make explicit the methods on which your role
-depends.  If you do so, the role composer can detect any errors at compile
-time.  If you do not, the problem will only appear at runtime, when and if
-something attempts to call the missing method.
+If you do not make explicit the methods on which your role depends, the role
+composer will not verify their existence at compilation time.  Any missing
+methods will cause runtime errors (barring the use of something like
+C<AUTOMETH>).  As compile-time verification is an important feature of roles,
+it's best to mark your dependencies.
 
 =head1 Runtime Application of Roles
 
 X<roles; runtime application>
 
-Class-based OO usually works, where instances have the methods and attributes
-of the classes they instantiate.  Sometimes, something more dynamic is useful.
-Perl 6 allows you to add extra behaviors to individual objects by applying
-roles to individual objects at runtime.
+Class declarations frozen at compilation time are often sufficient, but
+sometimes it's useful to add new behaviors to individual objects.  Perl 6
+allows you to do so by applying roles to individual objects at runtime.
 
-The example in this chapter uses this in order to give bots new abilities
-during its lifetime. The C<Plugins> role is at the heart of this.  Note the
-signature of the method C<on-message>. It captures the invocant into a variable
-C<$self> marked C<rw>, which indicates that the invocant may be modified.
-Inside the method, that happens:
+The example in this chapter uses this to give bots new abilities during their
+lifetimes. The C<Plugins> role is at the heart of this.  The signature of the
+method C<on-message> captures the invocant into a variable C<$self> marked
+C<rw>, which indicates that the invocant may be modified.  Inside the method,
+that happens:
 
 =begin programlisting
 
@@ -326,13 +355,13 @@ The "first-class roles" mention needs to move out of a parenthetical note.
 
 =end for
 
-Like classes, roles are first-class in Perl 6; you can pass them around just
-like any other object.  The C<%pluggables> hash maps names of plug-ins to Role
-objects.  Thus this lookup stores a Role in C<$plug-in>. The C<does> operator
-adds this role to C<$self>--not the I<class> of C<$self>, but the instance
-itself. From this point on, C<$self> now has all of the methods from the role,
-in addition to all of the ones that it had before.  Importantly, this does not
-have any influence on any other instances of the same class; only this one
+Roles in Perl 6 are first-class entities, just like classes.  You can pass
+roles around just like any other object.  The C<%pluggables> hash maps names of
+plug-ins to Role objects.  The lookup inside C<on-message> stores a Role in
+C<$plug-in>. The C<does> operator adds this role to C<$self>--not the I<class>
+of C<$self>, but the instance itself. From this point on, C<$self> now has all
+of the methods from the role, in addition to all of the ones that it had
+before.  This does affect any other instances of the same class; only this one
 instance has changed.
 
 =head2 Differences from compile time composition
@@ -346,27 +375,38 @@ roles along with any that already existed in the class.
 
 If you wish to apply multiple roles at a time, list them all with C<does>.
 This case behaves the same way as compile-time composition, in that the role
-composer will compose them all into the imaginary anonymous subclass.  As you
-might expect, any conflicts will occur at this point.
+composer will compose them all into the imaginary anonymous subclass.  Any
+conflicts will occur at this point.
 
 This gives a degree of safety, but it happens at runtime and is thus not as
 safe as compile time composition.  For safety, perform your compositions at
-compile time.  For example, instead of applying multiple roles to an instance,
-compose them into a new role at compile time and apply that role to the
-instance.
+compile time.  Instead of applying multiple roles to an instance, compose them
+into a new role at compile time and apply that role to the instance.
 
 =head2 The C<but> operator
 
 X<does>
+X<but>
 
-Runtime role application with C<does> modifies an object in-place:
-C<$x does SomeRole> modifies the object stored in C<$x>. When this is not
-desirable, the C<but> operator can be used instead. It returns a clone of
-the object, and applies the role composition only to the clone -- the original
-object stays the same.
+Runtime role application with C<does> modifies an object in place: C<$x does
+SomeRole> modifies the object stored in C<$x>. Sometimes this modification is
+not what you want.  In that case, use the C<but> operator, which clones the
+object, performs the role composition with the clone, and returns the clone.
+The original object stays the same.
 
 TODO: example
 
 =head1 Parametric Roles
 
 
+=head1 Roles and Types
+
+=for author
+
+does() as an operator
+
+the use of role names as type specifiers
+
+"every class implies a role"
+
+=end for

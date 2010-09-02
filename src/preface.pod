@@ -33,14 +33,12 @@ working through this book, you should have a solid grasp of the basics of Perl
 
 =head1 Format of this book
 
-Each chapter opens with a reasonably complete example that illustrates
-the topic of the chapter. The example is meant to give an overall
-impression of how the chapter's topic is used in a real program.
-Following the example will be a detailed explanation of the code as well
-as some insight into the techniques and idioms used. This is meant to
-convey the "flavor" of writing Perl 6 programs so that the reader may
-proceed to write their own native Perl 6 programs rather than programs
-that resemble some other languageN<Some programmers can still write
+Each chapter opens with a reasonably complete example that illustrates the
+topic of the chapter. We intend these examples to demonstrate how to use the
+features, techniques, and idioms explained in the chapter in real programs.
+Our goal is to convey the "flavor" of writing Perl 6 programs so that the
+reader may proceed to write their own native Perl 6 programs rather than
+programs that resemble some other languageN<Some programmers can still write
 Fortran in any language, however :)>.
 
 =head1 Relationship between Perl 6 and Perl 5
@@ -57,12 +55,12 @@ restriction of backward compatibility with Perl 5 or earlier versions.
 
 Some might ask, "Why call it Perl if it's a different language?" Perl is more
 than the vagaries of syntax. Perl is philosophy (there's more than one way to
-do it; easy things easy, hard things possible); Perl is custom (comprehensive
-testing); Perl is architectural edifice (the Comprehensive Perl Archive
-Network); and Perl is community (perl5-porters, perl6-language).  Both Perl 5
-and Perl 6 share these attributes to varying degrees. As well, Perl is
-syncretic.  Just as Perl borrows good ideas from other languages, so Perl 5 and
-Perl 6 share features.
+do it; easy things should be easy, and hard things possible); Perl is custom
+(comprehensive testing, idioms); Perl is architectural edifice (the
+Comprehensive Perl Archive Network); and Perl is community (perl5-porters,
+perl6-language).  Both Perl 5 and Perl 6 share these attributes to varying
+degrees. As well, Perl is syncretic.  Just as Perl borrows good ideas from
+other languages, so Perl 5 and Perl 6 share features.
 
 =head1 Perl 6 implementations
 
@@ -84,7 +82,7 @@ is available from U<http://sourceforge.net/projects/parrotwin32/files/>.
 
 =head1 Executing programs
 
-To run a Perl 6 program with Rakudo, include the install directory in your
+To run a Perl 6 program with Rakudo, include the installation directory in your
 system C<PATH> variable and issue a command like:
 
 =begin screen
@@ -93,15 +91,9 @@ system C<PATH> variable and issue a command like:
 
 =end screen
 
-=for author
-
-Did the lexical fix get merged?
-
-=end for
-
 If you invoke the Rakudo compiler without an explicit script to run, it enters
-a small interactive mode that allows Perl 6 statements to be executed from the
-command line. 
+a small interactive mode that allows the execution of Perl 6 statements from
+the command line.
 
 =head1 Getting involved
 
@@ -112,8 +104,7 @@ to the Perl 6 community, there are more resources available to you:
 
 =item World Wide Web
 
-The Perl 6 homepage is C<http://perl6.org/>--it contains pointers to many
-useful resources.
+The Perl 6 homepage at C<http://perl6.org/> links to many useful resources.
 
 =item IRC
 
@@ -124,7 +115,7 @@ The channel C<#perl6> on C<irc.freenode.net> discusses all things Perl 6.
 If you need programming help with Perl 6, send an email to
 C<perl6-users@perl.org>.
 
-For issues regarding the Perl 6 language specification contact
+For issues regarding the Perl 6 language specification, contact
 C<perl6-language@perl.org>. For issues regarding Perl 6 compilers, send email
 to C<perl6-compiler@perl.org>.
 

@@ -3,12 +3,12 @@
 X<operator>
 
 Operators are very short names for often used routines. They have special
-calling syntax, and can be manipulated by other operators.
+calling syntax, and can manipulate each other.
 
-Returning to the table tennis example, suppose you want to plot the number of
-sets that each player won in a tournament. This example uses the numbers from
-the previous chapter, and makes a very simple text output by just printing a
-number of C<X> characters to represent horizontal bars.
+Consider the table tennis example from the previous chapter. Suppose you want
+to plot the number of sets that each player won in a tournament. This example
+makes a very simple text output by printing C<X> characters to represent
+horizontal bars:
 
 =begin programlisting
 
@@ -16,7 +16,7 @@ number of C<X> characters to represent horizontal bars.
 
     my @scores = 'Ana' => 8, 'Dave' => 6, 'Charlie' => 4, 'Beth' => 4;
 
-    my $screen-width   = 30;
+    my $screen-width     = 30;
 
     my $label-area-width = 1 + [max] @scores».key».chars;
     my $max-score        = [max] @scores».value;
@@ -29,7 +29,7 @@ number of C<X> characters to represent horizontal bars.
 
 =end programlisting
 
-Output:
+This program produces the output:
 
 =begin screen
 
@@ -40,7 +40,7 @@ Output:
 
 =end screen
 
-The line
+The line:
 
 =begin programlisting
 
@@ -48,25 +48,24 @@ The line
 
 =end programlisting
 
-already contains three different operators: C<=>, C<< => >> and C<,>.
+... already contains three different operators: C<=>, C<< => >>, and C<,>.
 
 X<assignment>
 X<operator; assignment>
 X<operator; =>
 
-The C<=> operator is the I<assignment operator> -- it takes the
-values from the right-hand side, and stores them in the variable on the
-left-hand side, here C<@scores>.
+The C<=> operator is the I<assignment operator>--it takes the values from the
+right-hand side, and stores them in the variable on the left-hand side, here
+C<@scores>.
 
 =begin sidebar
 
-Like other languages that have adopted a similar syntax to C, Perl 6
-allows for a shorthand way to write certain assignments.  Any
-assignment of the form  C<$var = $var R<op> EXPR> can be expressed as
-C<$var R<op>= EXPR>.  So, for instance, C<~> (tilde) is the string
-concatenation operator; to append some text to the end of a string,
-you could say C<$string ~= "text"> which is equivalent to C<$string =
-$string ~ "text">.
+Like other languages that have adopted a similar syntax to C, Perl 6 allows for
+a shorthand way to write certain assignments.  You can express any assignment
+of the form  C<< $var = $var R<op> EXPR >> as C<< $var R<op>= EXPR >>.  For
+example, C<~> (tilde) is the string concatenation operator; to append some text
+to the end of a string, you can write C<$string ~= "text">, which is equivalent
+to C<$string = $string ~ "text">.
 
 =end sidebar
 
@@ -74,11 +73,11 @@ X<pair>
 X<< operator;=> >>
 X< operator; fat arrow>
 
-The C<< => >> operator (the C<fat arrow>) constructs C<Pair>
-objects. A Pair stores a key and a value; the key is on the left-hand side of
-the C<< => >> operator, the value on the right. It also has a specialty: if
-the key on the left is a bare identifier, it is taken to be a string. So one
-could also write the example above as
+The C<< => >> operator (the I<fat arrow>) constructs C<Pair> objects. A Pair
+stores a key and a value; the key is on the left-hand side of the C<< => >>
+operator, the value on the right. This operator also has a special feature: it
+causes the parser to interpret any bare identifier on the left-hand side as a
+string.  You could also write the example line as:
 
 =begin programlisting
 
@@ -102,30 +101,29 @@ X<operator; postcircumfix>
 X<postfix>
 X<operator; postfix>
 
-The previous chapter already used other types of operators, too. It contained
-the statement C<%games{$p1}++;> which uses the I<postcircumfix> operator
-C<{...}>. It stands behind (I<post>) a term, and consists of two symbols (an
-opening and a closing curly bracket) which enclose (I<circumfix>) another term.
-Behind this postcircumfix operator is an ordinary I<postfix> operator with name
-C<++>, which increments the value it qualifies. No whitespace is allowed
-between a term and its postfix or postcircumfix operators.
+The previous chapter already used other types of operators. It contained the
+statement C<%games{$p1}++;>.  The I<postcircumfix> operator C<{...}> occurs
+after (the I<post>) a term, and consists of two symbols (an opening and a
+closing curly bracket) which enclose (I<circumfix>) another term.  After this
+postcircumfix operator is an ordinary I<postfix> operator with name C<++>,
+which increments the value it qualifies. You may not use whitespace between a
+term and its postfix or postcircumfix operators.
 
 X<postfix>
 X<operator; postfix>
 
-Yet another operator type is the I<prefix> operator, which stands in front of
-a term. An example is the C<-> operator, which negates the following numeric
-value, as in C<my $x = -4>.
+Another operator type is the I<prefix> operator, which occurs before a term. An
+example is the C<-> operator, which negates the following numeric value, as in
+C<my $x = -4>.
 
-But the C<-> operator can also mean subtraction, so C<say 5 - 4> will print a
-C<1>. To distinguish the prefix operator C<-> from the infix operator C<->,
-the Perl 6 parser always keeps track of whether it expects an infix
-operator or a term. A term can have zero or more prefix operators, so you can
-actually write C<say 4 + -5>. After the C<+> (an infix operator), the compiler
-expects a term, thus the C<-> is interpreted as a prefix operator to the term
-C<5>.
+The C<-> operator can also mean subtraction, so C<say 5 - 4> will print a C<1>.
+To distinguish the prefix operator C<-> from the infix operator C<->, the Perl
+6 parser always keeps track of whether it expects an infix operator or a term.
+A term can have zero or more prefix operators, so you can actually write C<say
+4 + -5>. After the C<+> (an infix operator), the compiler expects a term, so as
+to interpret the C<-> as a prefix operator to the term C<5>.
 
-The next line containing new features is
+The next line containing new features is:
 
 =begin programlisting
 
@@ -134,37 +132,34 @@ The next line containing new features is
 =end programlisting
 
 It begins harmlessly with a variable declaration C<my $label-area-width> and an
-assignment to it. Next comes a simple numeric addition, C<1 + ...>. The right
-side of the C<+> operator is more complicated.
+assignment. Next comes a simple numeric addition, C<1 + ...>. The right side of
+the C<+> operator is more complicated.
 
 X<operator; max>
 
-In Perl 6 there is an infix C<max> operator which returns the greater of two
-values, so C<2 max 3> returns 3. Square brackets around an infix
-operator indicate that it is applied to a list piece by piece. So C<[max] 1, 5,
-3, 7> is the same as C<1 max 5 max 3 max 7> and evaluates to C<7>.
+The infix C<max> operator returns the greater of two values, so C<2 max 3>
+returns 3. Square brackets around an infix operator cause Perl to apply the
+operator to a list element by element.  C<[max] 1, 5, 3, 7> is the same as C<1
+max 5 max 3 max 7> and evaluates to C<7>.
 
 Likewise, you can write C<[+]> to get the sum of a list of values, C<[*]> for
-the product, and use C<< [<=] >> to check if a list is ordered by ascending
-values.
+the product, and C<< [<=] >> to check if a list is ordered by ascending values.
 
-After the C<[max]> you see the expression C<@scores».key».chars>. Just like
-C<@variable.method> calls a method on C<@variable>, C<@array».method>
-calls a method for each item in C<@array>, and returns the list of the return
-values.
+Next comes the expression C<@scores».key».chars>. Just like C<@variable.method>
+calls a method on C<@variable>, C<@array».method> calls a method for each item
+in C<@array> and returns the list of the return values.
 
-C<»> is called a I<hyper operator>. It is a unicode character that
-can be entered on most computers
-N<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key position
-select one of the keys to be the "Compose" key. Then press
-Compose-key and the "greater than" key twice.>
-If your operating system does not make it easy to write it you can also write it using two angle brackets (C<<< >> >>>).
-
-So C<@scores».key> is a list of all the keys of the pair objects in C<@scores>,
-and C<@scores».key».chars> is a list of the length of all keys in C<@scores>.
+C<»> is a I<hyper operator>. It is also a Unicode character.  If your operating
+system does not make it easy to write it you can also write it using two angle
+brackets (C<<< >> >>>)N<Ubuntu 10.4: In
+System/Preferences/Keyboard/Layouts/Options/Compose Key position select one of
+the keys to be the "Compose" key. Then press Compose-key and the "greater than"
+key twice.> C<@scores».key> is a list of all the keys of the pair objects in
+C<@scores>, and C<@scores».key».chars> is a list of the length of all keys in
+C<@scores>.
 
 The expression C<[max] @scores».key».chars> gives the largest of these
-values. It is the same as
+values. It is the same as:
 
 =begin programlisting
 
@@ -178,8 +173,8 @@ values. It is the same as
 X<meta operator; reduction>
 X<meta operator; []>
 
-The square brackets are called the I<reduction meta operator>: it transforms
-the enclosed infix operator into an operator that expects a list (a
+These circumfix square brackets are the I<reduction meta operator>, which
+transforms the enclosed infix operator into an operator that expects a list (a
 I<listop>), and carries out the operation between each two consecutive list
 items.
 
@@ -188,14 +183,16 @@ know how much space to allocate for the player names. Adding 1 to it leaves
 space for a single blank space between the name of the longest player and the
 left edge of the bars.
 
+The program next determines the maximum score:
+
 =begin programlisting
 
     my $max-score       = [max] @scores».value;
 
 =end programlisting
 
-With this line the program determines the maximum score. The drawing area has
-the width C<$screen-width - $label-area-width>, so for each score we can print
+The drawing area has the width C<$screen-width - $label-area-width>, so for
+each score, it should print:
 
 =begin programlisting
 
@@ -203,10 +200,10 @@ the width C<$screen-width - $label-area-width>, so for each score we can print
 
 =end programlisting
 
-amount of C<X> characters. This expression uses the infix operators C<-> and
-C</> for numerical calculations.
+... amount of C<X> characters. This expression uses the infix operators C<->
+and C</> for numerical calculations.
 
-Now all the necessary informations are in place and the chart can be printed:
+Now all the necessary informations are in place, and the chart can print:
 
 =begin programlisting
 
@@ -217,38 +214,36 @@ Now all the necessary informations are in place and the chart can be printed:
 
 =end programlisting
 
-These lines loop over the items in C<@scores>, binding them to the special
-variable C<$_> one at a time. For each such item, the program uses the
-C<printf> built-in function to print both the name of the player and a bar.
-
 X<printf>
 
-It is similar to C<printf> functions of the C and Perl 5 programming
-languages. It takes a format string, which specifies how to print the
-following parameters. If C<$label-area-width> is 8, the format string is
-C<"%- 8s%s\n">, which means a string (C<'s'>) filled to 8 spaces (C<' 8'>) and
-left-justified (C<'-'>), followed by another string and a newline.
+These lines loop over the items in C<@scores>, binding them to the special
+variable C<$_> one at a time. For each item, the program uses the C<printf>
+built-in function to print both the name of the player and a bar.  This
+function is similar to C<printf> in C and Perl 5.  It takes a format string,
+which specifies how to print the following parameters. If C<$label-area-width>
+is 8, the format string is C<"%- 8s%s\n">, which means a string (C<'s'>) filled
+to 8 spaces (C<' 8'>) and left-justified (C<'-'>), followed by another string
+and a newline.
 
-The first string is the name of the player, the second is the bar.
+The first string is the name of the player and the second is the bar.
 
 X<operator; x>
 X<repetition operator>
 
-The bar is generated with the infix C<x> operator, the
-I<repetition operator>. It takes a string on the left-hand side and a number
-on the right-hand side, and sticks the strings together as many times as the
-number specifies. So C<'ab' x 3> returns the string C<'ababab'>. C<.value>
-returns the value of the current pair, C<($unit * .value)> multiplies that
-values with C<$unit>, and C<'X' x ($unit * .value)> returns as that many C<X>
-characters.
+The infix C<x> operator, or I<repetition operator>, generates this bar. It
+takes a string on the left-hand side and a number on the right-hand side, and
+sticks the strings together as many times as the number specifies, so C<'ab' x
+3> returns the string C<'ababab'>. C<.value> returns the value of the current
+pair, C<($unit * .value)> multiplies that values with C<$unit>, and C<'X' x
+($unit * .value)> returns as that many C<X> characters.
 
 =head1 A Word on Precedence
 
 X<operator precedence>
 X<precedence>
 
-The explanations of the example above have one implication, which was not yet
-explicitly mentioned. In the line
+The explanations of this example have one implication which is not entirely
+obvious.  In the line:
 
 =begin programlisting
 
@@ -256,11 +251,10 @@ explicitly mentioned. In the line
 
 =end programlisting
 
-The right-hand side of the assignment produces a list (because of the C<,>
+... the right-hand side of the assignment produces a list (because of the C<,>
 operator) that is made of pairs (because of C<< => >>), and the result is then
-assigned to the array variable. But you could think of
-other ways that Perl 6 interprets this program. If you pass this line to the
-Perl 5 interpreter, it parses it as
+assigned to the array variable. You could think of other ways for Perl 6 to
+interpret this program. Perl 5 will interpret it as:
 
 =begin programlisting
 
@@ -268,26 +262,37 @@ Perl 5 interpreter, it parses it as
 
 =end programlisting
 
-and thus stores only one item in the variable C<@scores>, the rest is
-parsed as a listN<and discarded, because it is not stored in any variable>.
+... so that C<@scores> will contain only one item.  The rest of the expression
+is merely a list of constants evaluated, then discarded.
 
-The ways in which this statement is parsed in Perl 6 is governed by
-I<precedence rules>. For example, they state that the infix C<< => >> operator
-binds its arguments tighter than the infix C<,> operator, which in turn binds
-tighter than the C<=> assignment operatorN<There are actually two assignment
-operators with different precedence. When the right-hand side is a scalar,
-the I<item assignment operator> with tight precedence is used,
-otherwise the loose-precedence I<list assignment operator> is used. This
-allows the two expressions C<$a = 1, $b = 2> and C<@a = 1, 2> to both
-mean something sensible: assignment to two variables in a list, and
+X<precedence; rules>
+
+I<Precedence rules> govern how a parser will parse this line.  Perl 6's
+precedence rules state that the infix C<< => >> operator binds its arguments
+more tightly than the infix C<,> operator, which in turn binds more tightly
+than the C<=> assignment operator.
+
+=for author
+
+right-hand or left-hand?
+
+=end for
+
+=begin sidebar
+
+There are actually two assignment operators with different precedence. When the
+right-hand side is a scalar, the I<item assignment operator> with tight
+precedence is used, otherwise the loose-precedence I<list assignment operator>
+is used. This allows the two expressions C<$a = 1, $b = 2> and C<@a = 1, 2> to
+both mean something sensible: assignment to two variables in a list, and
 assignment of a two-item list to a single variable>.
 
+=end sidebar
 
-The precedence rules for Perl 6 allow many commonly used idioms to be expressed
-naturally and without any parentheses, or even without thinking about
-precedence. If you want to force a different way of parsing, parentheses can be
-used around an expression. Then this parenthesis group has the tightest
-possible precedence.
+Perl 6's precedence rules allow you to express many common operations
+naturally, without thinking about precedence at all.  If you want to force a
+different parsing precedence, surround an expression with parentheses, so that
+this new group has the tightest possible precedence:
 
 =begin programlisting
 
@@ -310,7 +315,7 @@ possible precedence.
 
 =row
 
-=cell 
+=cell
 
 =cell (tightest precedence)
 
@@ -318,7 +323,7 @@ possible precedence.
 
 =cell C<(), 42.5>
 
-=cell term 
+=cell term
 
 =row
 
@@ -330,7 +335,7 @@ possible precedence.
 
 =cell C<$x++>
 
-=cell autoincrement and -decrement
+=cell autoincrement and autodecrement
 
 =row
 
@@ -472,29 +477,30 @@ possible precedence.
 
 =row
 
-=cell 
+=cell
 
 =cell (loosest precedence)
 
 =end table
 
-
 =head1 Comparisons and Smart Matching
 
 X<value identity>
+X<===>
+X<operator; ===>
 
-There are several ways to compare objects in Perl. You can test for
-value equivalence using the C<===> infix operator. For immutable
-objectsN<Objects whose value I<can not> be changed;  a literal value.
-For instance, the literal C<7> will always and forever be just a C<7>.>,
-this is an ordinary value comparison.  C<"hello" === "hello"> is true
-because both strings are immutable and have the same value.
+There are several ways to compare objects in Perl. You can test for value
+equivalence using the C<===> infix operator. For immutable objectsN<Objects
+whose values I<can not> be changed; literal values.  For instance, the literal
+C<7> will always and forever be just a C<7>.>, this is an ordinary value
+comparison.  C<"hello" === "hello"> is true because both strings are immutable
+and have the same value.
 
-For mutable objects, C<===> compares their identities.  Two objects
-only share the same identity if, in fact, they are the same object.
-In the following example, the two arrays C<@a> and C<@b>, while they
-I<contain> the same values, are two separate array objects which have
-different identities and are thus I<not> equivalent under C<===>.
+For mutable objects, C<===> compares their identities.  Two objects only share
+the same identity if, in fact, they are the same object.  Even if the two
+arrays C<@a> and C<@b> I<contain> the same values, if they containers are two
+separate array objects, they will have different identities and will I<not> be
+equivalent when compared with C<===>:
 
 =begin programlisting
 
@@ -511,23 +517,31 @@ different identities and are thus I<not> equivalent under C<===>.
 
     my $a = 'a';
     say $a === 'a';     # 1
- 
+
 =end programlisting
 
-The C<eqv> operator returns C<True> only if two objects are of the same type,
-and of the same structure. With the variables defined above, C<@a eqv @b> is
-true because C<@a> and C<@b> contain the same values each. On the other hand
-C<'2' eqv 2> returns C<False>, because the left argument is a string, the
-right an integer and so they are not of the same type.
+X<operator; eqv>
+X<eqv>
 
-TODO clarify "same structure"
+The C<eqv> operator returns C<True> only if two objects are of the same type
+I<and> the same structure. With C<@a> and C<@b> as defined in the previous
+example, C<@a eqv @b> is true because C<@a> and C<@b> contain the same values
+each. On the other hand C<'2' eqv 2> returns C<False>, because the left
+argument is a string, the right an integer and so they are not of the same
+type.
+
+=for author
+
+clarify "same structure"
+
+=end for
 
 =head2 Numeric Comparisons
 
-You can ask if two objects have the same numeric value with the C<==> infix 
+You can ask if two objects have the same numeric value with the C<==> infix
 operator.  If one of the objects is not numeric,  Perl will do its best to
-make it numeric before doing the comparison.  If there is no good way to 
-convert an object to a number, the default of C<0> is assumed.
+make it numeric before doing the comparison.  If there is no good way to
+convert an object to a number, Perl will use the default of C<0>.
 
 =begin programlisting
 
@@ -538,9 +552,20 @@ convert an object to a number, the default of C<0> is assumed.
 
 =end programlisting
 
-The operators C<< < >>, C<< <= >>, C<< >= >> and C<< > >> can be used to
-compare the relative size of numbers, C<!=> returns True if the two objects
-differ in their numerical value.
+X<< < >>
+X<< operator; < >>
+X<< <= >>
+X<< operator; <= >>
+X<< >= >>
+X<< operator; >= >>
+X<< > >>
+X<< operator; > >>
+X<!>
+X<operator; !>
+
+The operators C<< < >>, C<< <= >>, C<< >= >>, and C<< > >> compare the relative
+size of numbers. C<!=> returns C<True> if the two objects differ in their
+numerical value.
 
 When you use an array or list as a number, it evaluates to the number of items
 in that list.
@@ -557,9 +582,12 @@ in that list.
 
 =head2 String Comparisons
 
-Just like C<==> converts its arguments to numbers before comparing, C<eq> as
-an infix operator compares for string equality, and converts its arguments to
-strings if necessary.
+X<eq>
+X<operator; eq>
+
+Just like C<==> converts its arguments to numbers before comparing, C<eq> as an
+infix operator compares for string equality, converting its arguments to
+strings as necessary:
 
 =begin programlisting
 
@@ -569,9 +597,9 @@ strings if necessary.
 
 =end programlisting
 
-Other operators compare strings lexicographically
+Other operators compare strings lexicographically.
 
-=begin table
+=begin table Operators and Comparisons
 
 =headrow
 
@@ -643,26 +671,37 @@ Other operators compare strings lexicographically
 
 =end table
 
-For example C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
+For example, C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
-C<!=> is really just a convenience for C<!==>, which in turn is really the C<!> meta operator added to the infix C<==> operator. An equivalent explanation applies to C<ne> and C<!eq>.
+X<!=>
+X<operator; !=>
+X<ne>
+X<operator; ne>
+X<!eq>
+X<operator; !eq>
+
+C<!=> is really just a convenience for C<!==>, which in turn is really the C<!>
+meta operator added to the infix C<==> operator. An equivalent explanation
+applies to C<ne> and C<!eq>.
 
 =head3 Three-way Comparison
 
 X<leg>
+X<operator; leg>
 X<cmp>
+X<operator; cmp>
 X<< <=> >>
+X<< operator; <=> >>
 
 The three-way comparison operators take two operands, and return
-C<Order::Increase> if the left is smaller, C<Order::Same> when both are
-equal, and C<Order::Decrease> if the right operand is
-smallerN<C<Order::Increase>, C<Order::Same>, and C<Order::Decrease>
-are enumerations (enums) which are further explained in L<subtypes>>. For
-numbers that operator is spelled C<< <=> >>, and for strings C<leg>
-(from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp> operator is a
-type sensitive three-way comparison operator, and compares numbers like
-C<< <=> >>, string like C<leg>, and for example pairs first by key, and
-then by values if the keys are identical.
+C<Order::Increase> if the left is smaller, C<Order::Same> when both are equal,
+and C<Order::Decrease> if the right operand is smallerN<C<Order::Increase>,
+C<Order::Same>, and C<Order::Decrease> are enumerations (enums); see
+L<subtypes>>. For numbers, the comparison operator is C<< <=> >>, and for
+strings it's C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp>
+operator is a type sensitive three-way comparison operator which compares
+numbers like C<< <=> >>, string like C<leg>, and (for example) pairs first by
+key, and then by values if the keys are identical:
 
 =begin programlisting
 
@@ -672,10 +711,12 @@ then by values if the keys are identical.
 
 =end programlisting
 
-A typical use case for three-way comparison is sorting. The C<sort> method in
-lists can take a block or function that takes two values, compares
-them, and returns a value less than, equal to or, greater than 0. The
-sort method then orders the values according to that return value.
+X<.sort>
+
+A typical use case for three-way comparison is sorting. The C<.sort> method in
+lists can take a block or function that takes two values, compares them, and
+returns a value less than, equal to or, greater than 0. The sort method then
+orders the values according to that return value:
 
 =begin programlisting
 
@@ -689,16 +730,18 @@ sort method then orders the values according to that return value.
 =end programlisting
 
 The default comparison is case sensitive; by comparing not the values, but
-their upper case variant, the example above sorts case insensitively.
+their upper case variant, this example sorts case insensitively.
 
 =head2 Smart Matching
 
-The various comparison operators that we have seen so far all coerce their
-arguments to certain types before comparing them. This is useful if you wish
-to be very specific about what kind of comparison you want and are unsure of
-the types of the things that are being compared. Perl 6 also provides another
-operator that allows you to perform comparisons that just Do The Right Thing.
-It's C<~~>, the smart match operator.
+X<~~>
+X<smart match>
+
+The various comparison operators all coerce their arguments to certain types
+before comparing them. This is useful if you wish to be very specific about
+what kind of comparison you want and are unsure of the types of the values you
+are comparing.  Perl 6 provides another operator that allows you to perform
+comparisons that Do The Right Thing with C<~~>, the smart match operator.
 
 =begin programlisting
 
@@ -716,11 +759,11 @@ It's C<~~>, the smart match operator.
 
 =end programlisting
 
-The smart match operator always decides what kind of comparision to do based
-upon the type of the value on the right hand side. In the three examples above,
-it would do a numeric, a string and a range comparision respectively. While
-we've already seen operators to do numeric and string comparisons -- C<==> and
-C<eq> -- there is no operator for comparing ranges. This is part of the power
+The smart match operator always decides what kind of comparison to do based
+upon the type of the value on the right hand side. In the previous examples, it
+the comparisons are numeric, string, and range, respectively.  While this
+chapter has demonstrated the numeric and string comparison operators --C<==>
+and C<eq>--there is no operator for comparing ranges. This is part of the power
 of smart matching: more complex types can define interesting and useful ways to
 compare themselves to other things.
 
@@ -728,14 +771,19 @@ compare themselves to other things.
 
 Smart match works by calling the C<ACCEPTS> method on the operand on the right
 hand side and passing it the operand on the left hand side as an argument. Thus
-C<$answer ~~ 42> actually desugars to a method call like C<42.ACCEPTS($answer)>.
-The upshot of this is that -- after reading the chapter on writing classes and
-methods -- you too will be able to write things that can be smart-match against
-just by implementing an C<ACCEPTS> method to do the right thing.
+C<$answer ~~ 42> actually desugars to a method call like
+C<42.ACCEPTS($answer)>.  The upshot of this is that--after reading the chapter
+on writing classes and methods--you too will be able to write things that can
+smart-match against just by implementing an C<ACCEPTS> method to do the right
+thing.
+
+=for author
 
 TODO: explain 'desugars' terminology
 
-TODO: add := operator as that's used in subs-n-sigs.pod
+TODO: add := operator used in subs-n-sigs.pod
+
+=end for
 
 =end sidebar
 
