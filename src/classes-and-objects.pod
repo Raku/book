@@ -451,7 +451,7 @@ As mentioned before, a class can inherit from multiple classes.  When a class
 inherits from multiple classes the dispatcher knows to look at both classes when
 looking up a method to search for.  As a side note, Perl 6  uses the C3 
 algorithm to linearize the multiple inheritance hierarchies, which is a 
-significant improvement over Perl 5.  
+significant improvement over Perl 5's approach to handling multiple inheritance.
 
 =begin programlisting
 
@@ -477,6 +477,12 @@ $geek.code_to_solve('P =? NP');
 
 Now all the methods made available by both the Programmer class and the Cook
 class are available from the GeekCook class.
+
+While multiple inheritance is a useful concept to know and on occasion use, it
+is important to understand that there are more useful OOP concepts.  When
+reaching for multiple inheritance it is good practice to consider whether the
+design wouldn't be better realized by using roles.  For more information on roles
+check out the Roles chapter.
 
 =begin programlisting
 
