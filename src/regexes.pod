@@ -2,18 +2,20 @@
 
 X<regular expressions>
 X<regex>
+X<pattern matching>
+X<PCRE>
+X<POSIX>
 
-Regular expressions are a concept from computer science where simple
-patterns are used to describe the format of text.  Pattern matching is
-applying these patterns to actual strings to see if they ... well,
-match.  Most modern regular expression facilities are more powerful
-than traditional regular expressions due to the influence of languages
-such as Perl, but the short-hand term C<regex> has stuck and continues
-to mean "regular expression like pattern matching".  In Perl 6, though
-the specific syntax used to describe the patterns is 
-different from PCREN<B<P>erl B<C>ompatible B<R>egular B<E>xpressions> and
-POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for UniB<x>.
-See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
+Regular expressions are a computer science concept where simple patterns
+describe the format of text.  Pattern matching is the process of applying
+these patterns to actual text to look for matches.  Most modern regular
+expression facilities are more powerful than traditional regular expressions
+due to the influence of languages such as Perl, but the short-hand term
+C<regex> has stuck and continues to mean "regular expression-like pattern
+matching".  In Perl 6, though the specific syntax used to describe the
+patterns is different from PCREN<B<P>erl B<C>ompatible B<R>egular
+B<E>xpressions> and POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for
+UniB<x>.  See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
 
 A common writing error is to duplicate a word by accident. It is hard to
 catch such errors by rereading your own text, but Perl can do it for you
@@ -29,8 +31,8 @@ using C<regex>:
 
 =end programlisting
 
-In the simplest case a regex consists of a constant string. Matching a string
-against that regex searches for that string:
+The simplest case of a regex is a constant string. Matching a string against
+that regex searches for that string:
 
 =begin programlisting
 
@@ -44,15 +46,16 @@ The construct C<m/ ... /> builds a regex.  A regex on the right hand side of
 the C<~~> smart match operator applies against the string on the left hand
 side. By default, whitespace inside the regex is irrelevant for the matching,
 so writing the regex as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all produce
-the exact same semantics--although the first way is probably the most readable
-one.
+the exact same semantics--although the first way is probably the most readable.
+
+X<index>
+X<rindex>
 
 Only word characters, digits, and the underscore cause an exact substring
 search. All other characters may have a special meaning. If you want to search
 for a comma, an asterisk, or another non-word character, you must quote or
-escape itN<If you're just searching for literal text and not actually utilizing the
-pattern matching features of regex, consider using the C<index> or C<rindex> subroutines
-instead.>:
+escape itN<To search for a literal string--without using the pattern matching
+features of regex--consider using C<index> or C<rindex> instead.>:
 
 =begin programlisting
 
@@ -60,6 +63,7 @@ instead.>:
 
     # quoting
     if $str ~~ m/ '*very*' /   { say '\o/' }
+
     # escaping
     if $str ~~ m/ \* very \* / { say '\o/' }
 
@@ -69,13 +73,14 @@ X<regex; metasyntactic characters>
 X<regex; special characters>
 X<regex; . character>
 
-However searching for literal strings gets boring pretty quickly.  Regex
-support special (also called I<metasyntactic>) characters. The dot (C<.>)
-matches a single, arbitrary character:
+Searching for literal strings gets boring pretty quickly.  Regex support
+special (also called I<metasyntactic>) characters. The dot (C<.>) matches a
+single, arbitrary character:
 
 =begin programlisting
 
     my @words = <spell superlative openly stuff>;
+
     for @words -> $w {
         if $w ~~ m/ pe.l / {
             say "$w contains $/";
@@ -86,7 +91,7 @@ matches a single, arbitrary character:
 
 =end programlisting
 
-This prints
+This prints:
 
 =begin screen
 
@@ -97,23 +102,40 @@ This prints
 
 =end screen
 
-The dot matched an C<l>, C<r>, and C<n>, but it would also match a space in
-the sentence I<< the spectroscoB<pe l>acks resolution >>--regexes don't care
-about word boundaries at all. The special variable C<$/> stores (among other
-things) only the part of the string that matched the regular expression. C<$/>
-holds the so-called I<match object>.
+X<$/>
+X<match object>
+
+The dot matched an C<l>, C<r>, and C<n>, but it will also match a space in the
+sentence I<< the spectroscoB<pe l>acks resolution >>--regexes ignore word
+boundaries by default. The special variable C<$/> stores (among other things)
+only the part of the string that matched the regular expression. C<$/> holds
+these so-called I<match object>s.
 
 X<regex; \w>
 
-Suppose you have a big chunk of text.  For solving a crossword puzzle you are
-looking for words containing C<pe>, then an arbitrary letter, and then an C<l>
-(but not a space, as your puzzle has extra markers for those). The appropriate
+Suppose you want to solve a crossword puzzle. You have a word list and want to
+find words containing C<pe>, then an arbitrary letter, and then an C<l> (but
+not a space, as your puzzle has extra markers for those). The appropriate
 regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
-"Word" character--a letter, digit, or an underscore.  In the example
-at the beginning of this chapter C<\w> is used to build the definition
-of a "word".
+"Word" character--a letter, digit, or an underscore.  This chapter's example
+uses C<\w> to build the definition of a "word".
 
 Several other common control sequences each match a single character:
+
+X<regex; \w>
+X<regex; \d>
+X<regex; \s>
+X<regex; \t>
+X<regex; \h>
+X<regex; \n>
+X<regex; \v>
+X<regex; \W>
+X<regex; \D>
+X<regex; \S>
+X<regex; \T>
+X<regex; \H>
+X<regex; \N>
+X<regex; \V>
 
 =begin table Backslash sequences and their meaning
 
@@ -138,11 +160,11 @@ Several other common control sequences each match a single character:
 
 =row
 
-=cell  C<\w>
+=cell C<\w>
 
-=cell  word character
+=cell word character
 
-=cell  l, ö, 3, _
+=cell l, ö, 3, _
 
 =row
 
@@ -194,17 +216,20 @@ Several other common control sequences each match a single character:
 
 =end table
 
-Each of these backslash sequence means the complete opposite if you convert
-the letter to upper case: C<\W> matches a character that's not a word
-character and C<\N> matches a single character that's not a newline.
+Invert the sense of each of these backslash sequences by uppercasing its
+letter: C<\W> matches a character that's I<not> a word character and C<\N>
+matches a single character that's not a newline.
 
+X<regex; character classes>
 X<regex; custom character classes>
 
-These matches are not limited to the ASCII range--C<\d> matches Latin,
+These matches extend beyond the ASCII range--C<\d> matches Latin,
 Arabic-Indic, Devanagari and other digits, C<\s> matches non-breaking
-whitespace and so on. These I<character classes> follow the Unicode definition
-of what is a letter, a number, and so on. Define custom character classes by
-listing them inside nested angle and square brackets C<< <[ ... ]> >>.
+whitespace, and so on. These I<character classes> follow the Unicode
+definition of what is a letter, a number, and so on.
+
+To define your own custom character classes, listing the appropriate
+characters inside nested angle and square brackets C<< <[ ... ]> >>:
 
 =begin programlisting
 
@@ -220,10 +245,11 @@ listing them inside nested angle and square brackets C<< <[ ... ]> >>.
 =end programlisting
 
 X<regex; character range>
+X<..>
 
 Rather than listing each character in the character class individually, you
 may specify a range of characters by placing the range operator C<..> between
-the character that starts the range and the character that ends the range:
+the beginning and ending characters:
 
 =begin programlisting
 
@@ -237,7 +263,8 @@ the character that starts the range and the character that ends the range:
 X<regex; character class addition>
 X<regex; character class subtraction>
 
-Added to or subtract from character classes with the C<+> and C<-> operators:
+You may add characters to or subtract characters from classes with the C<+>
+and C<-> operators:
 
 =begin programlisting
 
@@ -256,12 +283,12 @@ The negated character class is a special application of this idea.
 X<regex; quantifier>
 X<regex; ? quantifier>
 
-A I<quantifier> can specify how often something has to occur. A question mark
+A I<quantifier> specifies how often something has to occur. A question mark
 C<?> makes the preceding unit (be it a letter, a character class, or something
 more complicated) optional, meaning it can either be present either zero or
-one times in the string being matched. So C<m/ho u? se/> matches either
-C<house> or C<hose>. You can also write the regex as C<m/hou?se/> without any
-spaces, and the C<?> still quantifies only the C<u>.
+one times. C<m/ho u? se/> matches either C<house> or C<hose>. You can also
+write the regex as C<m/hou?se/> without any spaces, and the C<?> will still
+quantify only the C<u>.
 
 X<regex; * quantifier>
 X<regex; + quantifier>
@@ -274,9 +301,9 @@ word character).
 
 X<regex; ** quantifier>
 
-The most general quantifier is C<**>. If followed by a number it matches that
-many times, and if followed by a range, it can match any number of times that
-the range allows:
+The most general quantifier is C<**>. When followed by a number, it matches
+that many times. When followed by a range, it can match any number of times
+that the range allows:
 
 =begin programlisting
 
@@ -290,20 +317,23 @@ the range allows:
 
 If the right hand side is neither a number nor a range, it becomes a
 delimiter, which means that C<m/ \w ** ', '/> matches a list of characters
-separated by a comma and a whitespace each.
+each separated by a comma and whitespace.
 
 X<regex; greedy matching>
 X<regex; non-greedy matching>
 
 If a quantifier has several ways to match, Perl will choose the longest one.
 This is I<greedy> matching. Appending a question mark to a quantifier makes it
-non-greedy N<The non-greedy general quantifier is C<$thing **? $count>, so the
-question mark goes directly after the second asterisk.>N<This example is a
-very poor way to parse HTML; using a proper parser is always preferable.>:
+non-greedyN<The non-greedy general quantifier is C<$thing **? $count>, so the
+question mark goes directly after the second asterisk.>
+
+For example, you can parse HTML very badlyN<Using a proper stateful parser is
+always more accurate.>with the code:
 
 =begin programlisting
 
     my $html = '<p>A paragraph</p> <p>And a second one</p>';
+
     if $html ~~ m/ '<p>' .* '</p>' / {
         say 'Matches the complete string!';
     }
@@ -342,19 +372,20 @@ longest alternative wins.  Two bars make the first matching alternative win.
 =head1 Anchors
 
 X<regex; anchors>
-
-So far every regex could match anywhere within a string.  Often it is
-desirable to limit the match to the start or end of a string or line, or to
-word boundaries.
-
 X<regex; string start anchor>
 X<regex; ^>
 X<regex; string end anchor>
 X<regex; $>
+X<regex; line start anchor>
+X<regex; ^^>
+X<regex; line end anchor>
+X<regex; $$>
 
-A single caret C<^> anchors the regex to the start of the string, a dollar
-C<$> to the end. C<m/ ^a /> matches strings beginning with an C<a>, and C<m/ ^
-a $ /> matches strings that consist only of an C<a>.
+So far every regex could match anywhere within a string.  Often it is useful
+to limit the match to the start or end of a string or line or to word
+boundaries.  A single caret C<^> anchors the regex to the start of the string
+and a dollar sign C<$> to the end. C<m/ ^a /> matches strings beginning with
+an C<a>, and C<m/ ^ a $ /> matches strings that consist only of an C<a>.
 
 =begin table Regex anchors
 
@@ -421,21 +452,18 @@ a $ /> matches strings that consist only of an C<a>.
 =head1 Captures
 
 X<regex; captures>
-
-Regexes are useful to check if a string is in a certain format, and to search
-for patterns within a string. With some more features they can be very good
-for I<extracting> information too.
-
 X<regex; $/>
 
-Surrounding part of a regex with round brackets (aka parentheses) C<(...)> makes Perl
+Regex can be very useful for I<extracting> information too.  Surrounding part
+of a regex with round brackets (aka parentheses) C<(...)> makes Perl
 I<capture> the string it matches. The string matched by the first group of
 parentheses is available in C<$/[0]>, the second in C<$/[1]>, etc.  C<$/> acts
-as an array containing the captures from each parentheses group.
+as an array containing the captures from each parentheses group:
 
 =begin programlisting
 
     my $str = 'Germany was reunited on 1990-10-03, peacefully';
+
     if $str ~~ m/ (\d**4) \- (\d\d) \- (\d\d) / {
         say 'Year:  ', $/[0];
         say 'Month: ', $/[1];
@@ -451,9 +479,16 @@ X<regex; quantified capture>
 If you quantify a capture, the corresponding entry in the match object is a
 list of other match objects:
 
+=for author
+
+The editor in me wants to fix this example to use the serial comma.
+
+=end for
+
 =begin programlisting
 
     my $ingredients = 'eggs, milk, sugar and flour';
+
     if $ingredients ~~ m/(\w+) ** [\,\s*] \s* 'and' \s* (\w+)/ {
         say 'list: ', $/[0].join(' | ');
         say 'end:  ', $/[1];
@@ -461,7 +496,7 @@ list of other match objects:
 
 =end programlisting
 
-This prints
+This prints:
 
 =begin screen
 
@@ -470,9 +505,10 @@ This prints
 
 =end screen
 
-The first capture, C<(\w+)>, was quantified, and thus C<$/[0]> is a list on
-which the code calls the C<.join> method. Regardless of how many times the
-first capture matches, the second is still available in C<$/[1]>.
+The first capture, C<(\w+)>, was quantified, so C<$/[0]> contains a list of
+words.  The code calls C<.join> to turn it into a string. Regardless of how
+many times the first capture matches (and how many elements are in C<$/[0]>),
+the second capture is still available in C<$/[1]>.
 
 As a shortcut, C<$/[0]> is also available under the name C<$0>, C<$/[1]> as
 C<$1>, and so on. These aliases are also available inside the regex. This
@@ -490,10 +526,10 @@ words, just like the example at the beginning of this chapter:
 =end programlisting
 
 The regex first anchors to a left word boundary with C<«> so that it doesn't
-match partial duplication of words.  Next, the regex captures a word (C<( \w+)>),
-followed by at least one non-word character C<\W+>.  This implies a right
-word boundary, so there is no need to use an explicit boundary.  Then it
-matches the previous capture followed by a right word boundary.
+match partial duplication of words.  Next, the regex captures a word
+(C<(\w+)>), followed by at least one non-word character C<\W+>.  This implies
+a right word boundary, so there is no need to use an explicit boundary.  Then
+it matches the previous capture followed by a right word boundary.
 
 Without the first word boundary anchor, the regex would for example match I<<
 strB<and and> beach >> or I<< laB<the the> table leg >>.  Without the last
@@ -503,10 +539,10 @@ word boundary anchor it would also match I<< B<the the>ory >>.
 
 X<regex; named>
 
-You can declare regexes just like subroutines and even name them.
-Suppose you found the example at the beginning of this chapter useful
-and want to make it available easily.  Suppose also you want to extend
-it to handle contractions such as C<doesn't> or C<isn't>:
+You can declare regexes just like subroutines--and even name them.  Suppose
+you found the example at the beginning of this chapter useful and want to make
+it available easily.  Suppose also you want to extend it to handle
+contractions such as C<doesn't> or C<isn't>:
 
 =begin programlisting
 
@@ -523,32 +559,31 @@ X<regex; backreference>
 
 This code introduces a regex named C<word>, which matches at least one word
 character, optionally followed by a single quote. Another regex called C<dup>
-(short for I<duplicate>) is anchored at a word boundary.
+(short for I<duplicate>) contains a word boundary anchor.
 
-Since named regex are very much like subroutines, within a regex, the syntax C<< <&word> >> 
-locates the regex C<word> within the current lexical scope and matches as if the regex
-were used in its place. The C<< <name=&regex> >> syntax creates a capture named
-C<name>, which records what C<&regex> matched in the match object.
+Within a regex, the syntax C<< <&word> >> locates the regex C<word> within the
+current lexical scope and matches against the regex. The C<< <name=&regex> >>
+syntax creates a capture named C<name>, which records what C<&regex> matched
+in the match object.
 
-In our example, C<dup> calls the C<word> regex, then matches at least one
-non-word character, and then matches the same string as previously matched 
-by the regex C<word>.  It ends with another word boundary.  The syntax for 
-This I<backreference> is a dollar sign followed by the name of the
-capture in angle brackets.  N<In grammars, which are introduced in the
-next chapter, C<< <word> >> simply looks up a regex named C<word> in
-the current grammar and parent grammars, and creates a capture of the
-same name.>
+In this example, C<dup> calls the C<word> regex, then matches at least one
+non-word character, and then matches the same string as previously matched by
+the regex C<word>.  It ends with another word boundary.  The syntax for this
+I<backreference> is a dollar sign followed by the name of the capture in angle
+bracketsN<In grammars--see (L<grammars>)--C<< <word> >> looks up a regex named
+C<word> in the current grammar and parent grammars, and creates a capture of
+the same name.>.
 
 X<subrule>
 X<regex; subrule>
 
 Within the C<if> block, C<< $<dup> >> is short for C<$/{'dup'}>.  It accesses
 the match object that the regex C<dup> produced. C<dup> also has a subrule
-called C<word>, and the match object produced from that call is accessible as
+called C<word>.  The match object produced from that call is accessible as
 C<< $<dup><word> >>.
 
-Just as subroutines allow for ordinary code, named regexes make it easy to
-organize complex regexes in smaller pieces.
+Named regexes make it easy to organize complex regexes by building them up
+from smaller pieces.
 
 =head1 Modifiers
 
@@ -566,9 +601,9 @@ X<regex; :sigspace modifier>
 X<regex; :s modifier>
 
 This works, but the repeated "I don't care about whitespace" units are clumsy.
-The desire to allow whitespace I<anywhere> in a string  is common, and Perl 6
-regexes provide such an option: the
-C<:sigspace> modifier (shortened to C<:s>):
+The desire to allow whitespace I<anywhere> in a string is common. Perl 6
+regexes allow this through the use of the C<:sigspace> modifier (shortened to
+C<:s>):
 
 =begin programlisting
 
@@ -581,18 +616,17 @@ C<:sigspace> modifier (shortened to C<:s>):
 
 =end programlisting
 
-This modifier allows optional whitespace in the text wherever there is one or
-more whitespace character in the pattern. It's even a bit cleverer than that:
-between two word characters whitespace is mandatory.  The regex does I<not>
-match the string C<eggs, milk, sugarandflour>.
+This modifier allows optional whitespace in the text wherever there one or
+more whitespace characters appears in the pattern. It's even a bit cleverer
+than that: between two word characters whitespace is mandatory.  The regex
+does I<not> match the string C<eggs, milk, sugarandflour>.
 
 X<regex; :ignorecase modifier>
 X<regex; :i>
 
 The C<:ignorecase> or C<:i> modifier makes the regex insensitive to upper and
-lower case, so C<m/ :i perl /> matches not only C<perl>, but also C<PerL> or
-C<PERL> (though nobody really writes the programming language in all uppercase
-letters).
+lower case, so C<m/ :i perl /> matches C<perl>, C<PerL>, and C<PERL> (though
+who names a programming language in all uppercase letters?)
 
 =head1 Backtracking control
 
@@ -600,26 +634,26 @@ X<regex; backtracking>
 
 In the course of matching a regex against a string, the regex engine may reach
 a point where an alternation has matched a particular branch or a quantifier
-has greedily matched all it can but the final portion of the regex fails to
+has greedily matched all it can, but the final portion of the regex fails to
 match.  In this case, the regex engine backs up and attempts to match another
-alternative or matches one fewer character on the quantified portion to see if
-the overall regex succeeds. This process of failing and trying again is called
+alternative or matches one fewer character of the quantified portion to see if
+the overall regex succeeds. This process of failing and trying again is
 I<backtracking>.
 
 When matching C<m/\w+ 'en'/> against the string C<oxen>, the C<\w+> group
-first matches the whole string (because of the greediness of C<+>), but then
-the C<en> literal at the end can't match anything.  C<\w+> gives up one
-character to match C<oxe>.  C<en> still can't match, so the C<\w+> group again
-gives up one character and now matches C<ox>. The C<en> literal can now match
-the last two characters of the string, and the overall match succeeds.
+first matches the whole string because of the greediness of C<+>, but then the
+C<en> literal at the end can't match anything.  C<\w+> gives up one character
+to match C<oxe>.  C<en> still can't match, so the C<\w+> group again gives up
+one character and now matches C<ox>. The C<en> literal can now match the last
+two characters of the string, and the overall match succeeds.
 
 X<regex; :>
 X<regex; disable backtracking>
 
 While backtracking is often useful and convenient, it can also be slow and
 confusing. A colon C<:> switches off backtracking for the previous quantifier
-or alternation. So C<m/ \w+: 'en'/> can never match any string, because the
-C<\w+> always eats up all word characters, and never releases them.
+or alternation. C<m/ \w+: 'en'/> can never match any string, because the
+C<\w+> always eats up all word characters and never releases them.
 
 X<regex; :ratchet>
 
@@ -627,8 +661,7 @@ The C<:ratchet> modifier disables backtracking for a whole regex, which is
 often desirable in a small regex called often from other regexes.  The
 duplicate word search regex had to anchor the regex to word boundaries,
 because C<\w+> would allow matching only part of a word. Disabling
-backtracking produces simpler behavior where C<\w+> always matches a full
-word:
+backtracking makes C<\w+> always match a full word:
 
 =begin programlisting
 
@@ -641,27 +674,27 @@ word:
 
 =end programlisting
 
-However the effect of C<:ratchet> applies only to the regex in which it
-appears.  The outer regex still backtracks, and can also retry the regex
-C<word> at a different staring position.
+The effect of C<:ratchet> applies only to the regex in which it appears.  The
+outer regex will still backtrack, so it can retry the regex C<word> at a
+different staring position.
 
 X<regex; token>
 X<token>
 
 The C<regex { :ratchet ... }> pattern is common that it has its own shortcut:
-C<token { ... }>.  The duplicate word searcher is idiomatic when written:
+C<token { ... }>.  An idiomatic duplicate word searcher might be:
 
 =begin programlisting
 
     my B<token> word { \w+ [ \' \w+]? }
-    my regex dup  { <word> \W+ $<word> }
+    my regex dup   { <word> \W+ $<word> }
 
 =end programlisting
 
 X<regex; rule>
 X<rule>
 
-A token that also switches on the C<:sigspace> modifier is a C<rule>:
+A token with the C<:sigspace> modifier is a C<rule>:
 
 =begin programlisting
 
@@ -674,14 +707,14 @@ A token that also switches on the C<:sigspace> modifier is a C<rule>:
 X<subst>
 X<substitutions>
 
-Regexes are not only popular for data validation and extraction, but also data
-manipulation. The C<subst> method matches a regex against a string.  If
-a match is found, it substitutes the portion of the string that matches
-with its second argument.
+Regexes are also good for data manipulation. The C<subst> method matches a
+regex against a string.  With C<subst> matches, it substitutes the matched
+portion of the string its the second operand:
 
 =begin programlisting
 
     my $spacey = 'with    many  superfluous   spaces';
+
     say $spacey.subst(rx/ \s+ /, ' ', :g);
     # output: with many superfluous spaces
 
@@ -690,37 +723,37 @@ with its second argument.
 X<regex; :g>
 X<regex; global substitution>
 
-The C<:g> at the end tells the substitution to work I<globally> to replace
-every match. Without C<:g>, it stops after the first match.
+By default, C<subst> performs a single match and stops.  The C<:g> modifier
+tells the substitution to work I<globally> to replace every possible match.
 
 X<operators; rx//>
 X<operators; m//>
 
 Note the use of C<rx/ ... /> rather than C<m/ ... /> to construct the regex.
-The former constructs a regex object. The latter not only constructs the regex
-object, but immediately matches it against the topic variable C<$_>.  Using
-C<m/ ... /> in the call to C<subst> creates a match object and passes it as
-the first argument, rather than the regex itself.
+The former constructs a regex object. The latter constructs the regex object
+I<and> immediately matches it against the topic variable C<$_>.  Using C<m/
+... /> in the call to C<subst> creates a match object and passes it as the
+first argument, rather than the regex itself.
 
 =head1 Other Regex Features
 
 X<regex; avoid captures>
 
 Sometimes you want to call other regexes, but don't want them to capture the
-matched text.  For example, when parsing a programming language you might
-discard whitespaces and comments. You can achieve that by calling the regex as
-C<< <.otherrule> >>.
+matched text.  When parsing a programming language you might discard
+whitespace characters and comments. You can achieve that by calling the regex
+as C<< <.otherrule> >>.
 
-For example, if you use the C<:sigspace> modifier, every continuous piece of
-whitespaces calls the built-in rule C<< <.ws> >>.  This use of a rule rather
-than a character class allows you to define your own version of whitespace
-characters (see L<grammars>).
+If you use the C<:sigspace> modifier, every continuous piece of whitespace
+calls the built-in rule C<< <.ws> >>.  This use of a rule rather than a
+character class allows you to define your own version of whitespace characters
+(see L<grammars>).
 
-Sometimes you just want to take a look ahead, and check if the next characters
-fulfill some properties without actually consuming them, so that the following
-parts of the regex can still match them.  This is common in substitutions. In
-normal English text, you always place a whitespace after a comma.  If somebody
-forgets to add that whitespace, a regex can clean up after the lazy writer:
+Sometimes you just want to peek ahead to check if the next characters fulfill
+some properties without actually consuming them.  This is common in
+substitutions. In normal English text, you always place a whitespace after a
+comma.  If somebody forgets to add that whitespace, a regex can clean up after
+the lazy writer:
 
 =begin programlisting
 
@@ -734,11 +767,11 @@ X<regex; lookahead>
 X<regex; zero-width assertion>
 
 The word character after the comma is not part of the match, because it is in
-a look-ahead, which C<< <?before ... > >> introduces. The leading question
-mark indicates an I<zero-width assertion>: a rule that never consumes
-characters from the matched string.  You can turn any call to a subrule into
-an zero width assertion.  The built-in token C<< <alpha> >> matches an
-alphabetic character, so you can rewrite this example as:
+a look-ahead introduced by C<< <?before ... > >>. The leading question mark
+indicates an I<zero-width assertion>: a rule that never consumes characters
+from the matched string.  You can turn any call to a subrule into an zero
+width assertion.  The built-in token C<< <alpha> >> matches an alphabetic
+character, so you can rewrite this example as:
 
 =begin programlisting
 
@@ -748,7 +781,8 @@ alphabetic character, so you can rewrite this example as:
 
 X<regex; negative look-ahead assertion>
 
-An leading exclamation mark negates the meaning; another variant is:
+An leading exclamation mark negates the meaning, such that the lookahead must
+I<not> find the regex fragment. Another variant is:
 
 =begin programlisting
 
@@ -756,15 +790,12 @@ An leading exclamation mark negates the meaning; another variant is:
 
 =end programlisting
 
-=for author
+X<regex; lookbehind>
 
-The first sentence of the next paragraph confuses me.
-
-=end for
-
-A look in the opposite direction is also possible, with C<< <?after> >>. In
-fact many built-in anchors can be written with look-ahead and look-behind
-assertions, though usually not quite as efficient:
+You can also look behind to assert that the string only matches I<after>
+another regex fragment.  This assertion is C<< <?after> >>.  You can write the
+equivalent of many built-in anchors with look-ahead and look-behind
+assertions, though they won't be as efficient.
 
 =begin table Emulation of anchors with look-around assertions
 
@@ -782,35 +813,35 @@ assertions, though usually not quite as efficient:
 
 =row
 
-=cell ^
+=cell C<^>
 
 =cell start of string
 
-=cell <!after .>
+=cell C<< <!after .> >>
 
 =row
 
-=cell ^^
+=cell C<^^>
 
 =cell start of line
 
-=cell <?after ^ | \n >
+=cell C<< <?after ^ | \n > >>
 
 =row
 
-=cell $
+=cell C<$>
 
 =cell end of string
 
-=cell <!before .>
+=cell C<< <!before .> >>
 
 =row
 
-=cell >>
+=cell C<<< >> >>>
 
 =cell right word boundary
 
-=cell <?after \w> <!before \w>
+=cell C<< <?after \w> <!before \w> >>
 
 =end table
 
@@ -829,6 +860,7 @@ assertions, though usually not quite as efficient:
 
     my token word { \w+ [ \' \w+]? }
     my regex dup { <word> \W+ $<word> }
+
     if $s ~~ m/ <dup> / {
         my ($line, $column) = line-and-column($/);
         say "Found '{$<dup><word>}' twice in a row";
@@ -864,11 +896,13 @@ the match position and calculating the difference to the match position.
 
 =begin sidebar
 
-The C<index> method searches a string for another substring, and returns the
-position of the search string.
+X<index>
+X<rindex>
 
-The C<rindex> method does the same, but searches backwards from the end of the
-string, so it finds the position of the last occurrence of the substring.
+The C<index> method searches a string for another substring and returns the
+position of the search string.  The C<rindex> method does the same, but
+searches backwards from the end of the string, so it finds the position of the
+final occurrence of the substring.
 
 =end sidebar
 
@@ -905,18 +939,18 @@ capture and the values the corresponding C<Match> objects.
 
 =end programlisting
 
-In this case the captures are in the same order as they are in the regex, but
-quantifiers can change that. Even so, C<$/.caps> follows the ordering of the
-string, not of the regex. Any parts of the string which match but not as part
-of captures will not appear in the values that C<caps> returns.
+In this case the captures occur in the same order as they are in the regex,
+but quantifiers can change that. Even so, C<$/.caps> follows the ordering of
+the string, not of the regex. Any parts of the string which match but not as
+part of captures will not appear in the values that C<caps> returns.
 
 X<Match.chunks>
 
 To access the non-captured parts too, use C<$/.chunks> instead.  It returns
 both the captured and the non-captured part of the matched string, in the same
 format as C<caps>, but with a tilde C<~> as key. If there are no overlapping
-captures (which could only come from look-around assertions), the
-concatenation of all the pair values that C<chunks> returns is the same as the
-matched part of the string.
+captures (as occurs from look-around assertions), the concatenation of all the
+pair values that C<chunks> returns is the same as the matched part of the
+string.
 
 =for vim: spell spelllang=en tw=78

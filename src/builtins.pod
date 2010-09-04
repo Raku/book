@@ -18,7 +18,7 @@ convert a copy of both C<$a> and C<$b> to numbers (unless they are numbers
 already). This implicit conversion is called I<coercion>.
 
 Besides operators, other syntactic elements coerce their elements: C<if> and
-C<while> coerce to truth values (bool), C<for> views things as lists, and so
+C<while> coerce to truth values (C<Bool>), C<for> views things as lists, and so
 on.
 
 =for author
@@ -30,9 +30,9 @@ here too.
 
 =head1 Numbers
 
-Sometimes coercion is intuitively transparent.  Perl 6 has several numeric
-types which you can intermix freely.  For example, subtracting a floating point
-value from an integer works, as in C<123 - 12.1e1>.
+Sometimes coercion is transparent.  Perl 6 has several numeric types which can
+intermix freely--such as subtracting a floating point value from an integer, as
+C<123 - 12.1e1>.
 
 The most important types are:
 
@@ -53,7 +53,7 @@ X<types; Num>
 
 C<Num> is the floating point type. It stores sign, mantissa, and exponent, each
 with a fixed width. Calculations involving C<Num> numbers are usually quite
-fast, but subject to limited precision.
+fast, though subject to limited precision.
 
 Numbers in scientific notation such as C<6.022e23> are of type C<Num>.
 
@@ -70,8 +70,8 @@ so mathematical operations on C<Rat>s with large components can become quite
 slow.  For this reason, rationals with large denominators automatically degrade
 to C<Num>.
 
-Writing a fractional value with a dot as the decimal separator produces a
-C<Rat>, for example C<3.14>.
+Writing a fractional value with a dot as the decimal separator, such as
+C<3.14>, produces a C<Rat>.
 
 =item Complex
 
