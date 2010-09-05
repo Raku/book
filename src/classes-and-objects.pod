@@ -359,26 +359,24 @@ to on the inherited class.
 
 =begin programlisting
 
-class Employee
-{
-   has $.salary;
+    class Employee {
+        has $.salary;
 
-   method pay() {
-     say "Here is \$$.salary";
-   }
+        method pay() {
+            say "Here is \$$.salary";
+        }
 
-}
+    }
 
-class Programmer is Employee
-{
-   has @.known_languages is rw;
-   has $.favorite_editor;
+    class Programmer is Employee {
+        has @.known_languages is rw;
+        has $.favorite_editor;
 
-   method code_to_solve( $problem ) {
-      say "Solving $problem using $.favorite_editor in " 
-      ~ $.known_languages[0] ~ '.';
-   }
-}
+        method code_to_solve( $problem ) {
+            say "Solving $problem using $.favorite_editor in " 
+            ~ $.known_languages[0] ~ '.';
+        }
+    }
 
 =end programlisting
 
@@ -387,11 +385,11 @@ defined in the Employee class as though they were from the Programmer class.
 
 =begin programlisting
 
-my $programmer = Employee.new( 
-    salary => 100_000, 
-    known_languages => <Perl5, Perl6, Erlang, C++>, 
-    favorite_edtor => 'vim'
-);
+    my $programmer = Employee.new( 
+        salary => 100_000, 
+        known_languages => <Perl5, Perl6, Erlang, C++>, 
+        favorite_edtor => 'vim'
+    );
 
 $programmer.code_to_solve('turing problem');
 $programmer.pay();
@@ -406,39 +404,38 @@ overriding the Cook's cook method.
 
 =begin programlisting
 
-class Cook is Employee
-{
-   has @.utensils  is rw;
-   has @.cookbooks is rw;
+    class Cook is Employee {
+        has @.utensils  is rw;
+        has @.cookbooks is rw;
 
-   method cook( $food ) {
-      say "Cooking $food";
-   }
+        method cook( $food ) {
+            say "Cooking $food";
+        }
 
-   method clean_utensils {
-      say "Cleaning $_" for @.utensils;
-   }
-}
+        method clean_utensils {
+            say "Cleaning $_" for @.utensils;
+        }
+    }
 
-class Baker is Cook
-{
-   method cook( $confection ) {
-      say "Baking a tasty $confection";
-   }
-}
+    class Baker is Cook {
+        method cook( $confection ) {
+            say "Baking a tasty $confection";
+        }
+    }
 
-my $cook = Cook.new( 
-    utensils => (<spoon ladel knife pan>), 
-    cookbooks => ('The Joy of Cooking'), 
-    salary => 40000);
+    my $cook = Cook.new( 
+        utensils => (<spoon ladel knife pan>), 
+        cookbooks => ('The Joy of Cooking'), 
+        salary => 40000);
 
-$cook.cook( 'pizza' ); # Cooking pizza
+    $cook.cook( 'pizza' ); # Cooking pizza
 
-my $baker = Cook.new( 
-    utensils => ('self cleaning oven'), 
-    cookbooks => ("The Baker's Apprentice"), 
-    salary => 50000);
-$baker.cook('brioche'); # Baking a tasty brioche
+    my $baker = Cook.new( 
+        utensils => ('self cleaning oven'), 
+        cookbooks => ("The Baker's Apprentice"), 
+        salary => 50000);
+
+    $baker.cook('brioche'); # Baking a tasty brioche
 
 =end programlisting
 
@@ -455,23 +452,22 @@ significant improvement over Perl 5's approach to handling multiple inheritance.
 
 =begin programlisting
 
-class GeekCook is Programmer is Cook
-{
-    method new( *%params ) {
-        push( %params<cookbooks>, "Cooking for Geeks" );
-        return self.bless(%params);
+    class GeekCook is Programmer is Cook {
+        method new( *%params ) {
+            push( %params<cookbooks>, "Cooking for Geeks" );
+            return self.bless(%params);
+        }
     }
-}
 
-my $geek = GeekCook.new( 
-   books           => ('Learning Perl 6'), 
-   utensils        => ('blingless pot', 'knife', 'calibrated oven'),
-   favorite_editor => 'MacVim',
-   known_languages => <Perl6>
-);
+    my $geek = GeekCook.new( 
+        books           => ('Learning Perl 6'), 
+        utensils        => ('blingless pot', 'knife', 'calibrated oven'),
+        favorite_editor => 'MacVim',
+        known_languages => <Perl6>
+    );
 
-$geek.cook('pizza');
-$geek.code_to_solve('P =? NP');
+    $geek.cook('pizza');
+    $geek.code_to_solve('P =? NP');
 
 =end programlisting
 
@@ -486,15 +482,15 @@ check out the Roles chapter.
 
 =begin programlisting
 
-my $geek = GeekCook.new( 
-   books           => ('Learning Perl 6'), 
-   utensils        => ('blingless pot', 'knife', 'calibrated oven'),
-   favorite_editor => 'MacVim',
-   languages       => <Perl6>
-);
+    my $geek = GeekCook.new( 
+        books           => ('Learning Perl 6'), 
+        utensils        => ('blingless pot', 'knife', 'calibrated oven'),
+        favorite_editor => 'MacVim',
+        languages       => <Perl6>
+    );
 
-$geek.cook('pizza');
-$geek.code_to_solve('P =? NP');
+    $geek.cook('pizza');
+    $geek.code_to_solve('P =? NP');
 
 =end programlisting
 
