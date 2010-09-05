@@ -361,7 +361,7 @@ to on the inherited class.
 
 class Employee
 {
-   has $.salary is rw;
+   has $.salary;
 
    method pay() {
      "Here is \$$.salary()".say();
