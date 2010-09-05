@@ -364,7 +364,7 @@ class Employee
    has $.salary;
 
    method pay() {
-     "Here is \$$.salary()".say();
+     say("Here is \$$.salary()");
    }
 
 }
