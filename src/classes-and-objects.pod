@@ -372,7 +372,7 @@ class Employee
 class Programmer is Employee
 {
    has @.known_languages is rw;
-   has $.favorite_editor is ro;
+   has $.favorite_editor;
 
    method code_to_solve( $problem ) {
       say( "Solving $problem using $.favorite_editor in " 
