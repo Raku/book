@@ -346,6 +346,153 @@ the various other dependencies in order, giving the output:
     making dinner
     eating dinner. NOM!
 
+=head1 Inheritance
+
+Object Oriented Programming provides the concept of inheritance as one of the 
+mechanisms to allow for code reuse.  Perl 6 supports the ability for one class 
+to inherit from one or more classes.  When a class inherits from another class
+that informs the method dispatcher to follow the inheritance chain to look
+for a method to dispatch.  This happens both for standard methods defined via
+the method keyword and for methods generated through other means such as 
+attribute accessors.
+
+=begin programlisting
+
+    class Employee {
+        has $.salary;
+
+        method pay() {
+            say "Here is \$$.salary";
+        }
+
+    }
+
+    class Programmer is Employee {
+        has @.known_languages is rw;
+        has $.favorite_editor;
+
+        method code_to_solve( $problem ) {
+            say "Solving $problem using $.favorite_editor in " 
+            ~ $.known_languages[0] ~ '.';
+        }
+    }
+
+=end programlisting
+
+Now any object of type Programmer can make use of the methods and accessors 
+defined in the Employee class as though they were from the Programmer class.
+
+=begin programlisting
+
+    my $programmer = Employee.new( 
+        salary => 100_000, 
+        known_languages => <Perl5, Perl6, Erlang, C++>, 
+        favorite_edtor => 'vim'
+    );
+
+$programmer.code_to_solve('turing problem');
+$programmer.pay();
+
+=begin programlisting
+
+=head2 Overriding Inherited Methods
+
+Of course, classes can override methods and attributes defined on ancestoral 
+classes by defining their own.  The example below demonstrates the Baker class 
+overriding the Cook's cook method.
+
+=begin programlisting
+
+    class Cook is Employee {
+        has @.utensils  is rw;
+        has @.cookbooks is rw;
+
+        method cook( $food ) {
+            say "Cooking $food";
+        }
+
+        method clean_utensils {
+            say "Cleaning $_" for @.utensils;
+        }
+    }
+
+    class Baker is Cook {
+        method cook( $confection ) {
+            say "Baking a tasty $confection";
+        }
+    }
+
+    my $cook = Cook.new( 
+        utensils => (<spoon ladel knife pan>), 
+        cookbooks => ('The Joy of Cooking'), 
+        salary => 40000);
+
+    $cook.cook( 'pizza' ); # Cooking pizza
+
+    my $baker = Cook.new( 
+        utensils => ('self cleaning oven'), 
+        cookbooks => ("The Baker's Apprentice"), 
+        salary => 50000);
+
+    $baker.cook('brioche'); # Baking a tasty brioche
+
+=end programlisting
+
+Because the dispatcher will see the cook method on Baker before it moves up to 
+the parent class the Baker's cook method will be called.
+
+=head2 Multiple Inheritance
+
+As mentioned before, a class can inherit from multiple classes.  When a class 
+inherits from multiple classes the dispatcher knows to look at both classes when
+looking up a method to search for.  As a side note, Perl 6  uses the C3 
+algorithm to linearize the multiple inheritance hierarchies, which is a 
+significant improvement over Perl 5's approach to handling multiple inheritance.
+
+=begin programlisting
+
+    class GeekCook is Programmer is Cook {
+        method new( *%params ) {
+            push( %params<cookbooks>, "Cooking for Geeks" );
+            return self.bless(%params);
+        }
+    }
+
+    my $geek = GeekCook.new( 
+        books           => ('Learning Perl 6'), 
+        utensils        => ('blingless pot', 'knife', 'calibrated oven'),
+        favorite_editor => 'MacVim',
+        known_languages => <Perl6>
+    );
+
+    $geek.cook('pizza');
+    $geek.code_to_solve('P =? NP');
+
+=end programlisting
+
+Now all the methods made available by both the Programmer class and the Cook
+class are available from the GeekCook class.
+
+While multiple inheritance is a useful concept to know and on occasion use, it
+is important to understand that there are more useful OOP concepts.  When
+reaching for multiple inheritance it is good practice to consider whether the
+design wouldn't be better realized by using roles.  For more information on roles
+check out the Roles chapter.
+
+=begin programlisting
+
+    my $geek = GeekCook.new( 
+        books           => ('Learning Perl 6'), 
+        utensils        => ('blingless pot', 'knife', 'calibrated oven'),
+        favorite_editor => 'MacVim',
+        languages       => <Perl6>
+    );
+
+    $geek.cook('pizza');
+    $geek.code_to_solve('P =? NP');
+
+=end programlisting
+
 =head1 Exercises
 
 B<1.> The method C<add-dependency> in C<Task> permits the creation of I<cycles>
