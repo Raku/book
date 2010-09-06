@@ -14,9 +14,8 @@ result is interesting and, at times, useful.
         has Task @!dependencies;
         has Bool $.done;
 
-        # RAKUDO: Should really be '&callback' [perl #69766]
-        method new(Callable $callback, Task *@dependencies) {
-            return self.bless(*, :$callback, :@dependencies);
+        method new(&callback, Task *@dependencies) {
+            return self.bless(*, :&callback, :@dependencies);
         }
 
         method add-dependency(Task $dependency) {
@@ -267,9 +266,8 @@ this example does:
 
 =begin programlisting
 
-    # RAKUDO: Should really be '&callback' [perl #69766]
-    method new(Callable $callback, Task *@dependencies) {
-        return self.bless(*, :$callback, :@dependencies);
+    method new(&callback, Task *@dependencies) {
+        return self.bless(*, :&callback, :@dependencies);
     }
 
 =end programlisting
@@ -296,7 +294,7 @@ that the class can provide a nice constructor for its users. The first
 parameter is the callback (the thing to do to execute the task). The rest of
 the parameters are dependent C<Task> instances.  The constructor captures these
 into the C<@dependencies> slurpy array and passes them as named parameters to
-C<bless> (note that C<:$callback> uses the name of the variable--minus the
+C<bless> (note that C<:&callback> uses the name of the variable--minus the
 sigil--as the name of the parameter).
 
 =head1 Consuming our class
