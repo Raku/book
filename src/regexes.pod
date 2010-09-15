@@ -359,9 +359,11 @@ items with square brackets:
 
 X<regex; alternation>
 
-Separate I<alternations>--tokens and units of which I<any> can match-- with
-vertical bars. One vertical bar between two parts of a regex means that the
-longest alternative wins.  Two bars make the first matching alternative win.
+Separate I<alternations>--parts of a regex of which I<any> can match--
+with vertical bars. One vertical bar between multiple parts of a regex
+means that the alternatives are tried in parallel and the longest
+matching alternative wins. Two bars make the regex engine try each
+alternative in order and the first matching alternative wins.
 
 =begin programlisting
 
