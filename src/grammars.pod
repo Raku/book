@@ -69,41 +69,44 @@ introduced (see L<multis>).
 
 =end programlisting
 
-A grammar contains various named regexes.  The call to
-C<JSON::Tiny.parse($string)> starts by calling C<TOP>.
+A grammar contains various named regex. Regex names may be constructed
+the same as subroutine names or method names. While regex names are
+completely up to the grammar writer, a rule named C<TOP>
+will, by default, be invoked when the C<.parse()> method is
+executed on a grammar.  The above call to C<JSON::Tiny::Grammar.parse($tester)> 
+starts by attempting to match the regex named C<TOP> to the string C<$tester>.
 
-Regexes inside a grammar do not need a scope declarator. They default to the
-same lookup semantics as methods in classes. The call to another regex
-simplifies to C<< <regex_name> >>, which also creates a capture of the same
-name.
+In this example, the C<TOP> rule anchors the match to the start and end
+of the string, so that the whole string has to be in valid JSON format
+for the match to succeed. After matching the anchor at the start of the
+string, the regex attempts to match either an C<< <array> >> or an C<<
+<object> >>. Enclosing a regex name in angle brackets causes the regex
+engine to attempt to match a regex by that name within the same grammar.
+Subsequent matches are straightforward and reflect the structure in
+which JSON components can appear.
 
-The C<TOP> rule anchors the match to the start and end of the string, so that
-the whole string has to be in valid JSON format for the match to succeed. It
-then either matches an C<< <array> >> or an C<< <object> >>.  Subsequent calls
-are straightforward and reflect the structure in which JSON components can
-appear.
-
-Regexes can be recursive.  An C<array> contains C<value>. In turn a C<value>
-can be an C<array>. That won't cause any infinite loops as long as at least
-one regex per recursive call consumes at least one character. If a set of
-regexes were to call each other recursively without ever progressing in the
-string, the recursion could go on infinitely, never progressing in the string
-and never proceeding to other parts of the grammar.
+Regexes can be recursive. An C<array> contains C<value>. In turn a
+C<value> can be an C<array>. This will not cause an infinite loop as
+long as at least one regex per recursive call consumes at least one
+character. If a set of regexes were to call each other recursively
+without progressing in the string, the recursion could go on infinitely
+and never proceed to other parts of the grammar.
 
 X<goal matching>
 X<~; regex meta character>
 
-=for author
-
-This paragraph is still unclear.
-
-=end for
-
-They only new regex syntax used in the C<JSON::Tiny> grammar is the I<goal
-matching> syntax C<'{' ~ '}' [ ... ]>, which resembles C<'{' ...  '}'>, but
-gives a better error message upon failure.  It sets the term to the right of
-the tilde character as the goal, and then matches the final term C<[ ... ]>.
-If the goal does not match, Perl will issue an error.
+The example grammar given above introduces the I<goal matching syntax>
+which can be presented abstractly as: C<A ~ B C>. In
+C<JSON::Tiny::Grammar>, C<A> is C<'{'>, C<B> is C<'}'> and C<C> is C<<
+<pairlist> >>. The atom on the left of the tilde (C<A>) is matched
+normally, but the atom to the right of the tilde (C<B>) is set as the
+goal, and then the final atom (C<C>) is matched. Once the final atom
+matches, the regex engine attempts to match the goal (C<B>). This has
+the effect of switching the match order of the final two atoms (C<B> and
+C<C>), but since Perl knows that the regex engine should be looking for
+the goal, a better error message can be given when the goal does not
+match. This is very helpful for bracketing constructs as it puts the
+brackets near one another.
 
 X<proto token>
 
@@ -127,19 +130,15 @@ Another novelty is the declaration of a I<proto token>:
 
 The C<proto token> syntax indicates that C<value> will be a set of
 alternatives instead of a single regex.  Each alternative has a name of the
-form C<< token value:sym<thing> >>, which can read as I<< alternative of
+form C<< token value:sym<thing> >>, which can be read as I<< alternative of
 C<value> with parameter C<sym> set to C<thing> >>.  The body of such an
 alternative is a normal regex, where the call C<< <sym> >> matches the value
 of the parameter, in this example C<thing>.
 
-When calling the rule C<< <value> >>, the grammar engine attempts to match
-every alternative.  The longest match wins.
-
-=begin sidebar
-
-The grammar engine can attempt to match alternatives in parallel.
-
-=end sidebar
+When calling the rule C<< <value> >>, the grammar engine attempts to
+match the alternatives in parallel and the longest match wins. This is
+exactly like normal alternation, but as we'll see in the next section,
+has the advantage of being extensible.
 
 =head1 Grammar Inheritance
 
@@ -154,17 +153,11 @@ JavaScript comments, which begin with C<//> and continue until the end of the
 line. The simplest enhancement is to allow such a comment in any place where
 whitespace is valid.
 
-=for author
-
-The explanation of rules seems out of place here.  Can it move?  As well, this
-paragraph was deeply confusing.  Here's my attempt to simplify.
-
-=end for
-
-Most of the grammar uses I<rules>, which are like tokens with the C<:sigspace>
-modifier enabled.  As the JSON grammar uses the C<ws> token to find
-significant whitespace, the simplest approach to enable single-line comments
-is to override that token:
+However, C<JSON::Tiny::Grammar> only implicitly matches whitespace
+through the use of I<rules>, which are like tokens but with the
+C<:sigspace> modifier enabled. Implicit whitespace is matched with the
+inherited regex C<< <ws> >>, so the simplest approach to enable single-
+line comments is to override that named regex:
 
 =begin programlisting
 
@@ -189,14 +182,15 @@ is to override that token:
 =end programlisting
 
 The first two lines introduce a grammar that inherits from
-C<JSON::Tiny::Grammar>.  As subclasses inherit methods from superclasses, so
-any grammar rule not present in the derived grammar will come from its base
-grammar.
+C<JSON::Tiny::Grammar>. As subclasses inherit methods from superclasses,
+so any grammar rule not present in the derived grammar will come from
+its base grammar.
 
-In this minimal JSON grammar, whitespace is never mandatory, so C<ws> can
-match nothing at all. After optional spaces, two slashes C<'//'> introduce a
-comment, after which must follow an arbitrary number of non-newline
-characters, and then a newline. In prose, it extends to the rest of the line.
+In this minimal JSON grammar, whitespace is never mandatory, so C<ws>
+can match nothing at all. After optional spaces, two slashes C<'//'>
+introduce a comment, after which must follow an arbitrary number of non-
+newline characters, and then a newline. In prose, the comment starts
+with C<'//'> and extends to the rest of the line.
 
 Inherited grammars may also add variants to proto tokens:
 
@@ -219,11 +213,18 @@ ordinary, C<|> delimited alternatives.
 X<reduction methods>
 X<action methods>
 
-The C<parse> method of a grammar returns a C<Match> object, through which you
-can access all the relevant information of the match.  If you were to do this
-yourself, you'd have to traverse the match tree recursively to find and to
-extract the interesting data.  An alternative solution exists: I<reduction
-methods>, also called I<action methods>.
+The C<parse> method of a grammar returns a C<Match> object through which
+you can access all the relevant information of the match. Named regex
+that match within the grammar may be accessed via the C<Match> object
+similar to a hash where the keys are the regex names and the values are
+the C<Match> object that represents that part of the overall regex
+match. Similarly, portions of the match that are captured with
+parentheses are available as positional elements of the C<Match> object
+(as if it were an array). 
+
+Once you have the Match object, what can you I<do> with it? You could
+recursively traverse this object and create data structures based on what
+you find or execute code. An alternative solution exists: I<action methods>.
 
 =begin programlisting
 
@@ -268,8 +269,8 @@ methods>, also called I<action methods>.
 =end programlisting
 
 This example passes an actions object to the grammar's C<parse> method.
-Whenever the grammar engine finishes parsing one rule, it calls a method on
-the actions object with the same name as the current rule. If no such method
+Whenever the grammar engine finishes parsing a regex, it calls a method on
+the actions object with the same name as the current regex. If no such method
 exists, the grammar engine moves along.  If a method does exist, the grammar
 engine passes the current match object as a positional argument.
 
