@@ -25,8 +25,8 @@ To build the book, you need to have the following software installed:
 
     * A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04
       supplies most of what is needed with its texlive-latex-base,
-      texlive-latex-extra, texlive-xetex, texlive-fonts-extra and
-      texlive-latex-recommended packages.
+      texlive-latex-extra, texlive-xetex, texlive-fonts-extra,
+      texlive-latex-recommended and texlive-font-utils packages.
 
     * Adobe's fonts and B&H Luxi Sans. To get those, install
       ttf-xfree86-nonfree (and uninstall t1-xfree86-nonfree) and
