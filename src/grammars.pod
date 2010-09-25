@@ -363,14 +363,8 @@ The other action methods work the same way. They transform the information
 they extract from the match object into native Perl 6 data structures, and
 call C<make> to set those native structures as their own ASTs.
 
-=for author
-
-I don't understand this next sentence.
-
-=end for
-
-The action methods that belong to a proto token are parametric in the same way
-as the alternative:
+The action methods for proto tokens include the full name of each individual
+rule, including them C<sym> part:
 
 =begin programlisting
 
@@ -383,6 +377,6 @@ as the alternative:
 =end programlisting
 
 When a C<< <value> >> call matches, the action method with the same
-parametrization as the matching alternative executes.
+symbol as the matching subrule executes.
 
 =for vim: spell spelllang=en tw=78
