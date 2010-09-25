@@ -63,6 +63,26 @@ sub end_U {
     $self->{scratch} .= '}';
 }
 
+sub start_X {
+	my ($self, $flags) = @_;
+	$self->{scratch} .= '\\index{';
+	++$self->{flags}{in_index};	
+}
+
+sub end_X {
+	my ($self) = @_;
+	$self->{scratch} .= '}';
+	--$self->{flags}{in_index};
+}
+
+sub encode_index_text {
+	my ($self, $text) = @_;
+	# this is only a subset of required escaping, but should fix UsingPerl6 book
+	$text =~ s/"/\\"/g;
+	$text =~ s/!/"!/g;
+	$text;
+}
+
 # --------------------------------------------------------------------
 sub encode_verbatim_text {
     my ($self, $text) = @_;
@@ -148,6 +168,8 @@ sub encode_text {
     # Non-breakable spaces.
     $text =~ s/Perl 6/Perl~6/g;
     $text =~ s/Perl 5/Perl~5/g;
+
+    $text = $self->encode_index_text($text) if $self->{flags}{in_index};
 
     return $text;
 }
