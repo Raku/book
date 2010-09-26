@@ -254,7 +254,10 @@ more specific match in the nominal type.
 
 This restriction allows a clever compiler optimization: it can sort all
 candidates by narrowness once to find the candidate with the best matching
-signature by examining nominal type constraints. These are far cheaper to check than constraint checks. Constraint checking occurs next, then the compiler considers the nominal types of candidates.
+signature by examining nominal type constraints. These are far cheaper to
+check than constraint checks. Constraint checking occurs next, and only if
+the constraint check of the narrowest candidate fails, other candidates are
+tried that are lass narrow by nominal type.
 
 =for author
 
