@@ -142,9 +142,9 @@ this to count how often a type check occurs:
 
     my $counter = 0;
 
-    multi a(Int $x)  { };
+    multi a(Int $x)  { }
     multi a($x)      { }
-    multi a($x where { $counter++; True }) { };
+    multi a($x where { $counter++; True }) { }
 
     a(3);
     say $counter;       # says B<0>
@@ -277,9 +277,9 @@ narrowness of a match:
 
 =begin programlisting
 
-    class Rock     { };
-    class Paper    { };
-    class Scissors { };
+    class Rock     { }
+    class Paper    { }
+    class Scissors { }
 
     multi wins(Scissors $, Paper    $) { +1 }
     multi wins(Paper    $, Rock     $) { +1 }
