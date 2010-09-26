@@ -277,11 +277,10 @@ narrowness of a match:
 
 =begin programlisting
 
-    # RAKUDO has problems with an enum here,
-    # it answers with "Player One wins\nDraw\nDraw"
-    # using separate classes would fix that,
-    # but is not as pretty.
-    enum Symbol <Rock Paper Scissors>;
+    class Rock     { };
+    class Paper    { };
+    class Scissors { };
+
     multi wins(Scissors $, Paper    $) { +1 }
     multi wins(Paper    $, Rock     $) { +1 }
     multi wins(Rock     $, Scissors $) { +1 }
@@ -313,10 +312,8 @@ paper, or scissors).  Scissors win against paper, paper wraps rock, and
 scissors can't cut rock, but go blunt trying.  If both players select the same
 item, it's a draw.
 
-X<enum>
-
-The code creates a type for each possible symbol by declaring an enumerated
-type, or I<enum>. For each combination of chosen symbols for which Player One
+The code creates a class for each possible symbol.
+For each combination of chosen symbols for which Player One
 wins there's a candidate of the form:
 
 =begin programlisting
