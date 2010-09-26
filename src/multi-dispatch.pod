@@ -265,10 +265,9 @@ I could use a table or figure here to illustrate the hierarchy of narrowing.
 
 =end for
 
-With some trickery it is possible to get an object which conforms to a built-in
-type (C<Num>, for example) but which is also an undefined value. In this case
-the candidate that is specific to C<Num> wins, because the nominal type check
-is narrower than the C<where {!defined $d}> constraint.
+The C<Int> type object both conforms to C<Int>, but it is also an undefined
+value. If you pass it to the multi C<a>, the second candidate, which is
+specific to C<Int> wins, because nominal types are checked first.
 
 =head1 Multiple arguments
 
