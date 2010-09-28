@@ -71,6 +71,8 @@ Which package?
 =end for
 
 X<type object>
+X<defined>
+X<.defined>
 
 Declaring a class creates a I<type object>, which by default gets installed
 into the package (just like a variable declared with C<our> scope).  This type
@@ -79,6 +81,21 @@ example, types such as C<Int> and C<Str> refer to the type object of one of the
 Perl 6 built-in classes.  The example uses the class name C<Task> so that other
 code can refer to it later, such as to create class instances by calling the
 C<new> method.
+
+Type objects are I<undefined>, in the sense that they return C<False> if you
+call the C<.defined> method on them. You can use this method to find out if a
+given object is a type object or not:
+
+=begin programlisting
+
+    my $obj = Int;
+    if $obj.defined {
+        say "Type object";
+    } else {
+        say "Ordinary, defined object";
+    }
+
+=end programlisting
 
 =head1 I can has state?
 
@@ -492,6 +509,78 @@ check out the Roles chapter.
     $geek.code_to_solve('P =? NP');
 
 =end programlisting
+
+=head1 Introspection
+
+Introspection is the process of gathering information about some objects in
+your program, not by reading the source code, but by querying the object (or a
+controlling object) for some properties, like its type.
+
+Given an object C<$p>, and the class definitions from the previous sections,
+we can ask it a few questions:
+
+=begin programlisting
+
+    if $o ~~ Employee { say "It's an employee" };
+    if $o ~~ GeekCook { say "It's a geeky cook" };
+    say $o.WHAT;
+    say $o.perl;
+    say $o.^methods(:local).join(', ');
+
+=end programlisting
+
+The output can look like this:
+
+=begin screen
+
+    It's an employee
+    Programmer()
+    Programmer.new(known_languages => ["Perl", "Python", "Pascal"], favorite_editor => "gvim", salary => "too small")
+    code_to_solve, known_languages, favorite_editor
+
+=end screen
+
+The first two tests each smart-match against a class name. If the object is
+of that class, or of an inheriting class, it returns true. So the object in
+question is of class C<Employee> or one that inherits from it, but not
+C<GeekCook>.
+
+The C<.WHAT> method returns the type object associated with the object C<$o>,
+which tells the exact type of C<$o>: in this case C<Programmer>.
+
+C<$o.perl> returns a string that can be executed as Perl code, and reproduces
+the original object C<$o>. While this does not work perfectly in all
+casesN<for example closures cannot easily be reproduced this way; if you don't
+know what a closure is don't worry. Also current implementations have problems
+with dumping cyclic data structures this way, but they are expected to be
+handlded correctly by C<.perl> at some point.>, it
+is very useful for debugging simple objects.
+
+Finally C<$o.^methods(:local)> produces a list of methods that can be called
+on C<$o>. The C<:local> named argument limits the returned methods to those
+defined in the C<Employee> class, and excludes the inherited methods.
+
+The syntax of calling method with C<.^> instead of a single dot means that it
+is actually a method call on the I<meta class>, which is  a class managing the
+properties of the C<Employee> class - or any other class you are interested
+in. This meta class enables other ways of introspection too:
+
+=begin programlisting
+
+    say $o.^attributes.join(', ');
+    say $o.^parents.join(', ');  
+
+=end programlisting
+
+Introspection is very useful for debugging, and for learning the language
+and new libraries. When a function or method
+returns an object you don't know about, finding its type with C<.WHAT>, a
+construction recipe for it with C<.perl> and so on you'll get a good idea what
+this return value is. With C<.^methods> you can learn what you can do with it.
+
+But there are other applications too: a routine that serializes objects to a
+bunch of bytes needs to know the attributes of that object, which it can find
+out via introspection.
 
 =head1 Exercises
 
