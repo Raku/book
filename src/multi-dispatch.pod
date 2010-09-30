@@ -99,7 +99,7 @@ into C<to-json>.
 =head1 Constraints
 
 X<constraints>
-X<multidispatch; constraints>
+X<multidispatch, constraints>
 
 Candidates can specify more complex signatures:
 
@@ -115,9 +115,9 @@ Link to C<Any> discussion.
 
 =end for
 
-X<types; constraints>
+X<types, constraints>
 X<constraints>
-X<types; subset>
+X<types, subset>
 X<subset type>
 
 This candidate adds two new twists.  It contains no type definition, in which
@@ -128,7 +128,7 @@ candidate will match only I<some> values of the type C<Any>--those where the
 value is undefined.
 
 X<nominal type>
-X<types; nominal>
+X<types, nominal>
 
 Whenever the compiler performs a type check on the parameter C<$d>, it first
 checks the I<nominal> type (here, C<Any>).  If that check succeeds, it calls
@@ -206,7 +206,7 @@ defined, but it can match for I<all> objects, including C<Int>, C<Bool>,
 C<Num>.  A call like C<to-json(2)> has I<two> matching candidates--C<Int>
 and C<Any>.
 
-X<multidispatch; narrowness>
+X<multidispatch, narrowness>
 
 =for author
 
@@ -322,13 +322,13 @@ wins there's a candidate of the form:
 
 =end programlisting
 
-X<parameters; anonymous>
+X<parameters, anonymous>
 
 Because the bodies of the subs here do not use the parameters, there's no
 reason to force the programmer to name them; they're I<anonymous parameters>.
 A single C<$> in a signature identifies an anonymous scalar variable.
 
-X<types; capture>
+X<types, capture>
 X<type capture>
 
 The fourth candidate, C<multi wins(::T $, T $) {  0 }> uses C<::T>, which is a
@@ -378,7 +378,7 @@ it works.))
 
 =head1 Bindability checks
 
-X<traits; implicit constraints>
+X<traits, implicit constraints>
 X<implicit constraints>
 
 Traits can apply I<implicit constraints>:
@@ -396,7 +396,7 @@ arguments as C<rw>--both readable and writable. Calling the C<swap> routine
 with an immutable value (for example a number literal) will fail.
 
 X<substr>
-X<functions; substr>
+X<functions, substr>
 
 The built-in function C<substr> can not only extract parts of strings, but
 also modify them:
@@ -424,7 +424,7 @@ have different candidates: the latter binds its first argument as C<rw>:
 =end programlisting
 
 X<arity>
-X<functions; arity>
+X<functions, arity>
 
 =for author
 
@@ -489,7 +489,7 @@ quicksort is a couple of recursive calls to sort both partitions:
 =head1 Protos
 
 X<protos>
-X<functions; protos>
+X<functions, protos>
 
 You have two options to write multi subs: either you start every candidate with
 C<multi sub ...> or C<multi ...>, or you declare once and for all that the

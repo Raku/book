@@ -41,7 +41,7 @@ The most important types are:
 =item Int
 
 X<Int>
-X<types; Int>
+X<types, Int>
 
 C<Int> objects store integer numbers of arbitrary size. If you write a literal
 that consists only of digits, such as C<12>, it is an C<Int>.
@@ -49,7 +49,7 @@ that consists only of digits, such as C<12>, it is an C<Int>.
 =item Num
 
 X<Num>
-X<types; Num>
+X<types, Num>
 
 C<Num> is the floating point type. It stores sign, mantissa, and exponent, each
 with a fixed width. Calculations involving C<Num> numbers are usually quite
@@ -61,8 +61,8 @@ Numbers in scientific notation such as C<6.022e23> are of type C<Num>.
 
 X<Rat>
 X<rational type>
-X<types; rational>
-X<types; Rat>
+X<types, rational>
+X<types, Rat>
 
 C<Rat>, short for I<rational>, stores fractional numbers without loss of
 precision.  It does so by tracking its numerator and denominator as integers,
@@ -76,7 +76,7 @@ C<3.14>, produces a C<Rat>.
 =item Complex
 
 X<Complex>
-X<types; Complex>
+X<types, Complex>
 
 C<Complex> numbers have two parts: a real part and an imaginary part. If either
 part is C<NaN>, then the entire number may possibly be C<NaN>.
@@ -236,7 +236,7 @@ you can write both C<(-5).abs> and C<abs(-5)>.
 =end table
 
 X<trigonometric functions>
-X<operators; trigonometry>
+X<operators, trigonometry>
 X<units>
 
 =for author
@@ -256,9 +256,9 @@ example, C<180.sin(Degrees)> is approximately C<0>.
 
 X<strings>
 X<Str>
-X<types; Str>
+X<types, Str>
 X<Buf>
-X<types; Buf>
+X<types, Buf>
 
 Strings stored as C<Str> are sequences of characters, independent of character
 encoding. The C<Buf> type is available for storing binary data. The C<encode>
@@ -383,7 +383,7 @@ TODO: Str and Buf operators, methods
 =head1 Bool
 
 X<Bool>
-X<types; Bool>
+X<types, Bool>
 
 A Boolean value is either C<True> or C<False>.  Any value can coerce to a
 boolean in boolean context. The rules for deciding if a value is true or false

@@ -51,8 +51,8 @@ The line:
 ... already contains three different operators: C<=>, C<< => >>, and C<,>.
 
 X<assignment>
-X<operator; assignment>
-X<operator; =>
+X<operator, assignment>
+X<operator, =>
 
 The C<=> operator is the I<assignment operator>--it takes the values from the
 right-hand side, and stores them in the variable on the left-hand side, here
@@ -70,8 +70,8 @@ to C<$string = $string ~ "text">.
 =end sidebar
 
 X<pair>
-X<< operator;=> >>
-X< operator; fat arrow>
+X<< operator,=> >>
+X< operator, fat arrow>
 
 The C<< => >> operator (the I<fat arrow>) constructs C<Pair> objects. A Pair
 stores a key and a value; the key is on the left-hand side of the C<< => >>
@@ -89,7 +89,7 @@ Finally, the C<,> operator constructs a C<Parcel>, which is a sequence
 of objects. In this case the objects are pairs.
 
 X<infix>
-X<operator; infix operators>
+X<operator, infix operators>
 X<term>
 
 All of the three operators above are I<infix> operators, which means they
@@ -97,9 +97,9 @@ stand in between two I<terms>. A term can be a literal like C<8> or C<'Dave'>,
 or a combination of other terms and operators.
 
 X<postcircumfix>
-X<operator; postcircumfix>
+X<operator, postcircumfix>
 X<postfix>
-X<operator; postfix>
+X<operator, postfix>
 
 The previous chapter already used other types of operators. It contained the
 statement C<%games{$p1}++;>.  The I<postcircumfix> operator C<{...}> occurs
@@ -110,7 +110,7 @@ which increments the value it qualifies. You may not use whitespace between a
 term and its postfix or postcircumfix operators.
 
 X<postfix>
-X<operator; postfix>
+X<operator, postfix>
 
 Another operator type is the I<prefix> operator, which occurs before a term. An
 example is the C<-> operator, which negates the following numeric value, as in
@@ -135,7 +135,7 @@ It begins harmlessly with a variable declaration C<my $label-area-width> and an
 assignment. Next comes a simple numeric addition, C<1 + ...>. The right side of
 the C<+> operator is more complicated.
 
-X<operator; max>
+X<operator, max>
 
 The infix C<max> operator returns the greater of two values, so C<2 max 3>
 returns 3. Square brackets around an infix operator cause Perl to apply the
@@ -170,8 +170,8 @@ values. It is the same as:
 
 =end programlisting
 
-X<meta operator; reduction>
-X<meta operator; []>
+X<meta operator, reduction>
+X<meta operator, []>
 
 These circumfix square brackets are the I<reduction meta operator>, which
 transforms the enclosed infix operator into an operator that expects a list (a
@@ -227,7 +227,7 @@ and a newline.
 
 The first string is the name of the player and the second is the bar.
 
-X<operator; x>
+X<operator, x>
 X<repetition operator>
 
 The infix C<x> operator, or I<repetition operator>, generates this bar. It
@@ -265,7 +265,7 @@ interpret this program. Perl 5 will interpret it as:
 ... so that C<@scores> will contain only one item.  The rest of the expression
 is merely a list of constants evaluated, then discarded.
 
-X<precedence; rules>
+X<precedence, rules>
 
 I<Precedence rules> govern how a parser will parse this line.  Perl 6's
 precedence rules state that the infix C<< => >> operator binds its arguments
@@ -487,7 +487,7 @@ this new group has the tightest possible precedence:
 
 X<value identity>
 X<===>
-X<operator; ===>
+X<operator, ===>
 
 There are several ways to compare objects in Perl. You can test for value
 equivalence using the C<===> infix operator. For immutable objectsN<Objects
@@ -520,7 +520,7 @@ equivalent when compared with C<===>:
 
 =end programlisting
 
-X<operator; eqv>
+X<operator, eqv>
 X<eqv>
 
 The C<eqv> operator returns C<True> only if two objects are of the same type
@@ -553,15 +553,15 @@ convert an object to a number, Perl will use the default of C<0>.
 =end programlisting
 
 X<< < >>
-X<< operator; < >>
+X<< operator, < >>
 X<< <= >>
-X<< operator; <= >>
+X<< operator, <= >>
 X<< >= >>
-X<< operator; >= >>
+X<< operator, >= >>
 X<< > >>
-X<< operator; > >>
+X<< operator, > >>
 X<!>
-X<operator; !>
+X<operator, !>
 
 The operators C<< < >>, C<< <= >>, C<< >= >>, and C<< > >> compare the relative
 size of numbers. C<!=> returns C<True> if the two objects differ in their
@@ -583,7 +583,7 @@ in that list.
 =head2 String Comparisons
 
 X<eq>
-X<operator; eq>
+X<operator, eq>
 
 Just like C<==> converts its arguments to numbers before comparing, C<eq> as an
 infix operator compares for string equality, converting its arguments to
@@ -674,11 +674,11 @@ Other operators compare strings lexicographically.
 For example, C<'a' lt 'b'> is true, and likewise C<'a' lt 'aa'>.
 
 X<!=>
-X<operator; !=>
+X<operator, !=>
 X<ne>
-X<operator; ne>
+X<operator, ne>
 X<!eq>
-X<operator; !eq>
+X<operator, !eq>
 
 C<!=> is really just a convenience for C<!==>, which in turn is really the C<!>
 meta operator added to the infix C<==> operator. An equivalent explanation
@@ -687,11 +687,11 @@ applies to C<ne> and C<!eq>.
 =head3 Three-way Comparison
 
 X<leg>
-X<operator; leg>
+X<operator, leg>
 X<cmp>
-X<operator; cmp>
+X<operator, cmp>
 X<< <=> >>
-X<< operator; <=> >>
+X<< operator, <=> >>
 
 The three-way comparison operators take two operands, and return
 C<Order::Increase> if the left is smaller, C<Order::Same> when both are equal,

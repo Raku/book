@@ -16,7 +16,7 @@ interesting ways.  However, they only scratch the surface of what's possible.
 
 =head1 Declaring A Subroutine
 
-X<subroutines; declaration>
+X<subroutines, declaration>
 
 A subroutine declaration consists of several parts.  First, the subroutine
 declarator C<sub> indicates that you are starting a subroutine declaration.
@@ -37,8 +37,8 @@ For example, in:
 ... the name of the sub is C<panic>.  Its signature is empty.  Its body
 consists of a single C<say> statement.
 
-X<subroutines; scoping>
-X<scoping; subroutines>
+X<subroutines, scoping>
+X<scoping, subroutines>
 
 =for author
 
@@ -91,8 +91,8 @@ You may also export (L<exporting>) a subroutine to make it available to another
 scope.
 
 X<anonymous subroutines>
-X<subroutines; anonymous>
-X<subroutines; first-class>
+X<subroutines, anonymous>
+X<subroutines, first-class>
 X<first-class subroutines>
 
 Perl 6 subroutines are objects. You can pass them around and store them in data
@@ -136,8 +136,8 @@ ASCII art looks just as bad as in real life.
 =head1 Adding Signatures
 
 X<parameter>
-X<subroutines; signature>
-X<signatures; subroutines>
+X<subroutines, signature>
+X<signatures, subroutines>
 
 A subroutine signature performs two tasks. First, it declares the arguments
 which callers may or must pass to the subroutine. Second, it declares the
@@ -679,7 +679,7 @@ example:
 
 =end programlisting
 
-X<return; implicit>
+X<return, implicit>
 
 Be wary of relying on this: when the flow of control within a subroutine is
 sufficiently complex, adding an explicit C<return> will clarify the code. As a
@@ -711,7 +711,7 @@ error at the time of calling the subroutine.
 
 =head2 Basic Types
 
-X<constraint; type>
+X<constraint, type>
 X<parameter type constraint>
 
 The easiest way to restrict the possible values that a subroutine accepts is by

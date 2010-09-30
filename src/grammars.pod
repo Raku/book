@@ -93,7 +93,7 @@ without progressing in the string, the recursion could go on infinitely
 and never proceed to other parts of the grammar.
 
 X<goal matching>
-X<~; regex meta character>
+X<regex meta character,~>
 
 The example grammar given above introduces the I<goal matching syntax>
 which can be presented abstractly as: C<A ~ B C>. In

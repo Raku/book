@@ -148,7 +148,7 @@ class out of roles uses a safe mechanism called I<flattening composition>.  You
 may also apply a role to an individual object.  Both of these design techniques
 appear in the example code.
 
-X<roles; parametric>
+X<roles, parametric>
 
 Some roles--I<parametric roles>--allow the use of specific customizations to
 change how they provide the features they provide.  This helps Perl 6 provide
@@ -158,9 +158,9 @@ in C++.
 =head1 Compile Time Composition
 
 X<does>
-X<composition; methods>
-X<composition; resolution>
-X<composition; conflicts>
+X<composition, methods>
+X<composition, resolution>
+X<composition, conflicts>
 
 Look at the C<KarmaKeeper> class declaration. The body is empty; the class
 defines no attributes or methods of its own. The class inherits from C<IRCBot>,
@@ -236,7 +236,7 @@ the type implied by the role.
 
 =head2 Multi-methods and composition
 
-X<composition; multi methods>
+X<composition, multi methods>
 
 Sometimes it's okay to have multiple methods of the same name, provided they
 have different signatures such that the multidispatch mechanism can distinguish
@@ -296,7 +296,7 @@ very useful when dealing with per-object role application.
 
 =head2 Expressing requirements
 
-X<roles; requirements>
+X<roles, requirements>
 X<required methods>
 
 The role C<AnswerIfTalkedTo> declares a stub for the method C<bot-nick>, but
@@ -328,7 +328,7 @@ it's best to mark your dependencies.
 
 =head1 Runtime Application of Roles
 
-X<roles; runtime application>
+X<roles, runtime application>
 
 Class declarations frozen at compilation time are often sufficient, but
 sometimes it's useful to add new behaviors to individual objects.  Perl 6
