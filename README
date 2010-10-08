@@ -43,6 +43,9 @@ Just type 'make' on your command line, and the book should be built in
 dist/UsingPerl6.a4.pdf, with an A4 paper size; to get U.S. letter
 size, type 'make PAPER=letter'.
 
+PDF versions of this book can be found at 
+http://puffin.ch/perl/6/ and http://github.com/perl6/book/downloads
+
 All material in this repository is licensed under a CC-by-nc-sa
 license: <http://creativecommons.org/licenses/by-nc-sa/2.5/>
 (attribution, noncommercial, share-alike), unless explicitly stated
