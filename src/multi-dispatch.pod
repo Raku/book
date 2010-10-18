@@ -367,15 +367,6 @@ C<Any, Any>.  A possible candidate:
 
 ... would win against C<(::T, T)>.
 
-=for author
-
-(TODO: If we're going to change the example to use an enum instead of classes,
-surely we need some explanation of how it can use an enum value instead of a
-type? (I would take a stab at writing this myself, except I have no idea how/why
-it works.))
-
-=end for
-
 =head1 Bindability checks
 
 X<traits, implicit constraints>
