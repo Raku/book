@@ -16,14 +16,22 @@ functions to which Perl can dispatch in this case are I<multis>.
 X<JSON>
 
 Javascript Object Notation (I<JSON>) is a simple data exchange format often
-used for communicating with web services. It supports arrays, hashes, numbers,
-strings, boolean values, and C<null>, the undefined value.
+used for communicating with web services.  It supports arrays, hashes, numbers,
+strings, boolean values, and C<null>, the undefined value. Here you can find
+an implementation that turns Perl 6 data structures to JSON.
 
-C<JSON::Tiny> is a minimal library used to convert Perl 6 data structures to
-JSON.  See L<grammars> for the other part of that module, which parses JSON and
-turns it into Perl 6 data structures.  The full code, containing additional
-documentation and tests, is available from U<http://github.com/moritz/json/>.
-This snippet demonstrates how multis make the code simpler and more obvious:
+This snippet demonstrates how multis make the code simpler and more obvious.
+
+The other way round, converting a JSON string to a Perl 6 data structure, is
+covered in the chapter L<Grammars>.
+
+=begin sidebar
+
+The code presented here is runnable. It is part of the libary C<JSON::Tiny>,
+which is available from U<http://github.com/moritz/json/>. It also includes
+tests and documentation.
+
+=end sidebar
 
 =begin programlisting
 
