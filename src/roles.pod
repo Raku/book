@@ -367,7 +367,7 @@ instance has changed.
 =head2 Differences from compile time composition
 
 Runtime application differs from compile time composition in that methods in
-the applied role in will automatically override any of the same name within the
+the applied role will automatically override any of the same name within the
 class of the object. It's as if you had written an anonymous subclass of the
 current class of the object that composed the role into it. This means that
 C<.*> will find both those methods that mixed into the object from one or more
