@@ -120,7 +120,12 @@ regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
 "Word" character--a letter, digit, or an underscore.  This chapter's example
 uses C<\w> to build the definition of a "word".
 
-Several other common control sequences each match a single character:
+Several other common control sequences each match a single character; you can
+find a list of those in L<regex_backslash>.
+
+=begin table Backslash sequences and their meaning
+
+Z<regex_backslash>
 
 X<regex, \w>
 X<regex, \d>
@@ -136,8 +141,6 @@ X<regex, \T>
 X<regex, \H>
 X<regex, \N>
 X<regex, \V>
-
-=begin table Backslash sequences and their meaning
 
 =for todo
 
