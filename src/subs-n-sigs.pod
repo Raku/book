@@ -747,6 +747,12 @@ This produces the output:
 
 =end screen
 
+X<type; nominal>
+X<nominal type>
+
+The I<nominal> type is an actual type name, here C<Numeric>, as opposed to a
+type plus additional constraints, which are discussed in the next section.
+
 If multiple parameters have type constraints, each argument must fulfill the
 type constraint of the parameter to which it binds.
 

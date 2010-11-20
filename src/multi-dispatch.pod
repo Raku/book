@@ -139,7 +139,10 @@ X<nominal type>
 X<types, nominal>
 
 Whenever the compiler performs a type check on the parameter C<$d>, it first
-checks the I<nominal> type (here, C<Any>).  If that check succeeds, it calls
+checks the I<nominal> type (here, C<Any>). A nominal type is an actual class
+or role, as opposed to additional constraints in the form of code blocks.
+
+If that check succeeds, it calls
 the code block. The entire type check can only succeed if the code block
 returns a true value.
 
