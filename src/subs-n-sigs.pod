@@ -841,7 +841,12 @@ to the set of arguments it contains. To do this, use the C<\(...)> syntax.
 =end programlisting
 
 Here, the C<@tasks> array will end up containing two C<Capture>s, each of
-which contains two positional arguments and one named argument. Like arrays and
+which contains two positional arguments and one named argument.
+
+It doesn't matter where in the capture the named arguments appear, because
+they are passed by name, not by position.
+
+Like arrays and
 hashes, a C<Capture> can be flattened into an argument list using C<|>:
 
 =begin programlisting
