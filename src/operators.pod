@@ -700,8 +700,8 @@ C<Order::Same>, and C<Order::Decrease> are enumerations (enums); see
 L<subtypes>>. For numbers, the comparison operator is C<< <=> >>, and for
 strings it's C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp>
 operator is a type sensitive three-way comparison operator which compares
-numbers like C<< <=> >>, string like C<leg>, and (for example) pairs first by
-key, and then by values if the keys are identical:
+numbers like C<< <=> >>, strings like C<leg>, and (for example) pairs first by
+key, and then by value if the keys are identical:
 
 =begin programlisting
 
@@ -760,7 +760,7 @@ comparisons that Do The Right Thing with C<~~>, the smart match operator.
 =end programlisting
 
 The smart match operator always decides what kind of comparison to do based
-upon the type of the value on the right hand side. In the previous examples, it
+upon the type of the value on the right hand side. In the previous examples,
 the comparisons are numeric, string, and range, respectively.  While this
 chapter has demonstrated the numeric and string comparison operators --C<==>
 and C<eq>--there is no operator for comparing ranges. This is part of the power
