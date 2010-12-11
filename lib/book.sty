@@ -1,5 +1,4 @@
 \documentclass[
-    [% paper %]paper,
     DIV=10,
     parskip=full,
     headsepline=on,
@@ -11,6 +10,12 @@
     cleardoublepage=plain,
     BCOR=0
 ]{scrbook}
+
+\usepackage[[% IF paper -%]
+paper=[% paper %]paper
+[%- ELSE -%]
+paperwidth=[% paper_width %],paperheight=[% paper_height %]
+[% END %]]{geometry}
 
 % For (r) and (c)
 \usepackage{textcomp}

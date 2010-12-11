@@ -41,7 +41,8 @@ dist/*.pdf using bin/* and lib/* files.
 
 Just type 'make' on your command line, and the book should be built in
 dist/UsingPerl6.a4.pdf, with an A4 paper size; to get U.S. letter
-size, type 'make PAPER=letter'.
+size, type 'make PAPER=letter'. To get any PAPER width and height type
+'make PAPER=6.125in,9.25in'; accepted length units are pt, in, cm and mm.
 
 PDF versions of this book can be found at 
 http://puffin.ch/perl/6/ and http://github.com/perl6/book/downloads

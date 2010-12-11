@@ -12,7 +12,8 @@ sub main {
     my $paper;
     GetOptions(
 
-        # Should be one of: a4, letter.
+        # Should be one of: a4, letter,
+        # Or a string of width_height like '666pt,909pt'
         'paper:s' => \$paper,
     ) or die;
 
@@ -27,10 +28,19 @@ sub main {
 
     my $tt = Template->new( { INCLUDE_PATH => 'lib', } );
 
+    # Parse paper if needed
+    my ($paper_width,$paper_height);
+    if( $paper =~ /^([0-9\.]+(?:in|cm|pt|mm)),([0-9\.]+(?:in|cm|pt|mm))$/ ){
+      ( $paper_width , $paper_height ) = ( $1, $2 );
+      $paper = undef;
+    }
+
     print $tt->process(
         'book.sty', {
             content  => $output,
             paper    => $paper,
+            paper_width => $paper_width,
+            paper_height => $paper_height
         } );
 
 } ## end sub main
