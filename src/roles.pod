@@ -123,11 +123,11 @@ behaviors by performing different roles.
 
 =head1 What is a role?
 
-Previous chapters have explained classes and grammars. A role is another type
-of package. Like classes and grammars, a role can contain methods (including
-named regexes) and attributes. However, a role cannot stand on its own; you
-cannot instantiate a role.  To use a role, you must incorporate it into an
-object, class, or grammar.
+A role is another type of package. Like classes, a role can contain
+methods (including named regexes) and attributes. However, a role cannot
+stand on its own; you cannot instantiate a role. To use a role, you must
+incorporate it into an object, class, or, as we'll see in later
+chapters, a grammar.
 
 In other object systems, classes perform two tasks.  They represent entities in
 the system, providing models from which to create instances.  They also provide
