@@ -175,4 +175,41 @@ sub encode_text {
 }
 
 # --------------------------------------------------------------------
+# This one is copied from Pod::PseudoPod::LaTeX, at least till some
+# more customization of environments will be possible there. When it
+# happens, just remove the following sub and setup P::PP::LaTeX ot use
+# `tabulary' package with `L' column format specifiers.
+sub end_table
+{
+    my $self = shift;
+
+    # Format the table body
+    my $column_count  = @{ $self->{table_rows}[0] };
+    my $format_spec   = '|' . ( 'L|' x $column_count );
+
+    # first row is gray
+    $self->{scratch} .= "\\begin{tabulary}{\\columnwidth}{$format_spec}\n"
+                     .  "\\hline\n"
+                     .  "\\rowcolor[gray]{.9}\n";
+
+    # Format each row
+    my $row;
+    for $row ( @{ $self->{table_rows} } )
+    {
+        $self->{scratch} .= join( ' & ', @$row )
+                         . "\\\\ \\hline\n";
+    }
+
+    # Close the table
+    $self->{scratch} .= "\\end{tabulary}\n"
+                     .  "\\end{center}\n"
+                     .  "\\end{table}\n";
+
+    $self->{flags}{in_table}--;
+    delete $self->{table_rows};
+
+    $self->emit();
+}
+
+# --------------------------------------------------------------------
 1;
