@@ -90,9 +90,9 @@ given object is a type object or not:
 
     my $obj = Int;
     if $obj.defined {
-        say "Type object";
-    } else {
         say "Ordinary, defined object";
+    } else {
+        say "Type object";
     }
 
 =end programlisting
