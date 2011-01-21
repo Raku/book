@@ -150,13 +150,13 @@ calls a method on C<@variable>, C<@array».method> calls a method for each item
 in C<@array> and returns the list of the return values.
 
 C<»> is a I<hyper operator>. It is also a Unicode character.  If your operating
-system does not make it easy to write it you can also write it using two angle
-brackets (C<<< >> >>>)N<Ubuntu 10.4: In
-System/Preferences/Keyboard/Layouts/Options/Compose Key position select one of
-the keys to be the "Compose" key. Then press Compose-key and the "greater than"
-key twice.> C<@scores».key> is a list of all the keys of the pair objects in
-C<@scores>, and C<@scores».key».chars> is a list of the length of all keys in
-C<@scores>.
+systemN<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key
+position select one of the keys to be the "Compose" key. Then press Compose-key
+and the "greater than" key twice.> or text editorN<Emacs users can type C-x 8
+Enter 00bb Enter.> does not make it easy to write it you can also write it using
+two angle brackets (C<<< >> >>>) C<@scores».key> is a list of all the keys of
+the pair objects in C<@scores>, and C<@scores».key».chars> is a list of the
+length of all keys in C<@scores>.
 
 The expression C<[max] @scores».key».chars> gives the largest of these
 values. It is the same as:
