@@ -20,7 +20,9 @@ To build the book, you need to have the following software installed:
 
     * GNU make
     * perl 5.10
-    * the Perl 5 module Pod::PseudoPod::LaTeX version 1.101050 or newer
+    * the Perl 5 modules:
+      Pod::PseudoPod::LaTeX version 1.101050 or newer
+      Template version 2.22 or newer
     * inkscape (for svg -> pdf conversion)
 
     * A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04
