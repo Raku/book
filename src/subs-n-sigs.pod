@@ -112,13 +112,12 @@ TODO this example doesn't seem like a good one for first-class subs.
 
 =begin programlisting
 
-    my $dance = '';
     my %moves =
-        hands-over-head => sub { $dance ~= '/o\ '   },
-        bird-arms       => sub { $dance ~= '|/o\| ' },
-        left            => sub { $dance ~= '>o '    },
-        right           => sub { $dance ~= 'o< '    },
-        arms-up         => sub { $dance ~= '\o/ '   };
+        hands-over-head => sub { say '/o\ '   },
+        bird-arms       => sub { say '|/o\| ' },
+        left            => sub { print '>o '    },
+        right           => sub { print 'o< '    },
+        arms-up         => sub { print '\o/ '   };
 
     my @awesome-dance = <arms-up bird-arms right hands-over-head>;
 
@@ -126,7 +125,11 @@ TODO this example doesn't seem like a good one for first-class subs.
         %moves{$move}.();
     }
 
-    say $dance;
+    # outputs:
+    #              \o/
+    #              |/o\|
+    #              o<
+    #              /o\
 
 =end programlisting
 
