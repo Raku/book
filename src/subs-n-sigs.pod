@@ -115,9 +115,9 @@ TODO this example doesn't seem like a good one for first-class subs.
     my %moves =
         hands-over-head => sub { say '/o\ '   },
         bird-arms       => sub { say '|/o\| ' },
-        left            => sub { print '>o '    },
-        right           => sub { print 'o< '    },
-        arms-up         => sub { print '\o/ '   };
+        left            => sub { say '>o '    },
+        right           => sub { say 'o< '    },
+        arms-up         => sub { say '\o/ '   };
 
     my @awesome-dance = <arms-up bird-arms right hands-over-head>;
 
