@@ -10,8 +10,8 @@ operate on provided data (I<arguments>) and may produce results (I<return
 values>).  The I<signature> of a subroutine is a description of any arguments
 it takes and any return values it produces.
 
-The first chapter demonstrated simple subroutines.  In a sense, the operators
-described in the second chapter are also subroutines that Perl 6 parses in
+Chapter 2 demonstrated simple subroutines.  In a sense, the operators
+described in chapter 3 are also subroutines that Perl 6 parses in
 interesting ways.  However, they only scratch the surface of what's possible.
 
 =head1 Declaring A Subroutine
