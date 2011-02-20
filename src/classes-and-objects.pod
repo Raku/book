@@ -496,20 +496,6 @@ reaching for multiple inheritance it is good practice to consider whether the
 design wouldn't be better realized by using roles.  For more information on roles
 check out the Roles chapter.
 
-=begin programlisting
-
-    my $geek = GeekCook.new( 
-        books           => ('Learning Perl 6'), 
-        utensils        => ('blingless pot', 'knife', 'calibrated oven'),
-        favorite_editor => 'MacVim',
-        languages       => <Perl6>
-    );
-
-    $geek.cook('pizza');
-    $geek.code_to_solve('P =? NP');
-
-=end programlisting
-
 =head1 Introspection
 
 Introspection is the process of gathering information about some objects in
