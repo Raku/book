@@ -401,13 +401,13 @@ defined in the Employee class as though they were from the Programmer class.
 
 =begin programlisting
 
-    my $programmer = Employee.new( 
+    my $programmer = Programmer.new(
         salary => 100_000, 
         known_languages => <Perl5, Perl6, Erlang, C++>, 
         favorite_edtor => 'vim'
     );
 
-    $programmer.code_to_solve('turing problem');
+    $programmer.code_to_solve('halting problem');
     $programmer.pay();
 
 =begin programlisting
