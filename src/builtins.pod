@@ -110,7 +110,7 @@ The following operators are available for all number types:
 
 =cell C<**>
 
-=cell Exponentiation: C<$a**$b> is C<$a> to the power of C<$b>
+=cell exponentiation: C<$a**$b> is C<$a> to the power of C<$b>
 
 =row
 
