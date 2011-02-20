@@ -132,6 +132,12 @@ The following operators are available for all number types:
 
 =row
 
+=cell C<%>
+
+=cell modulo (remainder after division)
+
+=row
+
 =cell C<+>
 
 =cell addition
