@@ -407,8 +407,8 @@ defined in the Employee class as though they were from the Programmer class.
         favorite_edtor => 'vim'
     );
 
-$programmer.code_to_solve('turing problem');
-$programmer.pay();
+    $programmer.code_to_solve('turing problem');
+    $programmer.pay();
 
 =begin programlisting
 
