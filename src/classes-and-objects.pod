@@ -403,7 +403,7 @@ defined in the Employee class as though they were from the Programmer class.
 
     my $programmer = Programmer.new(
         salary => 100_000, 
-        known_languages => <Perl5, Perl6, Erlang, C++>, 
+        known_languages => <Perl5 Perl6 Erlang C++>,
         favorite_edtor => 'vim'
     );
 
