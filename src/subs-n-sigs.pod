@@ -1224,4 +1224,72 @@ Beyond this, traits (L<traits>) allow you to associate extra data with
 parameters.  This metadata can go far beyond that which subroutines,
 signatures, and parameters normally provide.
 
+
+=head1 MAIN subs for command line parsing
+
+Frequent users of the UNIX shells might have noticed a symmetry between
+postional and named arguments to routines on the one hand, and argument
+and options on the command line on the other hand.
+
+This symmetry can be exploited by declaring a subroutine called C<MAIN>.
+It is called every time the script is run, and its signature counts as
+a specification for command line arguments.
+
+=begin programlisting
+
+    # script roll-dice.pl
+    sub MAIN($count = 1, :$sides = 6, Bool :$sum) {
+        my @numbers = (1..$sides).roll($count);
+        say @numbers.join(' ');
+        say "sum: ", [+] @numbers if $sum;
+    }
+    # TODO: explain ranges, .pick and [+]
+    # (or reference later chapters)
+
+=end programlisting
+
+Calling this script without command line arguments leaves both parameters
+at their default values.
+
+This is how some invocations could look like
+N<<The use of random numbers through C<roll> means that you will likely see
+different output if you try it.>>
+
+=begin screen
+
+    $ perl6 roll-dice.pl
+    4
+    $ perl6 roll-dice.pl 4
+    1 4 2 4
+    $ perl6 roll-dice.pl --sides=20 3
+    18 1 2
+    $ perl6 roll-dice.pl --sides=20 --sum 3
+    9 14 12
+    sum: 35
+    $ perl6 roll-dice.pl --unknown-option
+    roll-dice.pl [--sides=value-of-sides] [count]
+
+=end screen
+
+Named arguments can be provided with the C<--name=value> syntax common to
+many GNU tools, and positional arguments just by their value.
+
+If an option does not require a parameter, the parameter in the MAIN
+signature needs to be marked as being of C<Bool> type.
+
+Usage of unknown options or too many or few arguments triggers an
+automatically generated usage message, which can be overridden with a
+custom C<USAGE> sub:
+
+=begin programlisting
+
+    sub MAIN(:$really-do-it!) { ... }
+    sub USAGE() {
+        say "This script is dangerous, please read the documentation first";
+    }
+
+=end programlisting
+
+# TODO: maybe talk more about available options?
+
 =for editor vim: se spell
