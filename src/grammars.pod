@@ -92,6 +92,13 @@ so that when a partial pattern match fails, the regex engine will not go
 back and try another alternative (this is equivalent to using the
 C<:ratchet> modifier).
 
+=for author
+
+Add code to POD processor that does the right thing with L<S??> and
+L<src/...> links. Or update this document appropriately.
+
+=end author
+
 See L<src/regex> for more information on modifiers and how they may be
 used or look at L<S05>.
 
