@@ -58,28 +58,22 @@ X<behavior>
 X<classes, behavior>
 
 Perl 6, like many other languages, uses the C<class> keyword to introduce a new
-class. Anything inside of the block that follows is part of the class
-definition. You may place arbitrary code there, just as you can with any other
-block, but classes commonly contain declarations.  The example code includes
-declarations relating to state (attributes, introduced through the C<has>
-keyword) and behavior (methods, through the C<method> keyword).
-
-=for author
-
-Which package?
-
-=end for
+class.  The block that follows may contain arbitrary code, just as with
+any other block, but classes commonly contain state and behavior declarations.
+The example code includes attributes (state), introduced through the C<has>
+keyword, and behaviors introduced through the C<method> keyword.
 
 X<type object>
 X<defined>
 X<.defined>
 
-Declaring a class creates a I<type object>, which by default gets installed
-into the package (just like a variable declared with C<our> scope).  This type
-object is an "empty instance" of the class.  You've already seen these.  For
-example, types such as C<Int> and C<Str> refer to the type object of one of the
-Perl 6 built-in classes.  The example uses the class name C<Task> so that other
-code can refer to it later, such as to create class instances by calling the
+Declaring a class creates a I<type object> which, by default, is
+installed into the current package (just like a variable declared with
+C<our> scope). This type object is an "empty instance" of the class.
+You've already seen these in previous chapters. For example, types such
+as C<Int> and C<Str> refer to the type object of one of the Perl 6 built-
+in classes. The example above uses the class name C<Task> so that other code
+can refer to it later, such as to create class instances by calling the
 C<new> method.
 
 Type objects are I<undefined>, in the sense that they return C<False> if you
@@ -107,7 +101,7 @@ X<classes, encapsulation>
 
 The first three lines inside the class block all declare attributes (called
 I<fields> or I<instance storage> in other languages).  These are storage
-locations that every instance of a class gets.  Just as a C<my> variable can
+locations that every instance of a class will obtain.  Just as a C<my> variable can
 not be accessed from the outside of its declared scope, attributes are not
 accessible outside of the class.  This I<encapsulation> is one of the key
 principles of object oriented design.
@@ -124,13 +118,6 @@ code to invoke in order to perform the task that an object represents:
 X<sigils, &>
 X<twigils>
 X<twigils, !>
-
-=for author
-
-A previous paragraph said that all attributes are private to the class.
-Explain the subtle distinction here.
-
-=end for
 
 The C<&> sigil indicates that this attribute represents something invocable.
 The C<!> character is a I<twigil>, or secondary sigil.  A twigil forms part of
