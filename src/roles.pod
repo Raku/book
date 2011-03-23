@@ -361,8 +361,8 @@ plug-ins to Role objects.  The lookup inside C<on-message> stores a Role in
 C<$plug-in>. The C<does> operator adds this role to C<$self>--not the I<class>
 of C<$self>, but the instance itself. From this point on, C<$self> now has all
 of the methods from the role, in addition to all of the ones that it had
-before.  This does affect any other instances of the same class; only this one
-instance has changed.
+before.  This does not affect any other instances of the same class; only this
+one instance has changed.
 
 =head2 Differences from compile time composition
 
