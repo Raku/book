@@ -433,7 +433,7 @@ overriding the Cook's cook method.
 
     $cook.cook( 'pizza' ); # Cooking pizza
 
-    my $baker = Cook.new( 
+    my $baker = Baker.new(
         utensils => ('self cleaning oven'), 
         cookbooks => ("The Baker's Apprentice"), 
         salary => 50000);
