@@ -541,3 +541,38 @@ argument list.  This delegation is common in object destructors, where each
 subclass may perform some cleanup for its own particular data.  After it
 finishes its work, it can delegate to its parent class meethod by calling
 C<nextsame>.
+
+=head1 Multiple MAIN subs
+
+C<MAIN> routines can also be multis. That way it is easy to add separate code
+for each action that the script can perform.
+
+=begin programlisting
+
+    # file calc.pl
+    multi MAIN('add', $x, $y)  { say $x + $y }
+    multi MAIN('div', $x, $y)  { say $x / $y }
+    multi MAIN('mult', $x, $y) { say $x * $y }
+
+=end programlisting
+
+Example calls to this script:
+
+=begin screen
+
+    $ perl6 calc.pl add 3 5
+    8
+    $ perl6 calc.pl mult 3 5
+    15
+    $ perl6 calc.pl
+    Usage:
+    calc.pl add x y
+    or
+    calc.pl div x y
+    or
+    calc.pl mult x y
+
+=end screen
+
+Here the multi dispatcher selects the routine based on the value of the first
+argument.
