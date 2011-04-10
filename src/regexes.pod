@@ -670,6 +670,11 @@ backtracking makes C<\w+> always match a full word:
 
 =begin programlisting
 
+    # XXX: does actually match, because m/<&dup>/
+    # searches for a starting position where the
+    # whole regex matches. Find an example that
+    # doesn't match
+
     my regex word { :ratchet \w+ [ \' \w+]? }
     my regex dup  { <word=&word> \W+ $<word> }
 
