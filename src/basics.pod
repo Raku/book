@@ -5,20 +5,20 @@ information from text files.  It's still strong in text processing, but Perl 5
 is also a powerful general-purpose programming language.  Perl 6 is even better.
 
 Suppose that you host a table tennis tournament.  The referees tell you the
-results of each game in the format C<Player 1 vs Player 2 | 3:2>, which means
-that C<Player 1> won against C<Player 2> by 3 to 2 sets. You need a script that
+results of each game in the format C<Player1 Player2 | 3:2>, which means
+that C<Player1> won against C<Player2> by 3 to 2 sets. You need a script that
 sums up how many matches and sets each player has won to determine the overall
 winner.
 
 The input data looks like this:
 
     Beth Ana Charlie Dave
-    Ana vs Dave | 3:0
-    Charlie vs Beth | 3:1
-    Ana vs Beth | 2:3
-    Dave vs Charlie | 3:0
-    Ana vs Charlie | 3:1
-    Beth vs Dave | 0:3
+    Ana Dave | 3:0
+    Charlie Beth | 3:1
+    Ana Beth | 2:3
+    Dave Charlie | 3:0
+    Ana Charlie | 3:1
+    Beth Dave | 0:3
 
 The first line is the list of players.  Every subsequent line records a result
 of a match.
@@ -30,14 +30,14 @@ Here's one way to solve that problem in Perl 6:
     use v6;
 
     my $file  = open 'scores';
-    my @names = $file.get.split(' ');
+    my @names = $file.get.words;
 
     my %matches;
     my %sets;
 
     for $file.lines -> $line {
         my ($pairing, $result) = $line.split(' | ');
-        my ($p1, $p2)          = $pairing.split(' vs ');
+        my ($p1, $p2)          = $pairing.words;
         my ($r1, $r2)          = $result.split(':');
 
         %sets{$p1} += $r1;
