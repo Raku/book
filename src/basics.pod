@@ -217,8 +217,14 @@ During the first iteration, C<$line> will contain the string C<Ana vs Dave |
 =end programlisting
 
 C<my> can declare multiple variables simultaneously. The right-hand side of the
-assignment is again a call to C<split>, this time splitting on a vertical bar
-surrounded by spaces. C<$pairing> gets the first item of the returned list, and
+assignment is a call to a method named C<split>, passing along the string
+C<' | '> as an argument.
+
+C<split> decomposes its I<invocant>--the string on which it operates--into a
+list of strings, so that joining the list items with the separator C<' | '>
+produces the original string.
+
+C<$pairing> gets the first item of the returned list, and
 C<$result> the second.
 
 After processing the first line, C<$pairing> will hold the string C<Ana vs
@@ -228,7 +234,7 @@ The next two lines follow the same pattern:
 
 =begin programlisting
 
-    my ($p1, $p2) = $pairing.split(' vs ');
+    my ($p1, $p2) = $pairing.words;
     my ($r1, $r2) = $result.split(':');
 
 =end programlisting
@@ -516,7 +522,7 @@ subsequent rows.
 How can you change the program if the first input line is omitted?
 Hint: C<%hash.keys> returns a list of all keys stored in C<%hash>.
 
-B<Answer:> Remove the line C<my @names = $file.get.split(' ');>, and change:
+B<Answer:> Remove the line C<my @names = $file.get.words;>, and change:
 
 =begin programlisting
 
