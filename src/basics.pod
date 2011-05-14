@@ -220,7 +220,7 @@ C<my> can declare multiple variables simultaneously. The right-hand side of the
 assignment is a call to a method named C<split>, passing along the string
 C<' | '> as an argument.
 
-C<split> decomposes its I<invocant>--the string on which it operates--into a
+C<split> decomposes its invocant into a
 list of strings, so that joining the list items with the separator C<' | '>
 produces the original string.
 
