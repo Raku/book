@@ -691,7 +691,7 @@ different staring position.
 X<regex, token>
 X<token>
 
-The C<regex { :ratchet ... }> pattern is common that it has its own shortcut:
+The C<regex { :ratchet ... }> pattern is so common that it has its own shortcut:
 C<token { ... }>.  An idiomatic duplicate word searcher might be:
 
 =begin programlisting
