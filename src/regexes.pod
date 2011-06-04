@@ -779,7 +779,7 @@ X<regex, zero-width assertion>
 The word character after the comma is not part of the match, because it is in
 a look-ahead introduced by C<< <?before ... > >>. The leading question mark
 indicates an I<zero-width assertion>: a rule that never consumes characters
-from the matched string.  You can turn any call to a subrule into an zero
+from the matched string.  You can turn any call to a subrule into a zero
 width assertion.  The built-in token C<< <alpha> >> matches an alphabetic
 character, so you can rewrite this example as:
 
@@ -791,7 +791,7 @@ character, so you can rewrite this example as:
 
 X<regex, negative look-ahead assertion>
 
-An leading exclamation mark negates the meaning, such that the lookahead must
+A leading exclamation mark negates the meaning, such that the lookahead must
 I<not> find the regex fragment. Another variant is:
 
 =begin programlisting
