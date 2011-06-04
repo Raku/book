@@ -791,7 +791,7 @@ character, so you can rewrite this example as:
 
 X<regex, negative look-ahead assertion>
 
-An leading exclamation mark negates the meaning, such that the lookahead must
+A leading exclamation mark negates the meaning, such that the lookahead must
 I<not> find the regex fragment. Another variant is:
 
 =begin programlisting
