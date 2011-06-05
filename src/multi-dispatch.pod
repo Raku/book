@@ -35,8 +35,8 @@ tests and documentation.
 
 =begin programlisting
 
-    multi to-json(Real $d) { ~$d }
     multi to-json(Bool $d) { $d ?? 'true' !! 'false'; }
+    multi to-json(Real $d) { ~$d }
     multi to-json(Str  $d) {
         '"'
         ~ $d.trans(['"',  '\\',   "\b", "\f", "\n", "\r", "\t"]
