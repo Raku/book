@@ -1,5 +1,6 @@
 =head0 Operators
 
+Z<sec:operators>
 X<operator>
 
 Operators are very short names for often used routines. They have special
@@ -697,7 +698,7 @@ The three-way comparison operators take two operands, and return
 C<Order::Increase> if the left is smaller, C<Order::Same> when both are equal,
 and C<Order::Decrease> if the right operand is smallerN<C<Order::Increase>,
 C<Order::Same>, and C<Order::Decrease> are enumerations (enums); see
-L<subtypes>>. For numbers, the comparison operator is C<< <=> >>, and for
+A<sec:subtypes>>. For numbers, the comparison operator is C<< <=> >>, and for
 strings it's C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp>
 operator is a type sensitive three-way comparison operator which compares
 numbers like C<< <=> >>, strings like C<leg>, and (for example) pairs first by

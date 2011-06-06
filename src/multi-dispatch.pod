@@ -1,6 +1,5 @@
 =head0 Multis
-
-Z<multis>
+Z<sec:multis>
 
 X<multidispatch>
 X<multis>
@@ -23,7 +22,7 @@ an implementation that turns Perl 6 data structures to JSON.
 This snippet demonstrates how multis make the code simpler and more obvious.
 
 The other way round, converting a JSON string to a Perl 6 data structure, is
-covered in the chapter L<Grammars>.
+covered in the chapter A<sec:grammars>.
 
 =begin sidebar
 
@@ -450,7 +449,7 @@ of arguments are allowed are handled with slurpy parameters instead:
 
 =head1 Nested Signatures in Multi-dispatch
 
-An earlier chapter showed how to use nested signatures to look deeper into data
+Chapter A<sec:subs> showed how to use nested signatures to look deeper into data
 structures and extract parts of them. In the context of multiple dispatch,
 nested signatures take on a second task: they act as constraints to distinguish
 between the candidates. This means that it is possible to dispatch based upon

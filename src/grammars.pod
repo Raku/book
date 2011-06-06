@@ -1,8 +1,9 @@
 =head0 Grammars
+Z<sec:grammars>
 
 Grammars organize regexes, just like classes organize methods. The following
 example demonstrates how to parse JSON, a data exchange format already
-introduced (see L<multis>).
+introduced (see A<sec:multis>).
 
 =begin programlisting
 

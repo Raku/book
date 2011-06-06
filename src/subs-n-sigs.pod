@@ -1,5 +1,6 @@
 =head0 Subs and Signatures
 
+Z<sec:subs>
 X<subroutine>
 X<arguments>
 X<signature>

@@ -1,5 +1,7 @@
 =head0 Classes and Objects
 
+Z<sec:classes>
+
 TODO: start with a much simpler bare-bones example!
 
 The following program shows how a dependency handler might look in Perl 6.

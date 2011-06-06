@@ -1,6 +1,6 @@
 =head0 Subtypes
 
-Z<subtypes>
+Z<sec:subtypes>
 
 =begin programlisting
 

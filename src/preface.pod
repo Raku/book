@@ -1,4 +1,5 @@
 =head0 Preface
+Z<sec:preface>
 
 Perl 6 is a language specification for which multiple compilers and
 interpreters exist in various stages of completeness. These implementations

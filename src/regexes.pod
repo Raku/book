@@ -1,4 +1,5 @@
 =head0 Pattern matching
+Z<sec:regexes>
 
 X<regular expressions>
 X<regex>
