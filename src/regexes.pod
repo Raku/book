@@ -264,6 +264,7 @@ the beginning and ending characters:
 
 =end programlisting
 
+
 X<regex, character class addition>
 X<regex, character class subtraction>
 
@@ -283,6 +284,20 @@ and C<-> operators:
 =end programlisting
 
 The negated character class is a special application of this idea.
+
+Inside a character class, non-word characters do not need to be escaped, and
+generally use their special meaning. So C<< /<[+.*]> / >> matches a plus sign,
+a dot or an asterisk. The only exceptions to that are the backslash, square
+brackets and the dash C<->, which need to be escaped with a backslash:
+
+=begin programlisting
+
+    my $str = 'A character [b] inside brackets';
+    if $str ~~ /'[' <-[ \[ \] ]> ']'/ ) {
+        say "Found a non-bracket character inside square brackets';
+    }
+
+=end programlisting
 
 X<regex, quantifier>
 X<regex, ? quantifier>
