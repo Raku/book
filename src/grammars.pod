@@ -398,7 +398,7 @@ they extract from the match object into native Perl 6 data structures, and
 call C<make> to set those native structures as their own ASTs.
 
 The action methods for proto tokens include the full name of each individual
-rule, including them C<sym> part:
+rule, including the C<sym> part:
 
 =begin programlisting
 
