@@ -1,4 +1,5 @@
 =head0 Grammars
+
 Z<sec:grammars>
 
 Grammars organize regexes, just like classes organize methods. The following
