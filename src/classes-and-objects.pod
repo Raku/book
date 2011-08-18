@@ -316,7 +316,7 @@ dependencies. To create a single task with no dependencies, write:
 =end programlisting
 
 An earlier section explained that declaring the class C<Task> installed a type
-object had been installed in the namespace.  This type object is a kind of
+object in the namespace.  This type object is a kind of
 "empty instance" of the class, specifically an instance without any state.  You
 can call methods on that instance, as long as they do not try to access any
 state; C<new> is an example, as it creates a new object rather than modifying
