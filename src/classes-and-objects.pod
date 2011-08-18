@@ -459,8 +459,9 @@ significant improvement over Perl 5's approach to handling multiple inheritance.
 
     class GeekCook is Programmer is Cook {
         method new( *%params ) {
+            %params<cookbooks> //= [];  # remove once rakudo fully supports autovivification
             push( %params<cookbooks>, "Cooking for Geeks" );
-            return self.bless(%params);
+            return self.bless(*, |%params);
         }
     }
 
