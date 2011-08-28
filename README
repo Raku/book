@@ -16,7 +16,9 @@ have an IRC client, you can use a web-based client at
 <http://webchat.freenode.net/?randomnick=1&channels=perl6book&prompt=1>
 )
 
-To build the book, you need to have the following software installed:
+To build the PDF version of this book, you need to have the following
+software installed (for HTML output only, the first section of the prereqs
+is enough; 'make html' will be your friend):
 
     * GNU make
     * perl 5.10
