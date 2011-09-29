@@ -103,7 +103,7 @@ X<postfix>
 X<operator, postfix>
 
 The previous chapter already used other types of operators. It contained the
-statement C<%games{$p1}++;>.  The I<postcircumfix> operator C<{...}> occurs
+statement C<%matches{$p1}++;>.  The I<postcircumfix> operator C<{...}> occurs
 after (the I<post>) a term, and consists of two symbols (an opening and a
 closing curly bracket) which enclose (I<circumfix>) another term.  After this
 postcircumfix operator is an ordinary I<postfix> operator with name C<++>,
