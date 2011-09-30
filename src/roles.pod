@@ -254,15 +254,27 @@ take precedence.  This is the mechanism by which the C<AdminBot> class can
 perform the appropriate C<on-message> method provided by both the
 C<KarmaTracking> and the C<Oping> roles.
 
-When a class composes multiple roles, an alternate declaration syntax may be
-more readable:
+When a class composes multiple roles, an alternate declaration syntax -
+called an C<also> declarator - may be more readable:
 
 =begin programlisting
 
     class KarmaKeeper is IRCBot {
-        does AnswerToAll;
-        does KarmaTracking;
-        does Oping;
+        also does AnswerToAll;
+        also does KarmaTracking;
+        also does Oping;
+    }
+
+=end programlisting
+
+The C<also> declarator is primarily intended for roles but can also be useful
+when creating anonymous classes or roles:
+
+=begin programlisting
+
+    my $karma = class {
+        also does KarmaTracking;
+        ...
     }
 
 =end programlisting
