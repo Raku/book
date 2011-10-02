@@ -1,10 +1,11 @@
-=head0 Subs and Signatures
+=head0 Subroutines and Signatures
 
 Z<sec:subs>
 X<subroutine>
 X<arguments>
 X<signature>
 X<return value>
+X<return type>
 
 A I<subroutine> is a piece of code that performs a specific task. It may
 operate on provided data (I<arguments>) and may produce results (I<return
@@ -15,7 +16,7 @@ Chapter 2 demonstrated simple subroutines.  In a sense, the operators
 described in chapter 3 are also subroutines that Perl 6 parses in
 interesting ways.  However, they only scratch the surface of what's possible.
 
-=head1 Declaring A Subroutine
+=head1 Declaring a Subroutine
 
 X<subroutines, declaration>
 
@@ -146,11 +147,14 @@ X<signatures, subroutines>
 A subroutine signature performs two tasks. First, it declares the arguments
 which callers may or must pass to the subroutine. Second, it declares the
 variables in the subroutine to which the arguments are bound. These variables
-are called I<parameters>.  Perl 6 signatures go further; they allow you to
-constrain the values of arguments and to match against and extract parts of
-complex data structures.
-
-TODO A third task: specifying a return type.
+are called I<parameters>N<In this book, we will use the traditional convention
+of using the term I<parameters> when referring to the variables in a
+subroutine's signature and I<arguments> when referring to the values actually
+passed when a subroutine is called. Though for the most part, you can consider
+these terms interchangeable.> Perl 6 signatures go further; they allow you to
+constrain the type, value, and "definedness" of its arguments and match against
+and extract parts of complex data structures. Additionally, they also allow you
+to explicitly specify the return type of a subroutine.
 
 =head2 The Basics
 
@@ -168,15 +172,20 @@ to which to bind incoming arguments.
 
 =end programlisting
 
-The use of the term I<bound> instead of I<assigned> is significant. The
-variables in your signature are read-only references to the passed arguments.
-Within the subroutine, you can not modify them.
+The use of the term I<bound> instead of I<assigned> is significant here. In
+Perl 6, the variables in a subroutine's signature are read-only references to
+the passed arguments by default. This means that you B<can not> modify them
+inside the subroutine.
 
-If read-only binding is too limiting, you can relax this restriction.  Marking
-a parameter with C<is rw> means that you can modify the passed argument within
-the subroutine.  Any modification will modify the original in place.  If you
-attempt to pass a literal or some other constant value for an C<rw> parameter,
-the binding will fail at the point of the call, throwing an exception:
+If read-only binding is too limiting, you can relax this restriction by
+applying the C<is rw> ("rw" being short for I<read/write>) trait to a
+parameter. This allows you to modify the argument inside the subroutine. Use
+caution as this B<will> alter the original object passed. If you attempt to
+pass a literal value, a constant, or some other type of immutable
+objectN<An I<immutable> object is an object whose state cannot be changed after
+it has been created. By contrast, a I<mutable> object may be changed after
+being created.> to a parameter that has the C<is rw> trait, the binding will
+fail at the time of the call and throw an exception:
 
 =begin programlisting
 
@@ -191,8 +200,9 @@ the binding will fail at the point of the call, throwing an exception:
 
 =end programlisting
 
-If, instead, you want your own copy of the argument to work with inside the
-subroutine--leaving the original untouched--mark the parameter C<is copy>:
+If, instead, you want a local copy of the argument to work with inside the
+subroutine - leaving the caller's variable untouched - use the C<is copy>
+trait:
 
 =begin programlisting
 
@@ -207,16 +217,23 @@ subroutine--leaving the original untouched--mark the parameter C<is copy>:
 
 =end programlisting
 
-The extra verbosity of marking parameters as mutable may seem excessive, but
-it's likely you won't use these modifiers often.
+In other programming languages, such as C/C++ and Scheme, this evaluation
+strategy is known as I<pass-by-value>. When using the C<is copy> trait, only
+the local copy is assigned; any arguments passed to the subroutine remain
+unchanged in the caller's scope.
+
+The extra verbosity of marking parameters as mutable or immutable may seem
+excessive at first, but as an average user, it's unlikely that you'll need to
+use these traits often.
 
 =head2 Passing Arrays, Hashes and Code
 
-A variable's sigil indicates its intended use.  In a signature, a variable's
+A variable's sigil indicates its intended use. In a signature, a variable's
 sigil also acts as a constraint on the type of argument that can be passed.
-For example, the C<@> sigil checks that the passed value is C<Positional> --
-a role which encompassses types like C<Array> and C<List>.  Failing to pass
-something that matches this constraint will cause the call to fail.
+For example, the C<@> sigil checks that the object passed does the
+C<Positional> role (a role which includes types like C<Array> and C<List>).
+Failing to pass something that matches this constraint will cause the call to
+fail:
 
 =begin programlisting
 
@@ -227,16 +244,17 @@ something that matches this constraint will cause the call to fail.
     }
 
     my @last_words = <do not want>;
+
     shout-them(@last_words);  # DO NOT WANT
     shout-them('help');       # Fails; a string is not Positional
 
 =end programlisting
 
-Similarly, the C<%> sigil implies that the caller must pass something that is
-C<Associative>--that is, something which allows indexing through C<< <...> >>
-or C<{...}>. The C<&> sigil requires that the caller pass something callable,
-such as an anonymous subroutine. In that case, you may also call the callable
-parameter without the C<&> sigil:
+Similarly, the C<%> sigil implies that the caller must pass an object that does
+the C<Associative> role; that is, something which allows indexing through
+C<< <...> >> or C<{...}>. The C<&> sigil requires the caller to pass an object
+that does the C<Callable> role such as an anonymous subroutine. In that case,
+you may also call the callable parameter without the C<&> sigil:
 
 =begin programlisting
 
@@ -250,26 +268,28 @@ parameter without the C<&> sigil:
 
 =end programlisting
 
-A scalar (the C<$> sigil) implies no constraints.  Anything may bind to it,
-even if it could also bind to one of the other sigils.
+A scalar uses the C<$> sigil and implies no constraints. Anything may bind to
+it, even if it could also bind to an object with one of the other sigils.
 
 =head2 Interpolating Arrays and Hashes
 
 Sometimes you want to fill positional arguments from an array. Instead of
 writing C<eat(@food[0], @food[1], @food[2], ...)> and so on, you can
-I<flatten> them into the argument list by prepending a vertical bar:
-C<eat(|@food)>.
+I<flatten> them into the argument list by prepending it with the vertical bar
+or "pipe" character (C<|>): C<eat(|@food)>.
 
 Likewise, you can interpolate hashes into named arguments:
 
 =begin programlisting
 
-    sub order-shrimps($count, $from) {
+    sub order-shrimps($count, :$from) {
         say "I'd like $count pieces of shrimp from the $from, please";
     }
 
-    my %user-preferences = ( from => 'Northern Sea' );
-    order-shrimps(3, |%user-preferences)
+    my %user-preferences = from => 'Northern Sea';
+
+    order-shrimps(3, |%user-preferences);
+    # I'd like 3 pieces of shrimp from the Northern Sea, please
 
 =end programlisting
 
@@ -294,7 +314,7 @@ the signature:
 
 =end programlisting
 
-... or append a question mark to the parameter's name:
+or append a question mark to the parameter's name:
 
 =begin programlisting
 
@@ -310,6 +330,25 @@ the signature:
 If no argument is passed, an undefined value will be bound to the parameter. As
 demonstrated, the C<defined(...)> function can be used to check if there is a
 value or not.
+
+=head2 Required Parameters
+
+Positional parameters are always required by default. However, you can
+explicitly specify that a parameter is required by appending a C<!> to it:
+
+=begin programlisting
+
+    sub order-drink($size!, $flavor) {
+        say "$size $flavor, coming right up!";
+    }
+
+    order-drink('Large', 'Mountain Dew');    # OK
+    order-drink('Pepsi');                    # Error
+
+=end programlisting
+
+Required parameters must always appear at the beginning of a subroutine's
+parameter list.
 
 =head2 Named Arguments and Parameters
 
@@ -562,15 +601,20 @@ all the positional parameters need to come before the named parameters.
 
 =begin programlisting
 
-    sub mix(@ingredients, :$name) { ... }    # OK
-    sub notmix(:$name, @ingredients) { ... } # Error
+    sub mix(@ingredients, :$name)    { ... }    # OK
+    sub notmix(:$name, @ingredients) { ... }    # Error
 
 =end programlisting
 
 Required positional parameters need to come before optional positional
-parameters -- named parameters have no such restriction.
+parameters. However, named parameters have no such restriction.
 
-# TODO: example
+=begin programlisting
+
+    sub copy-machine($amount, $size = 'A4', :$color!, :$quality) { ... }    # OK
+    sub fax-machine($amount = 1, $number)                        { ... }    # Error
+
+=end programlisting
 
 =head2 Slurpy Parameters
 
@@ -654,7 +698,7 @@ in this chapter is simpler when each subroutine returns a new string:
 
 =end programlisting
 
-A Perl subroutine can return multiple values:
+A subroutine can also return multiple values:
 
 =begin programlisting
 
@@ -711,6 +755,29 @@ C<return> has the additional effect of immediately exiting the subroutine:
 
 ... and you'd better not misplace your new C<$world> if it's temporary, as it's
 the only one you're going to get.
+
+=head1 Return Types
+
+X<return type>
+
+Like most other modern programming languages, Perl 6 gives you the option of
+explicitly specifying the return type of a subroutine. This allows you to
+restrict the data type of the value returned from a subroutine. This is done
+using the C<returns> trait:
+
+=begin programlisting
+
+    sub double-up($i) returns Int {
+        return $i * 2;
+    }
+
+    my Int $ultimate-answer = double-up(21);    # 42
+
+=end programlisting
+
+Using the C<returns> trait is, of course, always optional. However, it may
+allow the compiler to perform certain optimizations depending on which
+Perl 6 implementation you are using.
 
 =head1 Working With Types
 
@@ -811,6 +878,63 @@ Or one could constrain arguments to those that exist as keys of a hash:
             %in-stock.delete($name);
         }
     }
+
+=end programlisting
+
+=head1 Abstract and Concrete Parameters
+
+# XXX This section needs to be verified as accurate because even though it's
+#     correct according to the spec, Rakudo seems to allow type objects
+#     with :U.
+#     Also, add examples for each adverb.
+
+One of the Perl5-isms that Perl 6 eliminates is the need to verify the
+"definedness" of a subroutine's arguments.
+
+For example, the following Perl 5 code:
+
+=begin programlisting
+
+    sub foo {
+        my $arg = shift;
+        die "Argument is undefined" unless defined $arg;
+
+        # Do something
+    }
+
+=end programlisting
+
+can now be written as:
+
+=begin programlisting
+
+    sub foo(Int:D $arg) {
+        # Do something
+    }
+
+=end programlisting
+
+Notice the little smiley face attached to the parameter's type: C<:D>. This
+adverb indicates that the given argument must be bound to a concrete object;
+if not, a runtime exception will be thrown. That's why it's so happy!
+
+By contrast, the C<:U> adverb can be used to indicate that the parameter
+requires an undefined or I<abstract> object.
+
+Additionally, the C<:_> adverb allows either defined or undefined values.
+In practice, using C<:_> is a bit redundant.
+
+Lastly, the C<:T> adverb can be used to indicate that the parameter may only
+be given as a type object. For example:
+
+=begin programlisting
+
+    sub say-foobar(Int:T $arg) {
+        say 'FOOBAR!';
+    }
+
+    say-foobar(Int);
+    # FOOBAR!
 
 =end programlisting
 
@@ -1226,7 +1350,7 @@ parameters.  This metadata can go far beyond that which subroutines,
 signatures, and parameters normally provide.
 
 
-=head1 MAIN subs for command line parsing
+=head1 The C<MAIN> Subroutine
 
 Frequent users of the UNIX shells might have noticed a symmetry between
 postional and named arguments to routines on the one hand, and argument
