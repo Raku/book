@@ -22,7 +22,8 @@ X<subroutines, declaration>
 
 A subroutine declaration consists of several parts.  First, the subroutine
 declarator C<sub> indicates that you are starting a subroutine declaration.
-Next comes an optional name and an optional signature.  The body of the sub
+Next comes an optional name and an optional signature.  The body of the
+subroutine
 follows as a block of code enclosed in curly braces.  This is what will execute
 every time the subroutine is called.
 
@@ -89,7 +90,9 @@ C<our> also makes subroutines visible from the outside of a package or module:
 
 =end programlisting
 
-You may also export (L<exporting>) a subroutine to make it available to another
+# TODO: elaborate
+
+You may also export a subroutine to make it available to another
 scope.
 
 X<anonymous subroutines>
@@ -100,7 +103,7 @@ X<first-class subroutines>
 Perl 6 subroutines are objects. You can pass them around and store them in data
 structures just as you can do with any other piece of data.  Programming
 language designers often call these I<first-class subroutines>; they are as
-fundamental to and usable from the language as are hashes or arrays.
+fundamental to the language as hashes or arrays are.
 
 First-class subroutines can help you solve complex problems.  For example, to
 make a little ASCII art dancing figure, you could build up a hash where the
@@ -140,6 +143,7 @@ ASCII art looks just as bad as in real life.
 
 =head1 Adding Signatures
 
+Z<sec:signatures>
 X<parameter>
 X<subroutines, signature>
 X<signatures, subroutines>
@@ -150,7 +154,7 @@ variables in the subroutine to which the arguments are bound. These variables
 are called I<parameters>N<In this book, we will use the traditional convention
 of using the term I<parameters> when referring to the variables in a
 subroutine's signature and I<arguments> when referring to the values actually
-passed when a subroutine is called. Though for the most part, you can consider
+passed when a subroutine is called. Though, for the most part, you can consider
 these terms interchangeable.> Perl 6 signatures go further; they allow you to
 constrain the type, value, and "definedness" of its arguments and match against
 and extract parts of complex data structures. Additionally, they also allow you
@@ -175,7 +179,7 @@ to which to bind incoming arguments.
 The use of the term I<bound> instead of I<assigned> is significant here. In
 Perl 6, the variables in a subroutine's signature are read-only references to
 the passed arguments by default. This means that you B<can not> modify them
-inside the subroutine.
+from inside the subroutine.
 
 If read-only binding is too limiting, you can relax this restriction by
 applying the C<is rw> ("rw" being short for I<read/write>) trait to a
@@ -338,12 +342,12 @@ explicitly specify that a parameter is required by appending a C<!> to it:
 
 =begin programlisting
 
-    sub order-drink($size!, $flavor) {
+    sub order-drink($size, $flavor!) {
         say "$size $flavor, coming right up!";
     }
 
     order-drink('Large', 'Mountain Dew');    # OK
-    order-drink('Pepsi');                    # Error
+    order-drink('Small');                    # Error
 
 =end programlisting
 
@@ -377,11 +381,11 @@ precede the name of the parameter with a colon:
 
 =begin programlisting
 
-    sub order-shrimps($count, :$from = 'North Sea') {
+    sub order-shrimps($count, :$from = 'Northern Sea') {
         say "I'd like $count pieces of shrimp from the $from, please";
     }
 
-    order-shrimps(6);                       # takes 'North Sea'
+    order-shrimps(6);                       # takes 'Northern Sea'
     order-shrimps(4, from => 'Atlantic Ocean');
     order-shrimps(22, 'Mediterranean Sea'); # not allowed, :$from is named only
 
@@ -430,7 +434,7 @@ others are Americans, you might write:
             :$height =  50,
             :color(:colour($c))) {
 
-       # print a piece of SVG that reprents a rectangle
+       # print a piece of SVG that represents a rectangle
        say qq[<rect x="$x" y="$y" width="$width" height="$height"
                      style="fill: $c" />]
     }
@@ -488,7 +492,7 @@ key of the pair.
 
 =end programlisting
 
-L<pair_forms> lists possible C<Pair> forms and their meanings.
+A<pair_forms> lists possible C<Pair> forms and their meanings.
 
 =begin table C<Pair> forms and their meanings
 
@@ -569,6 +573,14 @@ Z<pair_forms>
 =cell C<< var => %var >>
 
 =cell Hash variable
+
+=row
+
+=cell C<< :&var >>
+
+=cell C<<  vaf => &var >>
+
+=cell Callable/ Subroutine variable
 
 =end table
 
@@ -785,7 +797,9 @@ Many subroutines cannot meaningfully work with arbitrary parameters, but
 require that the parameters support certain methods or have other properties.
 In these cases, it makes sense to restrict the types of parameters, such that
 attempts to pass incorrect values as arguments will cause Perl to raise an
-error at the time of calling the subroutine.
+error at the time of calling the subroutine, or even at the compile time, if
+the compiler is smart enough to catch thatN<at the time of writing, Rakudo
+recognizes type mismatches for literals and explicitly typed variables>.
 
 =head2 Basic Types
 
@@ -838,7 +852,7 @@ parameter with a C<where> block:
 
 =begin programlisting
 
-    sub circle-radius-from-area(Numeric $area where { $area >= 0 }) {
+    sub circle-radius-from-area(Real $area where { $area >= 0 }) {
         ($area / pi).sqrt
     }
 
@@ -850,7 +864,9 @@ parameter with a C<where> block:
 Because the calculation is meaningful only for non-negative area values, the
 parameter includes a constraint which returns C<True> for non-negative values.
 If this constraint returns a false value, the type check will fail when
-something calls this subroutine.
+something calls this subroutineN<< note that the nominal type is now C<Real>
+instead of C<Numeric>, because not all C<Numeric> values can be compared for
+positiveness >>.
 
 The block after the C<where> is optional; Perl performs the check by smart
 matching the argument against whatever follows the C<where>. For example, it
@@ -883,10 +899,9 @@ Or one could constrain arguments to those that exist as keys of a hash:
 
 =head1 Abstract and Concrete Parameters
 
-# XXX This section needs to be verified as accurate because even though it's
-#     correct according to the spec, Rakudo seems to allow type objects
-#     with :U.
-#     Also, add examples for each adverb.
+TODO, XXX This section needs to be verified as accurate because even though it's
+correct according to the spec, Rakudo seems to allow type objects
+with :U.  Also, add examples for each adverb.
 
 One of the Perl5-isms that Perl 6 eliminates is the need to verify the
 "definedness" of a subroutine's arguments.

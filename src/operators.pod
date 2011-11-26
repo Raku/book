@@ -3,7 +3,7 @@
 Z<sec:operators>
 X<operator>
 
-Operators are very short names for often used routines. They have special
+Operators are very short names for often used routines. They have a special
 calling syntax, and can manipulate each other.
 
 Consider the table tennis example from the previous chapter. Suppose you want
@@ -94,7 +94,7 @@ X<operator, infix operators>
 X<term>
 
 All of the three operators above are I<infix> operators, which means they
-stand in between two I<terms>. A term can be a literal like C<8> or C<'Dave'>,
+stand between two I<terms>. A term can be a literal like C<8> or C<'Dave'>,
 or a combination of other terms and operators.
 
 X<postcircumfix>
@@ -104,7 +104,7 @@ X<operator, postfix>
 
 The previous chapter already used other types of operators. It contained the
 statement C<%matches{$p1}++;>.  The I<postcircumfix> operator C<{...}> occurs
-after (the I<post>) a term, and consists of two symbols (an opening and a
+after (I<post>) a term, and consists of two symbols (an opening and a
 closing curly bracket) which enclose (I<circumfix>) another term.  After this
 postcircumfix operator is an ordinary I<postfix> operator with name C<++>,
 which increments the value it qualifies. You may not use whitespace between a
@@ -137,11 +137,13 @@ assignment. Next comes a simple numeric addition, C<1 + ...>. The right side of
 the C<+> operator is more complicated.
 
 X<operator, max>
+X<meta operator, reduce>
 
 The infix C<max> operator returns the greater of two values, so C<2 max 3>
 returns 3. Square brackets around an infix operator cause Perl to apply the
 operator to a list element by element.  C<[max] 1, 5, 3, 7> is the same as C<1
-max 5 max 3 max 7> and evaluates to C<7>.
+max 5 max 3 max 7> and evaluates to C<7>. You might know this as as I<reduce>
+from other programming languages.
 
 Likewise, you can write C<[+]> to get the sum of a list of values, C<[*]> for
 the product, and C<< [<=] >> to check if a list is ordered by ascending values.
@@ -153,9 +155,9 @@ in C<@array> and returns the list of the return values.
 C<»> is a I<hyper operator>. It is also a Unicode character.  If your operating
 systemN<Ubuntu 10.4: In System/Preferences/Keyboard/Layouts/Options/Compose Key
 position select one of the keys to be the "Compose" key. Then press Compose-key
-and the "greater than" key twice.> or text editorN<Emacs users can type C-x 8
-Enter 00bb Enter.> does not make it easy to write it you can also write it using
-two angle brackets (C<<< >> >>>) C<@scores».key> is a list of all the keys of
+and the "greater than" key twice.> or text editorN<<<< Emacs users can type C-x 8
+Enter 00bb Enter, vim users can type C<<< C-k >> >>>. >>>> does not make it easy to write it you can also write it using
+two angle brackets (C<<< >> >>>). C<@scores».key> is a list of all the keys of
 the pair objects in C<@scores>, and C<@scores».key».chars> is a list of the
 length of all keys in C<@scores>.
 
@@ -208,8 +210,8 @@ Now all the necessary informations are in place, and the chart can print:
 
 =begin programlisting
 
+    my $format = '%- ' ~ $label-area-width ~ "s%s\n";
     for @scores {
-        my $format = '%- ' ~ $label-area-width ~ "s%s\n";
         printf $format, .key, 'X' x ($unit * .value);
     }
 
@@ -286,7 +288,7 @@ right-hand side is a scalar, the I<item assignment operator> with tight
 precedence is used, otherwise the loose-precedence I<list assignment operator>
 is used. This allows the two expressions C<$a = 1, $b = 2> and C<@a = 1, 2> to
 both mean something sensible: assignment to two variables in a list, and
-assignment of a two-item list to a single variable>.
+assignment of a two-item list to a single variable.
 
 =end sidebar
 
@@ -301,6 +303,17 @@ this new group has the tightest possible precedence:
     say (5 - 7) / 2;    # (-2) / 2 =  -1
 
 =end programlisting
+
+But beware that parenthesis directly after an identifier -- without any
+whitespace between -- are always parsed as the argument list, so
+
+=begin programlisting
+
+    say(5 - 7) / 2;     # -2
+
+=end programlisting
+
+prints out only the result of C<5 - 7>.
 
 =begin table Precedence table
 
@@ -370,7 +383,7 @@ this new group has the tightest possible precedence:
 
 =row
 
-=cell C<$x x 3>
+=cell C<$a x 3>
 
 =cell replication operators
 
@@ -513,11 +526,11 @@ equivalent when compared with C<===>:
 
     # these use identity for value
 
-    say 3   === 3;     # 1
+    say  3  ===  3     # 1
     say 'a' === 'a';   # 1
 
     my $a = 'a';
-    say $a === 'a';     # 1
+    say  $a === 'a';   # 1
 
 =end programlisting
 
@@ -527,8 +540,8 @@ X<eqv>
 The C<eqv> operator returns C<True> only if two objects are of the same type
 I<and> the same structure. With C<@a> and C<@b> as defined in the previous
 example, C<@a eqv @b> is true because C<@a> and C<@b> contain the same values
-each. On the other hand C<'2' eqv 2> returns C<False>, because the left
-argument is a string, the right an integer and so they are not of the same
+each. On the other hand C<'2' eqv 2> returns C<False>, because one
+argument is a string, the other an integer and so they are not of the same
 type.
 
 =for author
@@ -698,7 +711,7 @@ The three-way comparison operators take two operands, and return
 C<Order::Increase> if the left is smaller, C<Order::Same> when both are equal,
 and C<Order::Decrease> if the right operand is smallerN<C<Order::Increase>,
 C<Order::Same>, and C<Order::Decrease> are enumerations (enums); see
-A<sec:subtypes>>. For numbers, the comparison operator is C<< <=> >>, and for
+A<sec:subtypes> >. For numbers, the comparison operator is C<< <=> >> and for
 strings it's C<leg> (from I<l>esser, I<e>qual, I<g>reater). The infix C<cmp>
 operator is a type sensitive three-way comparison operator which compares
 numbers like C<< <=> >>, strings like C<leg>, and (for example) pairs first by
@@ -775,8 +788,7 @@ hand side and passing it the operand on the left hand side as an argument. Thus
 C<$answer ~~ 42> actually desugars to a method call like
 C<42.ACCEPTS($answer)>.  The upshot of this is that--after reading the chapter
 on writing classes and methods--you too will be able to write things that can
-smart-match against just by implementing an C<ACCEPTS> method to do the right
-thing.
+smart-match just by implementing an C<ACCEPTS> method to do the right thing.
 
 =for author
 

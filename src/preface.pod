@@ -100,7 +100,7 @@ the command line.
 =head1 Getting involved
 
 If you are inspired by the contents of this book and want to contribute
-to the Perl 6 community, there are more resources available to you:
+to the Perl 6 community, there are some resources available to you:
 
 =over
 
