@@ -1388,7 +1388,7 @@ a specification for command line arguments.
 
 =end programlisting
 
-Calling this script without command line arguments leaves both parameters
+Calling this script without command line arguments leaves all three parameters
 at their default values.
 
 This is how some invocations could look like

@@ -512,7 +512,7 @@ and have the same value.
 
 For mutable objects, C<===> compares their identities.  Two objects only share
 the same identity if, in fact, they are the same object.  Even if the two
-arrays C<@a> and C<@b> I<contain> the same values, if there containers are two
+arrays C<@a> and C<@b> I<contain> the same values, if their containers are two
 separate array objects, they will have different identities and will I<not> be
 equivalent when compared with C<===>:
 
