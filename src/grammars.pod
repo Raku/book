@@ -83,33 +83,33 @@ C<JSON::Tiny::Grammar.parse($tester)> attempts to match the regex named
 C<TOP> to the string C<$tester>.
 
 However, the example code does not seem to have a regex named C<TOP>; it
-has a I<rule> named C<TOP>. What's the difference? A rule is a regex
-with special behavior. Within a rule, sequences of whitespace are deemed
-significant and will match actual whitespace within the string (this is
-equivalent to using the C<:sigspace> modifier). Looking at the grammar,
-you'll also note that there are also C<token> declarations as well. A
-C<token> is also a regex with special behavior. A C<token> is the same
-as a rule (has significant whitespace), but it also does not backtrack
-so that when a partial pattern match fails, the regex engine will not go
-back and try another alternative (this is equivalent to using the
-C<:ratchet> modifier).
+has a I<rule> named C<TOP>. Looking at the grammar, you'll also note
+that there are also C<token> declarations as well. What's the
+difference? Each of the C<token> and C<rule> declarations are just
+C<regex> declarations with special default behavior. A C<token> declares
+a regex that does not backtrack by default, so that when a partial
+pattern match fails, the regex engine will not go back up and try
+another alternative (this is equivalent to using the C<:ratchet>
+modifier). A C<rule> will also not backtrack by default, additionally,
+sequences of whitespace are deemed significant and will match actual
+whitespace within the string using the built-in C<< <ws> >> rule (this
+is equivalent to using the C<:sigspace> modifier).
 
 =for author
 
-Add code to POD processor that does the right thing with L<S??> and
-L<src/...> links. Or update this document appropriately.
+Add code to POD processor that does the right thing with L<S??> links.
 
 =end author
 
-See L<src/regex> for more information on modifiers and how they may be
+See L<sec:regexes> for more information on modifiers and how they may be
 used or look at L<S05>.
 
 Usually, when talking about regex that are rules or tokens, we tend to
 call them rules or tokens rather than the more general term "regex", to
 distinguish their special behaviors.
 
-In this example, the C<TOP> rule anchors the match to the start and end
-of the string, so that the whole string has to be in valid JSON format
+In this example, the C<TOP> rule anchors the match to the start (with C<^>) and end
+of the string (with C<$>), so that the whole string has to be in valid JSON format
 for the match to succeed. After matching the anchor at the start of the
 string, the regex attempts to match either an C<< <array> >> or an C<<
 <object> >>. Enclosing a regex name in angle brackets causes the regex
@@ -219,7 +219,7 @@ The first two lines introduce a grammar that inherits from
 C<JSON::Tiny::Grammar>. Just as subclasses inherit methods from superclasses,
 so grammars inherit rules from its base grammar. Any rule used within
 the grammar will be looked for first in the grammar in which it was used,
-then within its parent grammar.
+then within its parent(s).
 
 In this minimal JSON grammar, whitespace is never mandatory, so C<ws>
 can match nothing at all. After optional spaces, two slashes C<'//'>
@@ -248,7 +248,7 @@ ordinary, C<|> delimited alternatives.
 X<reduction methods>
 X<action methods>
 
-The C<parse> method of a grammar returns a C<Match> object through which
+The C<.parse> method of a grammar returns a C<Match> object through which
 you can access all the relevant information of the match. Named regex
 that match within the grammar may be accessed via the C<Match> object
 similar to a hash where the keys are the regex names and the values are
@@ -259,10 +259,12 @@ parentheses are available as positional elements of the C<Match> object
 
 Once you have the Match object, what can you I<do> with it? You could
 recursively traverse this object and create data structures based on what
-you find or execute code. An alternative solution exists: I<action methods>.
+you find or execute code. Perl 6 provides another alternative: I<action methods>.
 
 =begin programlisting
 
+    # JSON::Tiny::Grammar as above
+    # ...
     class JSON::Tiny::Actions {
         method TOP($/)      { make $/.values.[0].ast }
         method object($/)   { make $<pairlist>.ast.hash }
@@ -305,9 +307,10 @@ you find or execute code. An alternative solution exists: I<action methods>.
 
 This example passes an actions object to the grammar's C<parse> method.
 Whenever the grammar engine finishes parsing a regex, it calls a method on
-the actions object with the same name as the current regex. If no such method
-exists, the grammar engine moves along.  If a method does exist, the grammar
-engine passes the current match object as a positional argument.
+the actions object with the same name as the regex. If no such method
+exists, the grammar engine continues parsing the rest of the grammar. If
+a method does exist, the grammar engine passes the current match object
+as a positional argument.
 
 X<abstract syntax tree>
 X<AST>
