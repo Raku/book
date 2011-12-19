@@ -255,7 +255,7 @@ similar to a hash where the keys are the regex names and the values are
 the C<Match> object that represents that part of the overall regex
 match. Similarly, portions of the match that are captured with
 parentheses are available as positional elements of the C<Match> object
-(as if it were an array). 
+(as if it were an array).
 
 Once you have the Match object, what can you I<do> with it? You could
 recursively traverse this object and create data structures based on what

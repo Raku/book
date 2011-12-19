@@ -7,7 +7,7 @@ This book is the work of many contributors.  They are listed below.
 Jonathan is a prolific contributor to the Rakudo compiler. He is
 primarily responsible for the implementation of Rakudo's object system.
 
-=item Patrick R. Michaud  
+=item Patrick R. Michaud
 
 Patrick is the chief architect of Rakudo, the Parrot-based Perl 6 compiler.
 

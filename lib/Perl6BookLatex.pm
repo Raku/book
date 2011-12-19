@@ -66,7 +66,7 @@ sub end_U {
 sub start_X {
 	my ($self, $flags) = @_;
 	$self->{scratch} .= '\\index{';
-	++$self->{flags}{in_index};	
+	++$self->{flags}{in_index};
 }
 
 sub end_X {
@@ -89,7 +89,7 @@ sub encode_verbatim_text {
 
     $text =~ s/([{}])/\\$1/g;
     $text =~ s/\\(?![{}])/\\textbackslash{}/g;
-    
+
     return $text;
 }
 
@@ -159,7 +159,7 @@ sub encode_text {
     # Add unescaped dollars.
     $text =~ s/(\\backslash)/\$$1\$/g;
 
-    # FIXME: Can't just replace them, since they look awful inside ttseries 
+    # FIXME: Can't just replace them, since they look awful inside ttseries
     # $text =~ s/\.{3}\s*/\\ldots /g;
 
     # Suggest hyphenation points for module names.
