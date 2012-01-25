@@ -514,7 +514,7 @@ overloadable.  Instead it redispatches to overloadable multi methods.>.
 =begin sidebar
 
 To hide all candidates of a multi and replace them by another sub, declare it
-as C<only sub YourSub>.  At the time of writing, no compiler supports this.
+as C<only sub YourSub>.  At the time of writing, only Rakudo supports this..
 
 =end sidebar
 
