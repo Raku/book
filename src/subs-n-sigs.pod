@@ -1378,13 +1378,15 @@ a specification for command line arguments.
 =begin programlisting
 
     # script roll-dice.pl
-    sub MAIN($count = 1, :$sides = 6, Bool :$sum) {
+    sub MAIN($count = 1, Numeric :$sides = 6, Bool :$sum) {
         my @numbers = (1..$sides).roll($count);
         say @numbers.join(' ');
         say "sum: ", [+] @numbers if $sum;
     }
     # TODO: explain ranges, .pick and [+]
     # (or reference later chapters)
+    # note: [max] was already used in chapter 3, so [+] should
+    #       make sense to the reader already.
 
 =end programlisting
 
@@ -1407,7 +1409,8 @@ different output if you try it.>>
     9 14 12
     sum: 35
     $ perl6 roll-dice.pl --unknown-option
-    roll-dice.pl [--sides=value-of-sides] [count]
+    Usage:
+      roll-dice.pl [--sides=<Numeric>] [--sum] [<count>]
 
 =end screen
 
