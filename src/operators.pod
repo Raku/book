@@ -559,12 +559,18 @@ convert an object to a number, Perl will use the default of C<0>.
 
 =begin programlisting
 
-    say 1 == 1.0;      # 1
-    say 1 == '1';      # 1
-    say 1 == '2';      # 0
-    say 3 == '3b'      # 1
+    say 1 == 1.0;      # Bool::True
+    say 1 == '1';      # Bool::True
+    say 1 == '2';      # Bool::False
+    say 3 == '3b';     # fails
 
 =end programlisting
+
+=for author
+
+maybe explain the failure in 3 == '3b' more thoroughly?
+
+=end for
 
 X<< < >>
 X<< operator, < >>
