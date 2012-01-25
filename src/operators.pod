@@ -521,16 +521,16 @@ equivalent when compared with C<===>:
     my @a = 1, 2, 3;
     my @b = 1, 2, 3;
 
-    say @a  === @a;    # 1
-    say @a  === @b;    # 0
+    say @a  === @a;    # Bool::True
+    say @a  === @b;    # Bool::False
 
     # these use identity for value
 
-    say  3  ===  3     # 1
-    say 'a' === 'a';   # 1
+    say  3  ===  3     # Bool::True
+    say 'a' === 'a';   # Bool::True
 
     my $a = 'a';
-    say  $a === 'a';   # 1
+    say  $a === 'a';   # Bool::True
 
 =end programlisting
 
