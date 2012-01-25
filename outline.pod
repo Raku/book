@@ -28,7 +28,7 @@ Done: Operators
 TODO: list some common operators. Meta-operators
 
 =head2 Chapter 3 - Subs and signatures,
-   
+
 =head2 Chapter 4 - multis
 
 Typed based multi dispatch, narrowness, constraints, multiple arguments
@@ -41,7 +41,7 @@ TODO:
 
 inheritance, BUILD submethods
 
-=head2 Chapter 6 - Regexes 
+=head2 Chapter 6 - Regexes
 
 Literals, quantifiers, captures, anchors, look-arounds, backtracking control,
 match objects

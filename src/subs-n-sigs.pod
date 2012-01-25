@@ -594,7 +594,7 @@ object. For example, when populating a hash:
     my %color-popularities = :$black, :blue(8),
                              red => 18, :white<0>;
     # same as
-    # my %color-popularities = 
+    # my %color-popularities =
     #       black => 12,
     #       blue  => 8,
     #       red   => 18,

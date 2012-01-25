@@ -23,7 +23,7 @@ should finalize in mid March 2010.
 =head1 RELEASE PROCEDURE
 
 
-=over 
+=over
 
 =item 0
 
@@ -40,7 +40,7 @@ announcement.  Place the announcement in F<docs/announce/>.
 
 Use the following command to see a chronology of changes:
 
-    git log --since=YYYY-MM-DD --reverse 
+    git log --since=YYYY-MM-DD --reverse
 
 When you're done, commit the announcement and push it to the repo:
 
@@ -59,7 +59,7 @@ where C<YYYY-MM> is the four digit year and 2 digit month.
 =item 3
 
 Build the book by typing C<make release>.  This will create a file called
-F<build/book-YYYY-MM.pdf> where C<YYYY> and C<MM> are the current year 
+F<build/book-YYYY-MM.pdf> where C<YYYY> and C<MM> are the current year
 and month respectively.
 
 =item 4

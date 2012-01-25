@@ -36,7 +36,7 @@ is enough; 'make html' will be your friend):
       ttf-xfree86-nonfree (and uninstall t1-xfree86-nonfree) and
       Acrobat Reader then copy *.otf from
       /opt/Adobe/Reader9/Resource/Font/ to ~/.fonts/
-	
+
     * Run 'sudo fc-cache -f -v' to rebuild the cache in case the fonts
       are not found.
 
@@ -48,7 +48,7 @@ dist/UsingPerl6.a4.pdf, with an A4 paper size; to get U.S. letter
 size, type 'make PAPER=letter'. To get any PAPER width and height type
 'make PAPER=6.125in,9.25in'; accepted length units are pt, in, cm and mm.
 
-PDF versions of this book can be found at 
+PDF versions of this book can be found at
 http://puffin.ch/perl/6/ and http://github.com/perl6/book/downloads
 
 All material in this repository is licensed under a CC-by-nc-sa

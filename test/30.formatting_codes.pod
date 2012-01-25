@@ -43,7 +43,7 @@ C<EZ<>E<lt>solE<gt>>: E<sol>
 C<EZ<>E<lt>eacuteE<gt>>: E<eacute>
 
 C<EZ<>E<lt>075E<gt>> (equals sign): E<075>
-                           
+
 C<EZ<>E<lt>181E<gt>> (micro sign): E<181>
 
 BROKEN: C<EZ<>E<lt>0x2260E<gt>> method of Unicode entry appears to break files.

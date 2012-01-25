@@ -144,13 +144,13 @@ X<method>
 X<invocant>
 
 The right-hand side calls a I<method> --a named group of behavior-- named C<get>
-on the file handle stored in C<$file>.  The C<get> method reads and returns 
-one line from the file, removing the line ending.  C<words> is also a method, 
-called on the string returned from C<get>. C<words> decomposes its 
+on the file handle stored in C<$file>.  The C<get> method reads and returns
+one line from the file, removing the line ending.  C<words> is also a method,
+called on the string returned from C<get>. C<words> decomposes its
 I<invocant>--the string on which it operates--into a list of words, which
 here means strings without whitespace.
-It turns the single string C<'Beth Ana Charlie Dave'> into the list of 
-strings C<'Beth', 'Ana', 'Charlie', 'Dave'>. 
+It turns the single string C<'Beth Ana Charlie Dave'> into the list of
+strings C<'Beth', 'Ana', 'Charlie', 'Dave'>.
 
 Finally, this list gets
 stored in the array C<@names>.  The C<@> sigil marks the declared variable as

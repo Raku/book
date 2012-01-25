@@ -33,7 +33,7 @@ html: prepare $(CHAPTERS) bin/book-to-html
 	$(PERL) bin/book-to-html $(CHAPTERS) > $(BOOK).html
 
 pdf: tex lib/Makefile
-	cd build && make -I ../lib -f ../lib/Makefile 
+	cd build && make -I ../lib -f ../lib/Makefile
 
 tex: prepare $(CHAPTERS) lib/Perl6BookLatex.pm lib/book.sty bin/book-to-latex
 	$(PERL) -Ilib bin/book-to-latex --paper $(PAPER) $(CHAPTERS) > $(BOOK).tex
@@ -41,7 +41,7 @@ tex: prepare $(CHAPTERS) lib/Perl6BookLatex.pm lib/book.sty bin/book-to-latex
 release: pdf
 	cp $(BOOK).pdf build/book-$$(date +"%Y-%m").$(PAPER).pdf
 
-clean: 
+clean:
 	rm -rf build/
 
 .PHONY: clean
