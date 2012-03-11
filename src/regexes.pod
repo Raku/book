@@ -14,13 +14,13 @@ these patterns to actual text to look for matches.  Most modern regular
 expression facilities are more powerful than traditional regular expressions
 due to the influence of languages such as Perl, but the short-hand term
 C<regex> has stuck and continues to mean "regular expression-like pattern
-matching".  In Perl 6, though the specific syntax used to describe the
+matching".  In Perl 6, although the specific syntax used to describe the
 patterns is different from PCREN<B<P>erl B<C>ompatible B<R>egular
 B<E>xpressions> and POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for
 UniB<x>.  See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
 
 A common writing error is to duplicate a word by accident. It is hard to
-catch such errors by rereading your own text, but Perl can do it for you
+catch such errors by re-reading your own text, but Perl can do it for you
 using C<regex>:
 
 =begin programlisting
@@ -109,9 +109,10 @@ X<match object>
 
 The dot matched an C<l>, C<r>, and C<n>, but it will also match a space in the
 sentence I<< the spectroscoB<pe l>acks resolution >>--regexes ignore word
-boundaries by default. The special variable C<$/> stores (among other things)
-only the part of the string that matched the regular expression. C<$/> holds
-these so-called I<match object>s.
+boundaries by default.
+
+The special variable C<$/> stores the I<match object>, which allows you
+inspect the matched text.
 
 X<regex, \w>
 
@@ -123,7 +124,7 @@ regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
 uses C<\w> to build the definition of a "word".
 
 Several other common control sequences each match a single character; you can
-find a list of those in L<regex_backslash>.
+find a list of those in A<regex_backslash>.
 
 =begin table Backslash sequences and their meaning
 
@@ -348,7 +349,7 @@ non-greedyN<The non-greedy general quantifier is C<$thing **? $count>, so the
 question mark goes directly after the second asterisk.>
 
 For example, you can parse HTML very badlyN<Using a proper stateful parser is
-always more accurate.>with the code:
+always more accurate.> with the code:
 
 =begin programlisting
 
@@ -379,8 +380,8 @@ items with square brackets:
 
 X<regex, alternation>
 
-Separate I<alternations>--parts of a regex of which I<any> can match--
-with vertical bars. One vertical bar between multiple parts of a regex
+Separate I<alternations>--parts of a regex of which I<any> can match--with
+vertical bars. One vertical bar between multiple parts of a regex
 means that the alternatives are tried in parallel and the longest
 matching alternative wins. Two bars make the regex engine try each
 alternative in order and the first matching alternative wins.
@@ -580,7 +581,8 @@ contractions such as C<doesn't> or C<isn't>:
 X<regex, backreference>
 
 This code introduces a regex named C<word>, which matches at least one word
-character, optionally followed by a single quote. Another regex called C<dup>
+character, optionally followed by a single quote and some more word characters.
+Another regex called C<dup>
 (short for I<duplicate>) contains a word boundary anchor.
 
 Within a regex, the syntax C<< <&word> >> locates the regex C<word> within the
@@ -735,8 +737,8 @@ X<subst>
 X<substitutions>
 
 Regexes are also good for data manipulation. The C<subst> method matches a
-regex against a string.  With C<subst> matches, it substitutes the matched
-portion of the string its the second operand:
+regex against a string.  When C<subst> matches, it substitutes the matched
+portion of the string with its the second operand:
 
 =begin programlisting
 
@@ -759,7 +761,7 @@ X<operators, m//>
 Note the use of C<rx/ ... /> rather than C<m/ ... /> to construct the regex.
 The former constructs a regex object. The latter constructs the regex object
 I<and> immediately matches it against the topic variable C<$_>.  Using C<m/
-... /> in the call to C<subst> creates a match object and passes it as the
+... /> in the call to C<subst> would create  a match object and pass it as the
 first argument, rather than the regex itself.
 
 =head1 Other Regex Features

@@ -7,9 +7,9 @@ X<multis>
 Perl usually decides which function to call based on the name of the function
 or the contents of a function reference.  This is simple to understand.  Perl
 can also examine the contents of the arguments provided to decide which of
-several variants of a function--variants each with the same name--to call.  In
+several variants of a function--each with the same name--to call.  In
 this case, the amount and types of the function's arguments help to distinguish
-between multiple variants of a function.  This is I<multidispatch>, and the
+between the variants of a function.  This is called I<multidispatch>, and the
 functions to which Perl can dispatch in this case are I<multis>.
 
 X<JSON>
@@ -90,7 +90,7 @@ string C<'true'> or C<'false'>.
 
 The C<Str> candidate does more work: it wraps its parameter in quotes and
 escapes literal characters that the JSON spec does not allow in strings--a
-tab character becomes C<\t>, a newline C<\n>, and so on.
+tab character becomes C<"\t">, a newline C<"\n">, and so on.
 
 The C<to-json(Array $d)> candidate converts all elements of the array to JSON
 with recursive calls to C<to-json>, joins them with commas, and surrounds them
@@ -173,10 +173,10 @@ best candidate match, so the where block never executes and the first
 C<$counter> output is always C<0>.
 
 The output after the second call is at least C<1>. The compiler has to execute
-the where-block at least once to check if the third candidate is the best
+the C<where>-block at least once to check if the third candidate is the best
 match, but the specification does not require the I<minimal> possible number of
 runs.  This is illustrated in the second C<$counter> output. The specific
-implementation used to run this test actually executes the where-block twice.
+implementation used to run this test actually executes the C<where>-block twice.
 Keep in mind that the number of times the subtype checks blocks execute is
 specific to any particular implementation of Perl 6.
 
@@ -347,7 +347,7 @@ languages). It binds the nominal type of the first argument to C<T>, which can
 then act as a type constraint. If you pass a C<Rock> as the first argument,
 C<T> acts as an alias for C<Rock> inside the rest of the signature and the body
 of the routine. The signature C<(::T $, T $)> will bind only two objects of the
-same type, or where the second is of a subtype of the first.
+same type, or where the second is a subtype of the first.
 
 In this game, that fourth candidate matches only for two objects of the same
 type.  The routine returns C<0> to indicate a draw.

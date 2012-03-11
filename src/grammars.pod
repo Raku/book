@@ -327,7 +327,7 @@ X<AST>
 
 An abstract syntax tree, or AST, is a data structure which represents the
 parsed version of the text.  Your grammar describes the structure of the AST:
-its root element is the C<TOP> node, which contain children of the allowed
+its root element is the C<TOP> node, which contains children of the allowed
 types and so on.
 
 =end sidebar
