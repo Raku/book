@@ -53,7 +53,8 @@ here.
 By default, subroutines are lexically scoped, just like any variable declared
 with C<my>. This means that a subroutine may only be called within the scope in
 which it was declared.  Use the scope declarator C<our> to make the subroutine
-available within the current package:
+available within the current package, and install a lexical alias in the scope
+where you want to use it:
 
 =begin programlisting
 
@@ -66,6 +67,8 @@ available within the current package:
             say "glug glug";
         }
     }
+    our &eat; # makes the package-scoped sub eat
+              # available in this lexical scope
 
     eat();    # om nom nom
     drink();  # fails, can't drink outside of the block
