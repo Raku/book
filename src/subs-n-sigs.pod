@@ -93,10 +93,22 @@ C<our> also makes subroutines visible from the outside of a package or module:
 
 =end programlisting
 
-# TODO: elaborate
-
 You may also export a subroutine to make it available to another
 scope.
+
+    # in file Math/Trivial.pm
+    # TODO: find a better example
+    # TODO: explain modules, search paths
+    module Math::Trivial {
+        sub double($x) is export {
+            return 2 * $x;
+        }
+    }
+
+then in a different program or module you can write
+
+    use Math::Trivial; # imports sub double
+    say double(21);    # 21 is only half the truth
 
 X<anonymous subroutines>
 X<subroutines, anonymous>
