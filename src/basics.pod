@@ -101,7 +101,7 @@ curly braces { }.
 X<sigil>
 X<identifier>
 
-A variable name begins with a I<sigil>, which is non-alpha-numeric
+A variable name begins with a I<sigil>, which is a non-alpha-numeric
 symbol such as C<$>, C<@>, C<%>, or C<&>--or occasionally the double
 colon C<::>. Sigils indicate the structural interface for the variable,
 such as whether it should be treated as a single value, a compound value,
