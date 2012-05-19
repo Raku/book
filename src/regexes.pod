@@ -336,9 +336,15 @@ that the range allows:
 
 =end programlisting
 
-If the right hand side is neither a number nor a range, it becomes a
-delimiter, which means that C<m/ \w ** ', '/> matches a list of characters
-each separated by a comma and whitespace.
+X<separator, matching>
+X<%>
+
+One can specify a separator with C<%> after the quantifier:
+
+   '1,2,3' ~~ / \d+ % ',' /
+
+The separator is matched between two occurrences of the quantified
+regex. The separator can itself be a regex.
 
 X<regex, greedy matching>
 X<regex, non-greedy matching>
@@ -374,9 +380,13 @@ items with square brackets:
 
     my $ingredients = 'milk, flour, eggs and sugar';
     # prints "milk, flour, eggs"
-    $ingredients ~~ m/ [\w+] ** [\,\s*] / && say $/;
+    $ingredients ~~ m/ [\w+]+ % [\,\s*] / && say $/;
 
 =end programlisting
+
+Here C<\w+> matches a word, and C<[\w+]+ % [\,\s*]> matches at least one word,
+where several words are separated by a comma and an arbitrary amount of
+whitespace.
 
 X<regex, alternation>
 
@@ -512,7 +522,7 @@ The editor in me wants to fix this example to use the serial comma.
 
     my $ingredients = 'eggs, milk, sugar and flour';
 
-    if $ingredients ~~ m/(\w+) ** [\,\s*] \s* 'and' \s* (\w+)/ {
+    if $ingredients ~~ m/(\w+)% % [\,\s*] \s* 'and' \s* (\w+)/ {
         say 'list: ', $/[0].join(' | ');
         say 'end:  ', $/[1];
     }
@@ -617,7 +627,7 @@ The previous example to match a list of words was:
 
 =begin programlisting
 
-    m/(\w+) ** [\,\s*] \s* 'and' \s* (\w+)/
+    m/(\w+)+ % [\,\s*] \s* 'and' \s* (\w+)/
 
 =end programlisting
 
@@ -633,7 +643,7 @@ C<:s>):
 
     my $ingredients = 'eggs, milk, sugar and flour';
 
-    if $ingredients ~~ m/:s ( \w+ ) ** \,'and' (\w+)/ {
+    if $ingredients ~~ m/:s ( \w+ )%  % \,'and' (\w+)/ {
         say 'list: ', $/[0].join(' | ');
         say 'end:  ', $/[1];
     }
@@ -727,7 +737,8 @@ A token with the C<:sigspace> modifier is a C<rule>:
 
 =begin programlisting
 
-    my rule wordlist { <word> ** \, 'and' <word> }
+    # TODO: check if it works
+    my rule wordlist { <word>+ % \, 'and' <word> }
 
 =end programlisting
 
