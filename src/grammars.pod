@@ -13,9 +13,9 @@ introduced (see A<sec:multis>).
     grammar JSON::Tiny::Grammar {
         rule TOP        { ^[ <object> | <array> ]$ }
         rule object     { '{' ~ '}' <pairlist>     }
-        rule pairlist   { [ <pair> ** [ \, ]  ]?   }
+        rule pairlist   { <pair>* % [ \, ]         }
         rule pair       { <string> ':' <value>     }
-        rule array      { '[' ~ ']' [ <value> ** [ \, ] ]?  }
+        rule array      { '[' ~ ']' [ <value>* % [ \, ] ]  }
 
         proto token value { <...> };
 
@@ -378,7 +378,7 @@ submatch and turns it into a hash by calling its C<hash> method.
 
 =begin programlisting
 
-    rule pairlist       { [ <pair> ** [ \, ] ]? }
+    rule pairlist       { <pair>* % [ \, ]   }
     method pairlist($/) { make $<pair>».ast; }
 
 =end programlisting
