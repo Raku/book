@@ -507,11 +507,11 @@ key of the pair.
 
 =end programlisting
 
-A<pair_forms> lists possible C<Pair> forms and their meanings.
+A<pairForms> lists possible C<Pair> forms and their meanings.
 
 =begin table C<Pair> forms and their meanings
 
-Z<pair_forms>
+Z<pairForms>
 
 =headrow
 

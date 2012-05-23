@@ -124,11 +124,11 @@ regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
 uses C<\w> to build the definition of a "word".
 
 Several other common control sequences each match a single character; you can
-find a list of those in A<regex_backslash>.
+find a list of those in A<regexBackslash>.
 
 =begin table Backslash sequences and their meaning
 
-Z<regex_backslash>
+Z<regexBackslash>
 
 X<regex, \w>
 X<regex, \d>
