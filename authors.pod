@@ -1,6 +1,10 @@
+=pod
+
 =head1 Authors
 
 This book is the work of many contributors.  They are listed below.
+
+=over 4
 
 =item Jonathan Worthington
 
@@ -26,3 +30,7 @@ anything related to Perl 6.
 Scott occasionally tries to write things in Perl 6, but mostly hangs out
 on irc.freenode.net on the #perl6 channel and discusses anything that
 piques his interest relating to Perl 6 or its development.
+
+=back
+
+=cut
