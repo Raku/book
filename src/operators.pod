@@ -142,7 +142,7 @@ X<meta operator, reduce>
 The infix C<max> operator returns the greater of two values, so C<2 max 3>
 returns 3. Square brackets around an infix operator cause Perl to apply the
 operator to a list element by element.  C<[max] 1, 5, 3, 7> is the same as C<1
-max 5 max 3 max 7> and evaluates to C<7>. You might know this as as I<reduce>
+max 5 max 3 max 7> and evaluates to C<7>. You might know this as I<reduce>
 from other programming languages.
 
 Likewise, you can write C<[+]> to get the sum of a list of values, C<[*]> for
