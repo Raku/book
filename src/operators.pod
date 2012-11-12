@@ -749,8 +749,9 @@ orders the values according to that return value:
 
 =end programlisting
 
-The default comparison is case sensitive; by comparing not the values, but
-their upper case variant, this example sorts case insensitively.
+The default comparison is case sensitive. The second example makes the
+comparison case insensitive by comparing not the values, but their
+upper case equivalents.
 
 =head2 Smart Matching
 
