@@ -323,9 +323,9 @@ never provides an implementation.
 =end programlisting
 
 In the context of a role, this means that any class which composes this role
-must somehow provide a method named C<bot-nick>.  The class itself may provide
-it, another role must provide it, or a parent class must provide it.  C<IRCBot>
-does the latter; it C<IRCBot> defines an attribute C<$!bot-nick> along with an
+must somehow provide a method named C<bot-nick>.  It may either be provided by 
+the class itself, by another role, or by a parent class.  C<IRCBot> does the
+latter; it C<IRCBot> defines an attribute C<$!bot-nick> along with an
 accessor method.
 
 =for author
