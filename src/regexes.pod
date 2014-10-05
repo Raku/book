@@ -522,7 +522,7 @@ The editor in me wants to fix this example to use the serial comma.
 
     my $ingredients = 'eggs, milk, sugar and flour';
 
-    if $ingredients ~~ m/(\w+)% % [\,\s*] \s* 'and' \s* (\w+)/ {
+    if $ingredients ~~ m/(\w+)+ % [\,\s*] \s* 'and' \s* (\w+)/ {
         say 'list: ', $/[0].join(' | ');
         say 'end:  ', $/[1];
     }
