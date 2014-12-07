@@ -1097,13 +1097,15 @@ that with ordinary slicing access, or you can use signature binding:
         my $first = @a.shift;
         # TODO: either explain junctions, or find a
         # concise way to write without them
-        return $first >= all(@a);
+        # TODO: also explain the use of 'so' to cap the junction
+        # http://perl6advent.wordpress.com/2014/12/03/day-3-cap-your-junctions/
+        return so $first >= all(@a);
     }
 
     # same thing:
     sub first-is-largest(@a) {
-        my :($first, *@rest) := \(|@a)
-        return $first >= all(@rest);
+        my ($first, *@rest) := @a;
+        return so $first >= all(@rest);
     }
 
 =end programlisting
@@ -1114,7 +1116,7 @@ main signature of a subroutine, you get tremendous power:
 =begin programlisting
 
     sub first-is-largest([$first, *@rest]) {
-        return $first >= all(@rest);
+        return so $first >= all(@rest);
     }
 
 =end programlisting
