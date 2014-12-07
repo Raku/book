@@ -1071,10 +1071,10 @@ that delegate to other routines with the same arguments.
 
 =begin programlisting
 
-    sub visit-czechoslovakia(|$plan) {
+    sub visit-czechoslovakia(|plan) {
         warn "Sorry, this country has been deprecated.";
-        visit-slovakia(|$plan);
-        visit-czech-republic(|$plan);
+        visit-slovakia(|plan);
+        visit-czech-republic(|plan);
     }
 
 =end programlisting
