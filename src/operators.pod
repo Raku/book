@@ -206,7 +206,7 @@ each score, it should print:
 ... amount of C<X> characters. This expression uses the infix operators C<->
 and C</> for numerical calculations.
 
-Now all the necessary informations are in place, and the chart can print:
+Now all the necessary information is in place, and the chart can print:
 
 =begin programlisting
 
