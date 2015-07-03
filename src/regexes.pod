@@ -84,9 +84,9 @@ X<regex, metasyntactic characters>
 X<regex, special characters>
 X<regex, . character>
 
-Searching for literal strings gets boring pretty quickly.  Regex support
-special (also called I<metasyntactic>) characters. The dot (C<.>) matches a
-single, arbitrary character:
+Searching for literal strings gets boring pretty quickly and isn't
+really that useful. Regex support special (also called I<metasyntactic>)
+characters. The dot (C<.>) matches a single, arbitrary character:
 
 =begin programlisting
 
@@ -120,8 +120,10 @@ The dot matched an C<l>, C<r>, and C<n>, but it will also match a space in the
 sentence I<< the spectroscoB<pe l>acks resolution >>--regexes ignore word
 boundaries by default.
 
-The special variable C<$/> stores the I<match object>, which allows you
-inspect the matched text.
+The special variable C<$/> stores the I<match object> which is the result of
+the most recent pattern match.  This allows you inspect the matched text and
+access other interesting bits of information such where it appears in the 
+original string.
 
 X<regex, \w>
 
@@ -129,8 +131,7 @@ Suppose you want to solve a crossword puzzle. You have a word list and want to
 find words containing C<pe>, then an arbitrary letter, and then an C<l> (but
 not a space, as your puzzle has extra markers for those). The appropriate
 regex for that is C<m/pe \w l/>.  The C<\w> control sequence stands for a
-"Word" character--a letter, digit, or an underscore.  This chapter's example
-uses C<\w> to build the definition of a "word".
+"Word" character--a letter, digit, or an underscore.
 
 Several other common control sequences each match a single character; you can
 find a list of those in A<regexBackslash>.
@@ -243,7 +244,7 @@ Arabic-Indic, Devanagari and other digits, C<\s> matches non-breaking
 whitespace, and so on. These I<character classes> follow the Unicode
 definition of what is a letter, a number, and so on.
 
-To define your own custom character classes, listing the appropriate
+To define your own custom character classes, list the appropriate
 characters inside nested angle and square brackets C<< <[ ... ]> >>:
 
 =begin programlisting
@@ -313,12 +314,13 @@ brackets and the dash C<->, which need to be escaped with a backslash:
 X<regex, quantifier>
 X<regex, ? quantifier>
 
-A I<quantifier> specifies how often something has to occur. A question mark
-C<?> makes the preceding unit (be it a letter, a character class, or something
-more complicated) optional, meaning it can either be present either zero or
-one times. C<m/ho u? se/> matches either C<house> or C<hose>. You can also
-write the regex as C<m/hou?se/> without any spaces, and the C<?> will still
-quantify only the C<u>.
+A I<quantifier> specifies how often something has to occur. A question
+mark C<?> makes the preceding unit (be it a letter, a character class,
+or something more complicatedN<we'll see what "more complicated" means
+shortly>) optional, meaning it can either be present either zero or one
+times. C<m/ho u? se/> matches either C<house> or C<hose>. You can also
+write the regex as C<m/hou?se/> without any spaces, and the C<?> will
+still quantify only the C<u>.
 
 X<regex, * quantifier>
 X<regex, + quantifier>
