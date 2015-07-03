@@ -8,20 +8,23 @@ X<pattern matching>
 X<PCRE>
 X<POSIX>
 
-Regular expressions are a computer science concept where simple patterns
-describe the format of text.  Pattern matching is the process of applying
-these patterns to actual text to look for matches.  Most modern regular
-expression facilities are more powerful than traditional regular expressions
-due to the influence of languages such as Perl, but the short-hand term
-C<regex> has stuck and continues to mean "regular expression-like pattern
-matching".  In Perl 6, although the specific syntax used to describe the
-patterns is different from PCREN<B<P>erl B<C>ompatible B<R>egular
-B<E>xpressions> and POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for
-UniB<x>.  See IEEE standard 1003.1-2001>, we continue to call them C<regex>.
+Regular expressions are a computer science concept that uses simple
+patterns to describe the format or composition of text. For instance, a
+pattern might specify that the text start with a letter or end with a
+digit or perhaps be composed entirely of digits. Pattern matching is the
+process of applying these patterns to actual text to look for matches.
+In Perl 6, although the specific syntax used to describe patterns is
+different from other implementations of regular expressions such as
+PCREN<B<P>erl B<C>ompatible B<R>egular B<E>xpressions> and
+POSIXN<B<P>ortable B<O>perating B<S>ystem B<I>nterface for UniB<x>. See
+IEEE standard 1003.1-2001>, we still call them C<regex>N<Historically,
+because the term "regular expression" is a little cumbersome, most
+people shorten it to C<regex> or C<regexp>. We use C<regex> to mean any
+"regular expression-like pattern matching".>
 
-A common writing error is to duplicate a word by accident. It is hard to
-catch such errors by re-reading your own text, but Perl can do it for you
-using C<regex>:
+An example: a common writing error is to duplicate a word by accident.
+It is hard to catch such errors by re-reading your own text, but Perl
+can do it for you with a little C<regex>:
 
 =begin programlisting
 
@@ -32,6 +35,11 @@ using C<regex>:
     }
 
 =end programlisting
+
+The above snippet of code may look strange, but C<regex> is a succinct
+and powerful way to locate parts of text that may be interesting or that
+you want to perform some operation upon. The following sections go into
+more detail about the specific C<regex> syntax used in Perl 6.
 
 The simplest case of a regex is a constant string. Matching a string against
 that regex searches for that string:
@@ -46,9 +54,10 @@ that regex searches for that string:
 
 The construct C<m/ ... /> builds a regex.  A regex on the right hand side of
 the C<~~> smart match operator applies against the string on the left hand
-side. By default, whitespace inside the regex is irrelevant for the matching,
-so writing the regex as C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all produce
-the exact same semantics--although the first way is probably the most readable.
+side. By default, whitespace (spaces, tabs, of other "invisible" characters)
+inside the regex is irrelevant for matching, so writing the regex as
+C<m/ perl />, C<m/perl/> or C<m/ p e rl/> all produce the exact same effect--
+although the first way is probably the most readable.
 
 X<index>
 X<rindex>
