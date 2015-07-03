@@ -75,12 +75,15 @@ of maturity. All of the examples in this book will run with the I<Rakudo Perl
 advanced Perl 6 implementation can run them.  Good luck and--as the Perl 6
 community often says--have fun!
 
-=head1 Installing Rakudo
+=head1 Obtaining Rakudo
 
 For complete instructions for downloading and installing Rakudo, see
-U<http://www.rakudo.org/how-to-get-rakudo>. Source code releases are available
-from U<http://github.com/rakudo/rakudo/downloads>. A binary release for windows
-is available from U<http://sourceforge.net/projects/parrotwin32/files/>.
+U<http://www.rakudo.org/how-to-get-rakudo>. Monthly source code releases
+for the compiler are available at U<http://rakudo.org/downloads/rakudo/>.
+However, you may want to obtain the "early adopter" distribution of
+Rakudo called I<Rakudo Star>. The Rakudo Star distribution is available
+at U<http://rakudo.org/downloads/star/>. It contains the Rakudo Perl 6
+compiler, some useful modules, and a copy of this book.
 
 =head1 Executing programs
 
@@ -94,8 +97,8 @@ system C<PATH> variable and issue a command like:
 =end screen
 
 If you invoke the Rakudo compiler without an explicit script to run, it enters
-a small interactive mode that allows the execution of Perl 6 statements from
-the command line.
+an interactive mode that allows the execution of Perl 6 statements from
+the command line. A so-called "read eval print loop" (a.k.a. REPL).
 
 =head1 Getting involved
 
