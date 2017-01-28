@@ -86,8 +86,8 @@ string.  You could also write the example line as:
 
 =end programlisting
 
-Finally, the C<,> operator constructs a C<Parcel>, which is a sequence
-of objects. In this case the objects are pairs.
+Finally, the C<,> operator constructs a C<List> from its arguments.
+In this case, the C<,> is constructing a List of L<Pairs|https://docs.perl6.org/type/Pair>.
 
 X<infix>
 X<operator, infix operators>
@@ -219,8 +219,29 @@ Now all the necessary information is in place, and the chart can print:
 
 X<printf>
 
+=begin sidebar
+
 These lines loop over the items in C<@scores>, binding them to the special
-variable C<$_> one at a time. For each item, the program uses the C<printf>
+variable C<$_> one at a time. You can think of C<$_> as the English "it".
+For example, the three loops below are all functionally the same:
+
+=begin programlisting
+
+    for @scores -> $pair {
+        printf $format, $pair.key, 'X' x ($unit * $pair.value);
+    }
+    for @scores {
+        printf $format,    $_.key, 'X' x ($unit *    $_.value);
+    }
+    for @scores {
+        printf $format,      .key, 'X' x ($unit *      .value);
+    }
+
+=end programlisting
+
+=end sidebar
+
+Now, for each item, the program uses the C<printf>
 built-in function to print both the name of the player and a bar.  This
 function is similar to C<printf> in C and Perl 5.  It takes a format string,
 which specifies how to print the following parameters. If C<$label-area-width>
