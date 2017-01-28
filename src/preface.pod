@@ -100,7 +100,7 @@ If you invoke the Rakudo compiler without an explicit script to run, it enters
 an interactive mode that allows the execution of Perl 6 statements from
 the command line. A so-called "read eval print loop" (a.k.a. REPL).
 
-=head1 Getting involved
+=head1 Getting involved / Seeking assistance
 
 If you are inspired by the contents of this book and want to contribute
 to the Perl 6 community, there are some resources available to you:
@@ -113,7 +113,9 @@ The Perl 6 homepage at C<http://perl6.org/> links to many useful resources.
 
 You will occassionally see links to the L<perl6 documentation|https://docs.perl6.org/>. We suggest that
 you use this as a first resource whenever you have questions. You can type anything
-into the search bar, including unicode characters, eg. C<open> or C<=>> or C<∈>.
+into the search bar, including unicode characters.
+
+eg. L<open|https://docs.perl6.org/routine/open> or L<<=|https://docs.perl6.org/routine/$LESS-THAN_SIGN$EQUALS_SIGN> or L<∈|https://docs.perl6.org/routine/(elem)>.
 
 =item IRC
 
