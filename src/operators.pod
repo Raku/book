@@ -86,8 +86,8 @@ string.  You could also write the example line as:
 
 =end programlisting
 
-Finally, the C<,> operator constructs a C<Parcel>, which is a sequence
-of objects. In this case the objects are pairs.
+Finally, the C<,> operator constructs a C<List> from its arguments.
+In this case, the C<,> is constructing a List of Pairs.
 
 X<infix>
 X<operator, infix operators>
