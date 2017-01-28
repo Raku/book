@@ -111,6 +111,10 @@ to the Perl 6 community, there are some resources available to you:
 
 The Perl 6 homepage at C<http://perl6.org/> links to many useful resources.
 
+You will occassionally see links to the L<perl6 documentation|https://docs.perl6.org/>. We suggest that
+you use this as a first resource whenever you have questions. You can type anything
+into the search bar, including unicode characters, eg. C<open> or C<=>> or C<∈>.
+
 =item IRC
 
 The channel C<#perl6> on C<irc.freenode.net> discusses all things Perl 6.
