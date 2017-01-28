@@ -31,7 +31,7 @@ Here's one way to solve that problem in Perl 6:
 
     use v6;
 
-    my $file  = open 'scores';
+    my $file  = open 'scores.txt';
     my @names = $file.get.words;
 
     my %matches;
