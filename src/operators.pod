@@ -219,6 +219,8 @@ Now all the necessary information is in place, and the chart can print:
 
 X<printf>
 
+=begin sidebar
+
 These lines loop over the items in C<@scores>, binding them to the special
 variable C<$_> one at a time. You can think of C<$_> as the English "it".
 For example, the three loops below are all functionally the same:
@@ -236,6 +238,8 @@ For example, the three loops below are all functionally the same:
     }
 
 =end programlisting
+
+=end sidebar
 
 Now, for each item, the program uses the C<printf>
 built-in function to print both the name of the player and a bar.  This
