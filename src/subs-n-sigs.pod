@@ -264,9 +264,7 @@ fail:
 =begin programlisting
 
     sub shout-them(@words) {
-        for @words -> $w {
-            print uc("$w ");
-        }
+        say @words>>.uc.join(' ');
     }
 
     my @last_words = <do not want>;
@@ -662,9 +660,7 @@ this, add an array parameter to the signature, placing the I<slurpy> prefix
 =begin programlisting
 
     sub shout-them(*@words) {
-        for @words -> $w {
-            print uc("$w ");
-        }
+        say @words>>.uc.join(' ');
     }
 
     # now you can pass items
