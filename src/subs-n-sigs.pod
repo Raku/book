@@ -1391,7 +1391,7 @@ Frequent users of the UNIX shells might have noticed a symmetry between
 postional and named arguments to routines on the one hand, and argument
 and options on the command line on the other hand.
 
-This symmetry can be exploited by declaring a subroutine called C<MAIN>.
+This symmetry can be exploited by declaring a L<subroutine called C<MAIN>|https://docs.perl6.org/language/functions#sub_MAIN>.
 It is called every time the script is run, and its signature counts as
 a specification for command line arguments.
 
@@ -1403,8 +1403,8 @@ a specification for command line arguments.
         say @numbers.join(' ');
         say "sum: ", [+] @numbers if $sum;
     }
-    # TODO: explain ranges, .pick and [+]
-    # (or reference later chapters)
+    # L<Read about 1..$sides here|https://docs.perl6.org/type/Range>
+    # L<Read about .roll here|https://docs.perl6.org/routine/roll#(Range)_method_roll>
     # note: [max] was already used in chapter 3, so [+] should
     #       make sense to the reader already.
 
