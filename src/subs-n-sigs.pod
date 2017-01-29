@@ -1099,18 +1099,16 @@ that with ordinary slicing access, or you can use signature binding:
 =begin programlisting
 
     sub first-is-largest(@a) {
-        my $first = @a.shift;
-        # TODO: either explain junctions, or find a
-        # concise way to write without them
-        # TODO: also explain the use of 'so' to cap the junction
-        # http://perl6advent.wordpress.com/2014/12/03/day-3-cap-your-junctions/
-        return so $first >= all(@a);
+        my $first   = @a.shift;
+        my $largest = @a.sort[@a.end];
+        return $first >= $largest;
     }
 
     # same thing:
     sub first-is-largest(@a) {
         my ($first, *@rest) := @a;
-        return so $first >= all(@rest);
+        my $largest = @rest.sort[@rest.end];
+        return $first >= $largest;
     }
 
 =end programlisting
