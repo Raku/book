@@ -917,10 +917,6 @@ Or one could constrain arguments to those that exist as keys of a hash:
 
 =head1 Abstract and Concrete Parameters
 
-TODO, XXX This section needs to be verified as accurate because even though it's
-correct according to the spec, Rakudo seems to allow type objects
-with :U.  Also, add examples for each adverb.
-
 One of the Perl5-isms that Perl 6 eliminates is the need to verify the
 "definedness" of a subroutine's arguments.
 
@@ -941,9 +937,12 @@ can now be written as:
 
 =begin programlisting
 
-    sub foo(Int:D $arg) {
-        # Do something
-    }
+    sub foo(Int:D $arg) { say $arg }
+    
+    my Int $num;
+    foo($num);     # Fails!
+    $num = 4;
+    foo($num);     # 4
 
 =end programlisting
 
@@ -970,6 +969,9 @@ be given as a type object. For example:
     # FOOBAR!
 
 =end programlisting
+
+Utilizing the C<:U> and C<:D> smileys can lend to more declarative, maintainable
+code. Especially combined with multiple dispatch (which you will see later).
 
 =head1 Captures
 
