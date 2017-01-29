@@ -1119,7 +1119,7 @@ main signature of a subroutine, you get tremendous power:
 =begin programlisting
 
     sub first-is-largest([$first, *@rest]) {
-        return so $first >= all(@rest);
+        return $first >= @rest.sort[@rest.end];
     }
 
 =end programlisting
