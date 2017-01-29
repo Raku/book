@@ -93,6 +93,13 @@ C<our> also makes subroutines visible from the outside of a package or module:
 
 =end programlisting
 
+=begin sidebar
+
+In the example with C<our &eat;> you may have noticed that it failed to compile,
+while the C<EatAndDrink::drink()> example compiled, but failed at runtime.
+
+=end sidebar
+
 You may also export a subroutine to make it available to another
 scope.
 
