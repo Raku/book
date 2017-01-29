@@ -93,6 +93,13 @@ C<our> also makes subroutines visible from the outside of a package or module:
 
 =end programlisting
 
+=begin sidebar
+
+In the example with C<our &eat;> you may have noticed that it failed to compile,
+while the C<EatAndDrink::drink()> example compiled, but failed at runtime.
+
+=end sidebar
+
 You may also export a subroutine to make it available to another
 scope.
 
@@ -257,9 +264,7 @@ fail:
 =begin programlisting
 
     sub shout-them(@words) {
-        for @words -> $w {
-            print uc("$w ");
-        }
+        say @words.uc.join(' ');
     }
 
     my @last_words = <do not want>;
@@ -655,9 +660,7 @@ this, add an array parameter to the signature, placing the I<slurpy> prefix
 =begin programlisting
 
     sub shout-them(*@words) {
-        for @words -> $w {
-            print uc("$w ");
-        }
+        say @words.uc.join(' ');
     }
 
     # now you can pass items
@@ -914,10 +917,6 @@ Or one could constrain arguments to those that exist as keys of a hash:
 
 =head1 Abstract and Concrete Parameters
 
-TODO, XXX This section needs to be verified as accurate because even though it's
-correct according to the spec, Rakudo seems to allow type objects
-with :U.  Also, add examples for each adverb.
-
 One of the Perl5-isms that Perl 6 eliminates is the need to verify the
 "definedness" of a subroutine's arguments.
 
@@ -938,9 +937,12 @@ can now be written as:
 
 =begin programlisting
 
-    sub foo(Int:D $arg) {
-        # Do something
-    }
+    sub foo(Int:D $arg) { say $arg }
+    
+    my Int $num;
+    foo($num);     # Fails!
+    $num = 4;
+    foo($num);     # 4
 
 =end programlisting
 
@@ -967,6 +969,9 @@ be given as a type object. For example:
     # FOOBAR!
 
 =end programlisting
+
+Utilizing the C<:U> and C<:D> smileys can lend to more declarative, maintainable
+code. Especially combined with multiple dispatch (which you will see later).
 
 =head1 Captures
 
@@ -1094,18 +1099,16 @@ that with ordinary slicing access, or you can use signature binding:
 =begin programlisting
 
     sub first-is-largest(@a) {
-        my $first = @a.shift;
-        # TODO: either explain junctions, or find a
-        # concise way to write without them
-        # TODO: also explain the use of 'so' to cap the junction
-        # http://perl6advent.wordpress.com/2014/12/03/day-3-cap-your-junctions/
-        return so $first >= all(@a);
+        my $first   = @a.shift;
+        my $largest = @a.sort[@a.end];
+        return $first >= $largest;
     }
 
     # same thing:
     sub first-is-largest(@a) {
         my ($first, *@rest) := @a;
-        return so $first >= all(@rest);
+        my $largest = @rest.sort[@rest.end];
+        return $first >= $largest;
     }
 
 =end programlisting
@@ -1116,7 +1119,7 @@ main signature of a subroutine, you get tremendous power:
 =begin programlisting
 
     sub first-is-largest([$first, *@rest]) {
-        return so $first >= all(@rest);
+        return $first >= @rest.sort[@rest.end];
     }
 
 =end programlisting
@@ -1388,7 +1391,7 @@ Frequent users of the UNIX shells might have noticed a symmetry between
 postional and named arguments to routines on the one hand, and argument
 and options on the command line on the other hand.
 
-This symmetry can be exploited by declaring a subroutine called C<MAIN>.
+This symmetry can be exploited by declaring a L<subroutine called C<MAIN>|https://docs.perl6.org/language/functions#sub_MAIN>.
 It is called every time the script is run, and its signature counts as
 a specification for command line arguments.
 
@@ -1400,8 +1403,8 @@ a specification for command line arguments.
         say @numbers.join(' ');
         say "sum: ", [+] @numbers if $sum;
     }
-    # TODO: explain ranges, .pick and [+]
-    # (or reference later chapters)
+    # L<Read about 1..$sides here|https://docs.perl6.org/type/Range>
+    # L<Read about .roll here|https://docs.perl6.org/routine/roll#(Range)_method_roll>
     # note: [max] was already used in chapter 3, so [+] should
     #       make sense to the reader already.
 
