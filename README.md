@@ -1,4 +1,4 @@
-**NOTE**:
+***NOTE***:
 
 This repository is retained only for archival purposes.  The project is
 currently considered dead and only really useful for updating the
@@ -30,25 +30,22 @@ To build the PDF version of this book, you need to have the following
 software installed (for HTML output only, the first section of the prereqs
 is enough; 'make html' will be your friend):
 
-    * GNU make
-    * perl 5.10
-    * the Perl 5 modules:
-      Pod::PseudoPod::LaTeX version 1.101050 or newer
-      Template version 2.22 or newer
-    * inkscape (for svg -> pdf conversion)
-
-    * A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04
-      supplies most of what is needed with its texlive-latex-base,
-      texlive-latex-extra, texlive-xetex, texlive-fonts-extra,
-      texlive-latex-recommended and texlive-font-utils packages.
-
-    * Adobe's fonts and B&H Luxi Sans. To get those, install
-      ttf-xfree86-nonfree (and uninstall t1-xfree86-nonfree) and
-      Acrobat Reader then copy *.otf from
-      /opt/Adobe/Reader9/Resource/Font/ to ~/.fonts/
-	
-    * Run 'sudo fc-cache -f -v' to rebuild the cache in case the fonts
-      are not found.
+* GNU make
+* perl 5.10
+* the Perl 5 modules:
+  Pod::PseudoPod::LaTeX version 1.101050 or newer
+  Template version 2.22 or newer
+* inkscape (for svg -> pdf conversion)
+* A number of LaTeX packages (see lib/*.sty). Ubuntu 10.04
+  supplies most of what is needed with its texlive-latex-base,
+  texlive-latex-extra, texlive-xetex, texlive-fonts-extra,
+  texlive-latex-recommended and texlive-font-utils packages.
+* Adobe's fonts and B&H Luxi Sans. To get those, install
+  ttf-xfree86-nonfree (and uninstall t1-xfree86-nonfree) and
+  Acrobat Reader then copy *.otf from
+  /opt/Adobe/Reader9/Resource/Font/ to ~/.fonts/
+* Run 'sudo fc-cache -f -v' to rebuild the cache in case the fonts
+  are not found.
 
 The book is produced from src/*.pod chapters ultimately rendered into
 dist/*.pdf using bin/* and lib/* files.
