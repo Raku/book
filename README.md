@@ -1,12 +1,15 @@
 ***NOTE***:
 
-This repository is retained only for archival purposes.  The project is
+This repository is retained only for archival purposes. The project is
 currently considered dead and only really useful for updating the
-documentation on https://doc.perl6.org.  If you are looking for documentation
-about Perl 6, please search on http://doc.perl6.org and/or check out its
-GitHub project: https://github.com/perl6/doc
+documentation on https://docs.perl6.org. 
 
-======================================================================
+If you are looking for up-to-date Perl 6 books, please check
+<https://perl6book.com/> for an overview.
+
+Reference documentation can be found at <https://doc.perl6.org/>.
+
+----------------------------------------------------------------------
 
 We are writing a book about Perl 6.
 
