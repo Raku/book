@@ -1,5 +1,5 @@
 ***NOTE***:
-
+Please used this website. It is very helpful for all of us.
 This repository is retained only for archival purposes. The project is
 currently considered dead and only really useful for updating the
 documentation on https://docs.perl6.org. 
