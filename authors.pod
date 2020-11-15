@@ -22,14 +22,15 @@ related bug tickets. Sometimes he actually fixes things, too.
 
 =item Moritz Lenz
 
-Moritz tends the Perl 6 test suite, uses and develops Rakudo and blogs about
-anything related to Perl 6.
+Moritz tends the Raku test suite, uses and develops Rakudo and blogs about
+anything related to Raku.
 
 =item Jonathan Scott Duff (Scott)
 
-Scott occasionally tries to write things in Perl 6, but mostly hangs out
-on irc.freenode.net on the #perl6 channel and discusses anything that
-piques his interest relating to Perl 6 or its development.
+Sadly, Jonathan Scott Duff is no longer with us.
+
+See the L<in memoriam|https://github.com/rakudo/rakudo/blob/master/IN-MEMORIAM.md#jonathan-scott-duff-perlpilot>
+for more information.
 
 =back
 

@@ -4,16 +4,16 @@ This repository is retained only for archival purposes. The project is
 currently considered dead and only really useful for updating the
 documentation on https://docs.perl6.org. 
 
-If you are looking for up-to-date Perl 6 books, please check
+If you are looking for up-to-date Raku books, please check
 <https://perl6book.com/> for an overview.
 
 Reference documentation can be found at <https://doc.perl6.org/>.
 
 ----------------------------------------------------------------------
 
-We are writing a book about Perl 6.
+We are writing a book about Raku.
 
-It will be some kind of example-driven introduction to Perl 6, and at
+It will be some kind of example-driven introduction to Raku, and at
 the same time showing off the reasons why we love that language.
 
 We plan to have monthly releases, see docs/release-guide.pod
@@ -35,7 +35,7 @@ is enough; 'make html' will be your friend):
 
 * GNU make
 * perl 5.10
-* the Perl 5 modules:
+* the Perl modules:
   Pod::PseudoPod::LaTeX version 1.101050 or newer
   Template version 2.22 or newer
 * inkscape (for svg -> pdf conversion)
@@ -54,12 +54,12 @@ The book is produced from src/*.pod chapters ultimately rendered into
 dist/*.pdf using bin/* and lib/* files.
 
 Just type 'make' on your command line, and the book should be built in
-dist/UsingPerl6.a4.pdf, with an A4 paper size; to get U.S. letter
+dist/UsingRaku.a4.pdf, with an A4 paper size; to get U.S. letter
 size, type 'make PAPER=letter'. To get any PAPER width and height type
 'make PAPER=6.125in,9.25in'; accepted length units are pt, in, cm and mm.
 
 PDF versions of this book can be found at 
-http://puffin.ch/perl/6/ and http://github.com/perl6/book/downloads
+http://puffin.ch/perl/6/ and http://github.com/raku/book/downloads
 
 All material in this repository is licensed under a CC-by-nc-sa
 license: <http://creativecommons.org/licenses/by-nc-sa/2.5/>

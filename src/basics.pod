@@ -2,9 +2,7 @@
 
 Z<sec:basics>
 
-Perl originated as a programming language intended to gather and summarize
-information from text files.  It's still strong in text processing, but Perl 5
-is also a powerful general-purpose programming language.  Perl 6 is even better.
+Raku is a  powerful general-purpose programming language.
 
 Suppose that you host a table tennis tournament.  The referees tell you the
 results of each game in the format C<Player1 Player2 | 3:2>, which means
@@ -25,7 +23,7 @@ The input data (stored in a file called "scores") looks like this:
 The first line is the list of players.  Every subsequent line records a result
 of a match.
 
-Here's one way to solve that problem in Perl 6:
+Here's one way to solve that problem in Raku:
 
 =begin programlisting
 
@@ -73,13 +71,12 @@ This produces the output:
 
 X<v6>
 
-Every Perl 6 program should begin with C<use v6;>. This line tells the compiler
-which version of Perl the program expects. Should you accidentally run the file
-with Perl 5, you'll get a helpful error message.
+Every Raku program should begin with C<use v6;>. This line tells the compiler
+which version of Raku the program expects.
 
 X<statement>
 
-A Perl 6 program consists of zero or more statements. A I<statement> ends with
+A Raku program consists of zero or more statements. A I<statement> ends with
 a semicolon or a curly bracket at the end of a line:
 
 =begin programlisting
@@ -176,8 +173,8 @@ These two lines of code declare two hashes.  The C<%> sigil marks each
 variable as a C<Hash>.  A C<Hash> is an unordered collection of key-value
 pairs.  Other programming languages call that a I<hash table>,
 I<dictionary>, or I<map>.  You can query a hash table for the value that
-corresponds to a certain C<$key> with C<%hash{$key}>N<Unlike Perl 5, in
-Perl 6 the sigil does not change when accessing an array or hash with
+corresponds to a certain C<$key> with C<%hash{$key}>N<In
+Raku the sigil does not change when accessing an array or hash with
 C<[ ]> or C<{ }>. This is called I<M<sigil invariance>>.>.
 
 In the score counting program, C<%matches> stores the number of matches each
@@ -382,7 +379,7 @@ X<block>
 
 You have seen blocks before: both the C<for> loop C<< -> $line { ... } >> and
 the C<if> statement worked on blocks.  A block is a self-contained piece of
-Perl 6 code with an optional signature (the C<< -> $line >> part).  See
+Raku code with an optional signature (the C<< -> $line >> part).  See
 A<sec:signatures> for more information.
 
 The simplest way to sort the players by score would be C<@names.sort({
@@ -396,7 +393,7 @@ X<sort, stable>
 
 When two array items have the same value, C<sort> leaves them in the same order
 as it found them.  Computer scientists call this a I<stable sort>. The program
-takes advantage of this property of Perl 6's C<sort> to achieve the goal by
+takes advantage of this property of Raku's C<sort> to achieve the goal by
 sorting twice: first by the number of sets won (the secondary criterion), then
 by the number of matches won.
 
@@ -452,9 +449,9 @@ X<strings, single-quoted>
 
 =end programlisting
 
-Double quoted strings in Perl 6 can interpolate variables with the C<$>
+Double quoted strings in Raku can interpolate variables with the C<$>
 sigil as well as blocks of code in curly braces. Since any arbitrary
-Perl code can appear within curly braces, C<Array>s and C<Hash>es may be
+code can appear within curly braces, C<Array>s and C<Hash>es may be
 interpolated by placing them within curly braces.
 
 
