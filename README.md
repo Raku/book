@@ -2,12 +2,12 @@
 
 This repository is retained only for archival purposes. The project is
 currently considered dead and only really useful for updating the
-documentation on https://docs.perl6.org. 
+documentation on https://docs.raku.org. 
 
 If you are looking for up-to-date Raku books, please check
 <https://perl6book.com/> for an overview.
 
-Reference documentation can be found at <https://doc.perl6.org/>.
+Reference documentation can be found at <https://doc.raku.org/>.
 
 ----------------------------------------------------------------------
 
